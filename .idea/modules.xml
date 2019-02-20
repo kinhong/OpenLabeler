@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/openlabeler.iml" filepath="$PROJECT_DIR$/openlabeler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/app/openlabeler-app.iml" filepath="$PROJECT_DIR$/app/openlabeler-app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/preloader/openlabeler-preloader.iml" filepath="$PROJECT_DIR$/preloader/openlabeler-preloader.iml" />
+    </modules>
+  </component>
+</project>

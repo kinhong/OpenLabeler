@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~ ==============================================================================
+  -->
+
+<?import com.easymobo.openlabeler.preference.LabelMapTableView?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<fx:root type="BorderPane" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+    <center>
+        <LabelMapTableView fx:id="tvLabelMap" />
+    </center>
+    <bottom>
+        <HBox alignment="TOP_RIGHT" prefHeight="30.0" prefWidth="292.0" BorderPane.alignment="CENTER">
+            <children>
+                <Button fx:id="btnAddRow" focusTraversable="false" mnemonicParsing="false" styleClass="flat" onAction="#onAddRow">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="PLUS" size="12.0" />
+                    </graphic>
+                </Button>
+                <Button fx:id="btnRemoveRow" focusTraversable="false" mnemonicParsing="false" styleClass="flat" onAction="#onRemoveRow">
+                    <graphic>
+                        <FontAwesomeIconView glyphName="MINUS" size="12.0" />
+                    </graphic>
+                </Button>
+            </children>
+        </HBox>
+    </bottom>
+</fx:root>

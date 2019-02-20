@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~ ==============================================================================
+  -->
+
+<?import com.easymobo.openlabeler.ui.InputFileChooser?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<fx:root hgap="10.0" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" type="GridPane" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/OpenLabeler.css">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" percentWidth="70"/>
+  </columnConstraints>
+  <rowConstraints>
+      <RowConstraints valignment="CENTER" vgrow="ALWAYS" />
+    <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+       <Label styleClass="title" text="%menu.inferenceUsingTF" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM"></Label>
+       <Label text="%menu.useInference" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+       <CheckBox fx:id="chkUseInference" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+       <Label text="%menu.bndBoxColor" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
+       <ColorPicker fx:id="pickerHintStrokeColor" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+
+       <Label text="%menu.tfLabelMapFile" GridPane.halignment="LEFT" GridPane.rowIndex="3" />
+       <InputFileChooser fx:id="txtTFLabelMapFile" file="true" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+       <Label text="%menu.tfSavedModelDir" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
+       <InputFileChooser fx:id="txtTFSavedModelDir" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</fx:root>

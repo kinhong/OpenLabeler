@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.ColorPicker?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<!--
+  ~ Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~ ==============================================================================
+  -->
+
+<fx:root hgap="10.0" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" stylesheets="@/css/OpenLabeler.css" type="GridPane" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" />
+    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+      <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+    <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+      <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+       <Label styleClass="title" text="%menu.output" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM" />
+       <Label text="%menu.saveEveryChange" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
+       <CheckBox fx:id="chkSaveEveryChange" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+      <Label text="%menu.annotationDir" GridPane.halignment="LEFT" GridPane.rowIndex="2" GridPane.valignment="CENTER" />
+       <TextField fx:id="textAnnotationsDir" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+      <Label styleClass="title" text="%menu.annotation" GridPane.rowIndex="3" GridPane.valignment="BOTTOM" />
+       <Label text="%menu.autoSetName" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
+       <HBox alignment="CENTER_LEFT" spacing="20.0" GridPane.columnIndex="1" GridPane.rowIndex="4">
+           <children>
+           <CheckBox fx:id="chkAutoSetName" mnemonicParsing="false" />
+            <Button fx:id="btnClearUsedNames" mnemonicParsing="false" onAction="#onClearUsedNames" text="%menu.clearUsedNames" />
+           </children>
+       </HBox>
+       <Label text="%menu.bndBoxColor" GridPane.halignment="LEFT" GridPane.rowIndex="5" />
+       <ColorPicker fx:id="pickerObjectStrokeColor" editable="true" GridPane.columnIndex="1" GridPane.rowIndex="5" GridPane.valignment="CENTER" />
+   </children>
+   <padding>
+      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+   </padding>
+</fx:root>

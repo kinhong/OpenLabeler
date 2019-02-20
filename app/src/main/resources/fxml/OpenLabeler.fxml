@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  ~ ==============================================================================
+  -->
+
+<?import com.easymobo.openlabeler.ui.MediaPane?>
+<?import com.easymobo.openlabeler.ui.ObjectTableView?>
+<?import com.easymobo.openlabeler.ui.TagGroup?>
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.input.*?>
+<?import javafx.scene.layout.*?>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/OpenLabeler.css" fx:controller="com.easymobo.openlabeler.OpenLabelerController">
+    <top>
+        <VBox prefHeight="38.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <children>
+                <MenuBar fx:id="menuBar">
+                    <menus>
+                        <Menu fx:id="menuFile" mnemonicParsing="false" onShowing="#onFileMenu" text="%menu.file">
+                            <items>
+                                <MenuItem fx:id="miOpenMediaFile" mnemonicParsing="false" onAction="#onFileOpenFile" text="%menu.openMediaFile">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem mnemonicParsing="false" onAction="#onFileOpenDir" text="%menu.openMediaDir">
+                                <accelerator>
+                                    <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                </accelerator>
+                                </MenuItem>
+                                <Menu fx:id="menuOpenRecent" mnemonicParsing="false" text="%menu.openRecent" />
+                                <SeparatorMenuItem mnemonicParsing="false" />
+                                <MenuItem fx:id="miClose" mnemonicParsing="false" onAction="#onClose" text="%menu.close"/>
+                                <MenuItem fx:id="miSave" mnemonicParsing="false" onAction="#onSave" text="%menu.save">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                    </accelerator>
+                                </MenuItem>
+                                <SeparatorMenuItem fx:id="msPreference" mnemonicParsing="false" />
+                                <MenuItem fx:id="miPreference" mnemonicParsing="false" onAction="#onPreference" text="%menu.preferences"/>
+                                <SeparatorMenuItem fx:id="msExit" mnemonicParsing="false" />
+                                <MenuItem fx:id="miExit" mnemonicParsing="false" onAction="#onExit" text="%menu.exit"/>
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="%menu.edit">
+                            <items>
+                                <MenuItem fx:id="miUndo" mnemonicParsing="false" onAction="#onUndo" text="%menu.undo">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem fx:id="miRedo" mnemonicParsing="false" onAction="#onRedo" text="%menu.redo">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
+                                    </accelerator>
+                                </MenuItem>
+                                <SeparatorMenuItem mnemonicParsing="false" />
+                                <MenuItem fx:id="miCut" mnemonicParsing="false" onAction="#onCut" text="%menu.cut">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="X" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem fx:id="miCopy" mnemonicParsing="false" onAction="#onCopy" text="%menu.copy">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="C" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem fx:id="miPaste" mnemonicParsing="false" onAction="#onPaste" text="%menu.paste">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="V" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem fx:id="miDelete" mnemonicParsing="false" onAction="#onDelete" text="%menu.delete">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                                    </accelerator>
+                                </MenuItem>
+                                <SeparatorMenuItem mnemonicParsing="false" />
+                                <MenuItem fx:id="miPrevMediaFile" mnemonicParsing="false" onAction="#onPrevMediaFile" text="%menu.previousMediaFile">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem fx:id="miNextMediaFile" mnemonicParsing="false" onAction="#onNextMediaFile" text="%menu.nextMediaFile">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                    </accelerator>
+                                </MenuItem>
+
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="%menu.view">
+                            <items>
+                                <MenuItem fx:id="miZoomOut" mnemonicParsing="false" onAction="#onZoomOut" text="%menu.zoomOut" />
+                                <MenuItem fx:id="miZoomIn" mnemonicParsing="false" onAction="#onZoomIn" text="%menu.zoomIn" />
+                                <MenuItem fx:id="miZoomFit" mnemonicParsing="false" onAction="#onZoomFit" text="%menu.zoomFit" />
+                                <SeparatorMenuItem mnemonicParsing="false" />
+                                <MenuItem fx:id="miShowHint" mnemonicParsing="false" onAction="#onShowHint" text="%menu.showHint">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                    </accelerator>
+                                </MenuItem>
+                                <MenuItem fx:id="miClearHint" mnemonicParsing="false" onAction="#onClearHint" text="%menu.clearHint">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
+                                    </accelerator>
+                                </MenuItem>
+                            </items>
+                        </Menu>
+                        <Menu mnemonicParsing="false" text="%menu.help">
+                            <items>
+                                <MenuItem mnemonicParsing="false" onAction="#onSupportInfo" text="%menu.supportInfo" />
+                                <SeparatorMenuItem fx:id="msAbout" mnemonicParsing="false" />
+                                <MenuItem fx:id="miAbout" mnemonicParsing="false" onAction="#onAbout" text="%menu.about" />
+                            </items>
+                        </Menu>
+                    </menus>
+                </MenuBar>
+                <ToolBar prefHeight="14.0" prefWidth="600.0">
+                    <items>
+                        <Button fx:id="btnOpenMediaFile" mnemonicParsing="false" onAction="#onFileOpenFile">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="FILE_IMAGE_ALT" size="18.0" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.openMediaFile" />
+                            </tooltip>
+                        </Button>
+                        <Button fx:id="btnOpenMediaDir" mnemonicParsing="false" onAction="#onFileOpenDir">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="FOLDER_OPEN_ALT" size="18.0" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.openMediaDir" />
+                            </tooltip>
+                        </Button>
+                        <Separator prefHeight="27.0" prefWidth="10.0" />
+                        <Button fx:id="btnSave" mnemonicParsing="false" onAction="#onSave">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="SAVE" size="18.0" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.save" />
+                            </tooltip>
+                        </Button>
+                        <Separator prefHeight="27.0" prefWidth="10.0" />
+                        <Button fx:id="btnPrevMediaFile" mnemonicParsing="false" onAction="#onPrevMediaFile">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="ARROW_LEFT" size="18.0" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.previousMediaFile" />
+                            </tooltip>
+                        </Button>
+                        <Button fx:id="btnNextMediaFile" mnemonicParsing="false" onAction="#onNextMediaFile">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="ARROW_RIGHT" size="18.0" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.nextMediaFile" />
+                            </tooltip>
+                        </Button>
+                        <Separator prefHeight="27.0" prefWidth="10.0" />
+                        <Button fx:id="btnUndo" mnemonicParsing="false" onAction="#onUndo">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="ROTATE_LEFT" size="18.0" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.undo" />
+                            </tooltip>
+                        </Button>
+                        <Button fx:id="btnRedo" mnemonicParsing="false" onAction="#onRedo">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="ROTATE_RIGHT" size="18.0" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.redo" />
+                            </tooltip>
+                        </Button>
+                        <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#onDelete">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="REMOVE" size="18.0" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.delete" />
+                            </tooltip>
+                        </Button>
+                        <Separator prefHeight="27.0" prefWidth="10.0" />
+                        <Button fx:id="btnZoomOut" mnemonicParsing="false" onAction="#onZoomOut">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="SEARCH_MINUS" size="18.0" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.zoomOut" />
+                            </tooltip>
+                        </Button>
+                        <Button fx:id="btnZoomIn" mnemonicParsing="false" onAction="#onZoomIn">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="SEARCH_PLUS" size="18.0" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.zoomIn" />
+                            </tooltip>
+                        </Button>
+                        <Button fx:id="btnZoomFit" mnemonicParsing="false" onAction="#onZoomFit">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="SEARCH" size="18.0" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.zoomFit" />
+                            </tooltip>
+                        </Button>
+                        <Separator prefHeight="27.0" prefWidth="10.0" />
+                        <Button fx:id="btnShowHint" mnemonicParsing="false" onAction="#onShowHint">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="EYE" size="18.0" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.showHint" />
+                            </tooltip>
+                        </Button>
+                        <Button fx:id="btnClearHint" mnemonicParsing="false" onAction="#onClearHint">
+                            <graphic>
+                                <FontAwesomeIconView glyphName="EYE_SLASH" size="18.0" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.clearHint" />
+                            </tooltip>
+                        </Button>
+                    </items>
+                </ToolBar>
+            </children>
+        </VBox>
+    </top>
+    <center>
+        <SplitPane dividerPositions="0.75" prefHeight="160.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+            <items>
+                <ScrollPane fx:id="scrollPane" fitToHeight="true" fitToWidth="true" BorderPane.alignment="CENTER">
+                    <content>
+                        <StackPane prefHeight="137.0" prefWidth="598.0">
+                            <children>
+                                <TagGroup fx:id="tagGroup">
+                           <StackPane.margin>
+                              <Insets />
+                           </StackPane.margin></TagGroup>
+                            </children>
+                        </StackPane>
+                    </content>
+                </ScrollPane>
+                <SplitPane dividerPositions="0.3" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
+                    <items>
+                        <ObjectTableView fx:id="objectTable" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+                        <MediaPane fx:id="mediaPane" prefHeight="200.0" prefWidth="200.0"/>
+                    </items>
+                </SplitPane>
+            </items>
+        </SplitPane>
+    </center>
+    <bottom>
+        <HBox alignment="BOTTOM_LEFT" prefHeight="6.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label fx:id="status" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
+            <Label fx:id="coords" textAlignment="RIGHT" />
+            </children>
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+            </padding>
+        </HBox>
+    </bottom>
+</BorderPane>
