@@ -12,7 +12,7 @@
     <name>OpenLabeler</name>
 
     <properties>
-        <revision>1.0.0</revision>
+        <revision>0.0.0</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mainClass>com.easymobo.openlabeler.OpenLabeler</mainClass>
     </properties>
