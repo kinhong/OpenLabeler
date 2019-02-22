@@ -1,3 +1,7 @@
+# OpenLabeler
+[![GitHub license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://raw.githubusercontent.com/kinhong/openlabeler/master/LICENSE)/kinhong/openlabeler/LICENSE)
+[![Downloads](https://img.shields.io/badge/download-all%20releases-brightgreen.svg)](https://github.com/kinhong/openlabeler/releases/)
+
 ## Introduction
 
 **OpenLabeler** is an open source application for annotating objects. It can generate the PASCAL VOC format XML annotation file for artificial intelligence and deep learning training. A unique aspect of this application is its ability to use inference (with [TensorFlow](https://www.tensorflow.org)) to help improve accuracy and speed up the annotation process.
@@ -29,7 +33,7 @@ For example, you have thousands of images to annotate. After labeling the first 
 OpenLabeler can be used to start/stop a training process in TensorFlow within a [Docker](https://www.docker.com) container. Containers with [TensorFlow](https://www.tensorflow.org/install/docker) and [Object Detection API](https://github.com/tensorflow/models/tree/master/research/object_detection) dependencies have been pre-built for your convenience. To use this feature:
 
 1. [Install Docker](https://docs.docker.com/install) on your host machine
-2. Choose a pre-built, `kinhong/openlabeler:latest-py3` or `kinhong/openlabeler:latest-gpu-py3`, [docker image](https://cloud.docker.com/repository/docker/kinhong/openlabeler/tags) from [Docker Hub](https://hub.docker.com/)
+2. Choose a pre-built, `kinhong/openlabeler:latest-py3` or `kinhong/openlabeler:latest-gpu-py3`, [docker image](https://cloud.docker.com/repository/docker/kinhong/openlabeler/tags) from [Docker Hub](https://hub.docker.com/) and pull it to your docker host
 3. Download a base model from the [TensorFlow Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) for transfer learning
 4. Configure the Training Preference settings (and add the label map entries)
 ![Train Preferences](assets/pref-train.png)
