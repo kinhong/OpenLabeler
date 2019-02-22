@@ -1,5 +1,5 @@
 # OpenLabeler
-[![GitHub license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://raw.githubusercontent.com/kinhong/openlabeler/master/LICENSE)/kinhong/openlabeler/LICENSE)
+[![GitHub license](https://img.shields.io/badge/license-Apache--2.0-blue.svg)](https://raw.githubusercontent.com/kinhong/openlabeler/master/LICENSE)
 [![Downloads](https://img.shields.io/badge/download-all%20releases-brightgreen.svg)](https://github.com/kinhong/openlabeler/releases/)
 
 ## Introduction
