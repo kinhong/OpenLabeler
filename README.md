@@ -27,14 +27,16 @@ For example, you have thousands of images to annotate. After labeling the first 
 *Note: This is currently an experimental feature.*
 
 OpenLabeler can be used to start/stop a training process in TensorFlow within a [Docker](https://www.docker.com) container. Containers with [TensorFlow](https://www.tensorflow.org/install/docker) and [Object Detection API](https://github.com/tensorflow/models/tree/master/research/object_detection) dependencies have been pre-built for your convenience. To use this feature:
+
 1. [Install Docker](https://docs.docker.com/install) on your host machine
-2. Choose a pre-built docker [container](https://cloud.docker.com/repository/docker/kinhong/openlabeler/tags) from [Docker Hub](https://hub.docker.com/)
-3. Download a base model from the [TensorFlow Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) for transfer learning.
+2. Choose a pre-built, `kinhong/openlabeler:latest-py3` or `kinhong/openlabeler:latest-gpu-py3`, [docker image](https://cloud.docker.com/repository/docker/kinhong/openlabeler/tags) from [Docker Hub](https://hub.docker.com/)
+3. Download a base model from the [TensorFlow Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) for transfer learning
 4. Configure the Training Preference settings (and add the label map entries)
 ![Train Preferences](assets/pref-train.png)
-5. You can then start, stop, continue, restart training, or export the inference graph.
+5. You can then start, stop, continue, restart training, or export the inference graph
 
 ## Installation
+
 If you have previously installed OpenLabeler, uninstall it first. Find the .pkg, .deb or .msi installation packages for macOS, Linux, and Windows respectively on the [releases](https://github.com/kinhong/OpenLabeler/releases) page.
 
 ## Recommended Directory Structure
@@ -84,12 +86,12 @@ The Linux .deb bundle can be found under the app/target/package directory.
 
 ### Windows
 
-1. Download [OpenJDK 11+](http://jdk.java.net/11/) for Windows and unzip to a directory with no spaces (e.g., C:\java\jdk-11)
-2. Download [Maven](https://maven.apache.org/download.cgi) and unzip to a directory with no spaces (e.g., C:\java\apache-maven)
-3. Download [Wix](https://github.com/wixtoolset/wix3/releases) and unzip to a directory with no spaces (e.g., C:\wix)
-3. Open Control Panel > System and Security > System. Set the PATH (e.g., C:\java\jdk-11\bin;C:\java\apache-maven\bin;C:\wix\bin) and JAVA_HOME (e.g., C:\java\jdk-11) environment variables
+1. Download [OpenJDK 11+](http://jdk.java.net/11/) for Windows and unzip to a directory with no spaces (e.g., `C:\java\jdk-11`)
+2. Download [Maven](https://maven.apache.org/download.cgi) and unzip to a directory with no spaces (e.g., `C:\java\apache-maven`)
+3. Download [Wix](https://github.com/wixtoolset/wix3/releases) and unzip to a directory with no spaces (e.g., `C:\wix`)
+3. Open Control Panel > System and Security > System. Set the `PATH` (e.g., `C:\java\jdk-11\bin;C:\java\apache-maven\bin;C:\wix\bin`) and `JAVA_HOME` (e.g., `C:\java\jdk-11`) environment variables
 
-```
+```DOS .bat
 cd <openlabeler>
 copy <openlabeler>\bin\jdk.packager-windows\jpackager.exe <java_home>\bin
 copy <openlabeler>\bin\jdk.packager-windows\jdk.packager.jar <java_home>\jmods
