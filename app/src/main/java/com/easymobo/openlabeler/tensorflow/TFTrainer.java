@@ -322,22 +322,26 @@ public class TFTrainer implements AutoCloseable
                                     "--sample_1_of_n_eval_examples=" + 1,
                                     getDockerModelConfigPath())
                             .withHostConfig(new HostConfig().withBinds(getDockerBinds())).exec();
+                    LOG.info("Created new container " + container.getId());
 
                     dockerClient.startContainerCmd(container.getId()).exec();
+                    LOG.info("Started new container " + container.getId());
                 }
-                else {
+                else { // Continue training
                     if (trainer == null) {
-                        LOG.warning("TFTrainer cannot be found");
+                        LOG.warning("TFTrainer docker container not found");
                         return;
                     }
                     dockerClient.startContainerCmd(trainer.getId()).exec();
+                    LOG.info("Started container " + trainer.getId());
                 }
             }
             else { // Stop training
                 List<Container> containers = dockerClient.listContainersCmd().withShowAll(true).exec();
                 for (Container container : containers) {
                     if (ArrayUtils.isNotEmpty(container.getNames()) && container.getNames()[0].contains(containerName)) {
-                        dockerClient.stopContainerCmd(container.getId()).exec();
+                        dockerClient.stopContainerCmd(container.getId()).withTimeout(1).exec();
+                        LOG.info("Stopped container " + container.getId());
                     }
                 }
             }
@@ -346,6 +350,7 @@ public class TFTrainer implements AutoCloseable
             LOG.log(Level.SEVERE, "Unable to train", ex);
         }
     }
+
     /**
      * A wrapper around TensorFlow's TrainEvalPipelineConfig
      */

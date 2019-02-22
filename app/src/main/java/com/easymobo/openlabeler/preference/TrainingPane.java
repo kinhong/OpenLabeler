@@ -90,7 +90,10 @@ public class TrainingPane extends GridPane implements Category
         return dirtyProperty;
     }
     public boolean isDirty() {
-        if (!TFTrainer.getLabelMapPath(Settings.getTFDataDir()).toFile().exists()) {
+        if (!TFTrainer.getLabelMapPath(txtTFDataDir.getText()).toFile().exists()) {
+            return true;
+        }
+        if (!TFTrainer.getModelConfigPath(txtTFBaseModelDir.getText()).toFile().exists()) {
             return true;
         }
         return dirtyProperty.get();
@@ -229,7 +232,7 @@ public class TrainingPane extends GridPane implements Category
         save();
         TFTrainer.train(start, restart);
         Util.showInformation(bundle.getString("menu.alert"),
-                bundle.getString(start ? (restart ? "msg.restartTrain" :  "msg.startTrain") : "msg.stopTrain"));
+                bundle.getString(start ? (restart ? "msg.startTrain" : "msg.continueTrain") : "msg.stopTrain"));
         updateTraining();
     }
 }
