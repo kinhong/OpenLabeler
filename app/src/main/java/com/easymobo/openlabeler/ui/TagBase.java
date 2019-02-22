@@ -21,9 +21,7 @@ import com.easymobo.openlabeler.model.ObjectModel;
 import javafx.beans.property.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.BoundingBox;
-import javafx.geometry.Bounds;
-import javafx.geometry.Point2D;
+import javafx.geometry.*;
 import javafx.scene.Cursor;
 import javafx.scene.Group;
 import javafx.scene.ImageCursor;
@@ -210,9 +208,10 @@ public abstract class TagBase extends Group
 
     protected void onMouseDragged(MouseEvent me) {
         setCursor(Cursor.CLOSED_HAND);
-        double x = me.getX() - offset.getX();
-        double y = me.getY() - offset.getY();
+        setLocation(me.getX() - offset.getX(), me.getY() - offset.getY());
+    }
 
+    protected void setLocation(double x, double y) {
         // Check for out-of-bounds conditions
         if (x < 0) {
             x = 0;
@@ -228,6 +227,13 @@ public abstract class TagBase extends Group
         }
         rect.setX(x);
         rect.setY(y);
+    }
+
+    public void move(HorizontalDirection horizontal, VerticalDirection vertical) {
+        double x = horizontal == null ? 0 : (horizontal == HorizontalDirection.LEFT ? -1 : 1);
+        double y = vertical == null ? 0 : (vertical == VerticalDirection.UP ? -1 : 1);
+        setLocation(rect.getX() + x, rect.getY() + y);
+        boundsProperty().set(getRectBounds());
     }
 
     protected void onMouseReleased(MouseEvent me) {

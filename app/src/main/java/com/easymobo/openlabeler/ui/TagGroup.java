@@ -29,14 +29,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Bounds;
-import javafx.geometry.Insets;
-import javafx.geometry.Point2D;
+import javafx.geometry.*;
 import javafx.scene.Group;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
@@ -173,6 +173,9 @@ public class TagGroup extends Group implements AutoCloseable
         objectDetector = new ObjectDetector(bundle);
         new Thread(() -> objectDetector.init(), "Object Detector Initializer").start();
         objectDetector.statusProperty().addListener((observable, oldValue, newValue) -> statusProperty.set(newValue));
+
+        // keyboard
+        setOnKeyPressed(event -> onKeyPressed(event));
     }
 
     public Annotation getModel() {
@@ -296,6 +299,22 @@ public class TagGroup extends Group implements AutoCloseable
         contextMenu.setAutoHide(true);
         contextMenu.show(imageView, event.getScreenX(), event.getScreenY());
         event.consume();
+    }
+
+    public void onKeyPressed(KeyEvent event) {
+        if (event.isConsumed()) {
+            return;
+        }
+        KeyCode code = event.getCode();
+        if (code == KeyCode.BACK_SPACE) {
+            deleteSelected(bundle.getString("menu.delete"));
+        }
+        else if (code.isArrowKey() && event.isShortcutDown()) {
+            selectedObjectProperty.get().move(
+                code == KeyCode.LEFT ? HorizontalDirection.LEFT : (code == KeyCode.RIGHT ? HorizontalDirection.RIGHT : null),
+                code == KeyCode.UP ? VerticalDirection.UP : (code == KeyCode.DOWN ? VerticalDirection.DOWN : null)
+            );
+        }
     }
 
     public void deselectObjects() {

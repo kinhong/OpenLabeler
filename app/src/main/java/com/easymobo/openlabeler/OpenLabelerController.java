@@ -51,11 +51,9 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
-import javafx.scene.input.KeyCode;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.apache.commons.lang3.SystemUtils;
 import org.fxmisc.easybind.EasyBind;
@@ -138,12 +136,8 @@ public class OpenLabelerController implements Initializable, AutoCloseable
             LOG.log(Level.SEVERE, "Unable to create JAXBContext", ex);
         }
 
-        // The scroll pane has the keyboard focus
-        scrollPane.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.BACK_SPACE) {
-                tagGroup.deleteSelected(bundle.getString("menu.delete"));
-            }
-        });
+        // ScrollPane steals focus, so it is always the focus owner
+        scrollPane.setOnKeyPressed(event -> tagGroup.onKeyPressed(event));
 
         // Paste menu item
         miPaste.getParentMenu().setOnShowing(event -> {
