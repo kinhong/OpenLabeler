@@ -40,7 +40,7 @@ public class Annotation
 
     public Annotation(File file, Image image) {
         setFile(file);
-        this.size = new Size(image);
+        setSize(new Size(image));
     }
 
     @XmlTransient
@@ -137,7 +137,7 @@ public class Annotation
 
         public Size() {}
         public Size(Image image) {
-            this.image = image;
+            setImage(image);
         }
 
         @XmlTransient
