@@ -33,6 +33,8 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import org.controlsfx.tools.Borders;
 import org.fxmisc.easybind.EasyBind;
 
 import java.io.IOException;
@@ -45,8 +47,10 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TrainingPane extends GridPane implements Category
+public class TrainingPane extends VBox implements Category
 {
+    @FXML
+    private GridPane gpTrainingData, gpModel, gpDocker;
     @FXML
     private InputFileChooser txtTFImageDir, txtTFAnnotationDir, txtTFDataDir, txtTFBaseModelDir;
     @FXML
@@ -73,6 +77,12 @@ public class TrainingPane extends GridPane implements Category
 
         try {
             loader.load();
+            getChildren().addAll(
+                    Borders.wrap(gpTrainingData).lineBorder().title(bundle.getString("menu.trainingData")).buildAll(),
+                    Borders.wrap(gpModel).lineBorder().title(bundle.getString("menu.model")).buildAll(),
+                    Borders.wrap(gpDocker).lineBorder().title(bundle.getString("menu.docker")).buildAll()
+            );
+
         }
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
@@ -174,7 +184,6 @@ public class TrainingPane extends GridPane implements Category
     }
 
     private void updateLabelMap() {
-        String dataDir = txtTFDataDir.getText();
         labelMapPane.getItems().clear();
         labelMapPane.getItems().addAll(TFTrainer.getLabelMapItems(txtTFDataDir.getText()));
         bindProperties();
@@ -223,6 +232,7 @@ public class TrainingPane extends GridPane implements Category
     }
 
     private void exportGraph(Button source, int checkpoint) {
+        save();
         TFTrainer.exportGraph(checkpoint);
         Util.showInformation(bundle.getString("menu.alert"), MessageFormat.format(bundle.getString("msg.exportGraph"), checkpoint));
         source.setDisable(true);

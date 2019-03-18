@@ -24,15 +24,14 @@ import javafx.beans.property.*;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.List;
+import java.util.Collection;
 import java.util.prefs.Preferences;
 
 public class Settings
 {
     private static Preferences pref = Preferences.userNodeForPackage(Settings.class);
     // General
+    private static final String OPEN_LAST_MEDIA = "openLastMedia";
     private static final String SAVE_EVERY_CHANGE = "saveEveryChange";
     private static final String ANNOTATION_DIR = "annotationDir";
     private static final String AUTO_SET_NAME = "autoSetName";
@@ -53,6 +52,15 @@ public class Settings
     // Other
     private static final String RECENT_FILES = "recentFiles";
     private static final String RECENT_NAMES = "recentNames";
+
+    // Open last media file/folder
+    public static final BooleanProperty openLastMediaProperty = new BooleanPrefProperty(pref, OPEN_LAST_MEDIA, true);
+    public static boolean isOpenLastMedia() {
+        return openLastMediaProperty.get();
+    }
+    public static void setOpenLastMedia(boolean save) {
+        openLastMediaProperty.set(save);
+    }
 
     // Save every change
     public static final BooleanProperty saveEveryChangeProperty = new BooleanPrefProperty(pref, SAVE_EVERY_CHANGE, false);
@@ -213,11 +221,10 @@ public class Settings
     public static final RecentList recentFiles = new RecentList(4, RECENT_FILES);
 
     // Recent labels
-    public static final RecentList recentNames = new RecentList(100, RECENT_NAMES);
+    public static final RecentList recentNames = new RecentList(50, RECENT_NAMES);
 
-    public static class RecentList implements Iterable<String>
+    public static class RecentList extends ArrayList<String>
     {
-        private final List<String> recent = new ArrayList<>();
         private final int maxLength;
         private final String baseKey;
 
@@ -227,34 +234,36 @@ public class Settings
             load();
         }
 
-        public void add(String element) {
-            recent.remove(element);
-            recent.add(0, element);
+        @Override
+        public boolean add(String element) {
+            remove(element);
+            add(0, element);
             reduce();
+            save();
+            return true;
+        }
+
+        @Override
+        public boolean addAll(Collection<? extends String> elements) {
+            elements.forEach(e -> {
+                remove(e);
+                add(0, e);
+            });
+            reduce();
+            save();
+            return true;
+        }
+
+        @Override
+        public void clear() {
+            super.clear();
             save();
         }
 
         private void reduce() {
-            while (recent.size() > maxLength) {
-                recent.remove(recent.size() - 1);
+            while (size() > maxLength) {
+                remove(size() - 1);
             }
-        }
-
-        public void clear() {
-            recent.clear();
-            save();
-        }
-
-        public String get(int index) {
-            return recent.get(index);
-        }
-
-        public int size() {
-            return recent.size();
-        }
-
-        public Iterator<String> iterator() {
-            return Collections.unmodifiableCollection(recent).iterator();
         }
 
         private void load() {
@@ -263,14 +272,14 @@ public class Settings
                 if (val.equals("")) { /*$NON-NLS-1$*/
                     break;
                 }
-                recent.add(val);
+                super.add(val);
             }
         }
 
         private void save () {
             for (int i = 0; i < maxLength; i++) {
-                if (i < recent.size()) {
-                    pref.put(baseKey + i, recent.get(i));
+                if (i < size()) {
+                    pref.put(baseKey + i, get(i));
                 }
                 else {
                     pref.remove(baseKey + i);

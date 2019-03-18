@@ -20,12 +20,15 @@ package com.easymobo.openlabeler.ui;
 import com.easymobo.openlabeler.model.ObjectModel;
 import com.easymobo.openlabeler.preference.Settings;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 
@@ -34,8 +37,8 @@ public class ObjectTag extends TagBase
     private ObjectModel model;
     private String action;
 
-    public ObjectTag(Image image, Translate translate, Scale scale, ObjectModel model) {
-        super(image, translate, scale, model);
+    public ObjectTag(Image image, Translate translate, Scale scale, Rotate rotate, ObjectModel model) {
+        super(image, translate, scale, rotate, model);
         this.model = model;
 
         name.setText(model.getName());
@@ -56,6 +59,7 @@ public class ObjectTag extends TagBase
 
         // object thumbnail
         thumbProperty.bind(Bindings.createObjectBinding(() -> {
+
             PixelReader reader = image.getPixelReader();
             Bounds b = boundsProperty().get();
             return new WritableImage(reader, (int) b.getMinX(), (int) b.getMinY(), (int) b.getWidth(), (int) b.getHeight());

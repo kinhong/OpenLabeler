@@ -20,11 +20,11 @@
 <?import com.easymobo.openlabeler.ui.MediaPane?>
 <?import com.easymobo.openlabeler.ui.ObjectTableView?>
 <?import com.easymobo.openlabeler.ui.TagGroup?>
-<?import de.jensd.fx.glyphs.fontawesome.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.*?>
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/OpenLabeler.css" fx:controller="com.easymobo.openlabeler.OpenLabelerController">
     <top>
         <VBox prefHeight="38.0" prefWidth="600.0" BorderPane.alignment="CENTER">
@@ -110,6 +110,9 @@
                                 <MenuItem fx:id="miZoomIn" mnemonicParsing="false" onAction="#onZoomIn" text="%menu.zoomIn" />
                                 <MenuItem fx:id="miZoomFit" mnemonicParsing="false" onAction="#onZoomFit" text="%menu.zoomFit" />
                                 <SeparatorMenuItem mnemonicParsing="false" />
+                                <MenuItem fx:id="miRotateLeft" mnemonicParsing="false" onAction="#onRotateLeft" text="%menu.rotateLeft" />
+                                <MenuItem fx:id="miRotateRight" mnemonicParsing="false" onAction="#onRotateRight" text="%menu.rotateRight" />
+                                <SeparatorMenuItem mnemonicParsing="false" />
                                 <MenuItem fx:id="miShowHint" mnemonicParsing="false" onAction="#onShowHint" text="%menu.showHint">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
@@ -135,7 +138,7 @@
                     <items>
                         <Button fx:id="btnOpenMediaFile" mnemonicParsing="false" onAction="#onFileOpenFile">
                             <graphic>
-                                <FontAwesomeIconView glyphName="FILE_IMAGE_ALT" size="18.0" />
+                                <FontIcon iconLiteral="mdi-file-image" iconSize="18" />
                             </graphic>
                             <tooltip>
                                 <Tooltip text="%menu.openMediaFile" />
@@ -143,7 +146,7 @@
                         </Button>
                         <Button fx:id="btnOpenMediaDir" mnemonicParsing="false" onAction="#onFileOpenDir">
                             <graphic>
-                                <FontAwesomeIconView glyphName="FOLDER_OPEN_ALT" size="18.0" />
+                                <FontIcon iconLiteral="mdi-folder-multiple-image" iconSize="18" />
                             </graphic>
                             <tooltip>
                                 <Tooltip text="%menu.openMediaDir" />
@@ -152,7 +155,7 @@
                         <Separator prefHeight="27.0" prefWidth="10.0" />
                         <Button fx:id="btnSave" mnemonicParsing="false" onAction="#onSave">
                             <graphic>
-                                <FontAwesomeIconView glyphName="SAVE" size="18.0" />
+                                <FontIcon iconLiteral="mdi-content-save" iconSize="18" />
                             </graphic>
                             <tooltip>
                                 <Tooltip text="%menu.save" />
@@ -161,7 +164,7 @@
                         <Separator prefHeight="27.0" prefWidth="10.0" />
                         <Button fx:id="btnPrevMediaFile" mnemonicParsing="false" onAction="#onPrevMediaFile">
                             <graphic>
-                                <FontAwesomeIconView glyphName="ARROW_LEFT" size="18.0" />
+                                <FontIcon iconLiteral="mdi-arrow-left" iconSize="18" />
                             </graphic>
                             <tooltip>
                                 <Tooltip text="%menu.previousMediaFile" />
@@ -169,7 +172,7 @@
                         </Button>
                         <Button fx:id="btnNextMediaFile" mnemonicParsing="false" onAction="#onNextMediaFile">
                             <graphic>
-                                <FontAwesomeIconView glyphName="ARROW_RIGHT" size="18.0" />
+                                <FontIcon iconLiteral="mdi-arrow-right" iconSize="18" />
                             </graphic>
                             <tooltip>
                                 <Tooltip text="%menu.nextMediaFile" />
@@ -178,7 +181,7 @@
                         <Separator prefHeight="27.0" prefWidth="10.0" />
                         <Button fx:id="btnUndo" mnemonicParsing="false" onAction="#onUndo">
                             <graphic>
-                                <FontAwesomeIconView glyphName="ROTATE_LEFT" size="18.0" />
+                                <FontIcon iconLiteral="mdi-undo" iconSize="18" />
                             </graphic>
                             <tooltip>
                                 <Tooltip text="%menu.undo" />
@@ -186,7 +189,7 @@
                         </Button>
                         <Button fx:id="btnRedo" mnemonicParsing="false" onAction="#onRedo">
                             <graphic>
-                                <FontAwesomeIconView glyphName="ROTATE_RIGHT" size="18.0" />
+                                <FontIcon iconLiteral="mdi-redo" iconSize="18" />
                             </graphic>
                             <tooltip>
                                 <Tooltip text="%menu.redo" />
@@ -194,7 +197,7 @@
                         </Button>
                         <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#onDelete">
                             <graphic>
-                                <FontAwesomeIconView glyphName="REMOVE" size="18.0" />
+                                <FontIcon iconLiteral="mdi-delete" iconSize="18" />
                             </graphic>
                             <tooltip>
                                 <Tooltip text="%menu.delete" />
@@ -203,7 +206,7 @@
                         <Separator prefHeight="27.0" prefWidth="10.0" />
                         <Button fx:id="btnZoomOut" mnemonicParsing="false" onAction="#onZoomOut">
                             <graphic>
-                                <FontAwesomeIconView glyphName="SEARCH_MINUS" size="18.0" />
+                                <FontIcon iconLiteral="mdi-magnify-minus" iconSize="18" />
                             </graphic>
                             <tooltip>
                                 <Tooltip text="%menu.zoomOut" />
@@ -211,7 +214,7 @@
                         </Button>
                         <Button fx:id="btnZoomIn" mnemonicParsing="false" onAction="#onZoomIn">
                             <graphic>
-                                <FontAwesomeIconView glyphName="SEARCH_PLUS" size="18.0" />
+                                <FontIcon iconLiteral="mdi-magnify-plus" iconSize="18" />
                             </graphic>
                             <tooltip>
                                 <Tooltip text="%menu.zoomIn" />
@@ -219,16 +222,33 @@
                         </Button>
                         <Button fx:id="btnZoomFit" mnemonicParsing="false" onAction="#onZoomFit">
                             <graphic>
-                                <FontAwesomeIconView glyphName="SEARCH" size="18.0" />
+                                <FontIcon iconLiteral="mdi-magnify" iconSize="18" />
                             </graphic>
                             <tooltip>
                                 <Tooltip text="%menu.zoomFit" />
                             </tooltip>
                         </Button>
                         <Separator prefHeight="27.0" prefWidth="10.0" />
+                        <Button fx:id="btnRotateLeft" mnemonicParsing="false" onAction="#onRotateLeft">
+                            <graphic>
+                                <FontIcon iconLiteral="mdi-rotate-left" iconSize="18" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.rotateLeft" />
+                            </tooltip>
+                        </Button>
+                        <Button fx:id="btnRotateRight" mnemonicParsing="false" onAction="#onRotateRight">
+                            <graphic>
+                                <FontIcon iconLiteral="mdi-rotate-right" iconSize="18" />
+                            </graphic>
+                            <tooltip>
+                                <Tooltip text="%menu.rotateRight" />
+                            </tooltip>
+                        </Button>
+                        <Separator prefHeight="27.0" prefWidth="10.0" />
                         <Button fx:id="btnShowHint" mnemonicParsing="false" onAction="#onShowHint">
                             <graphic>
-                                <FontAwesomeIconView glyphName="EYE" size="18.0" />
+                                <FontIcon iconLiteral="mdi-eye" iconSize="18" />
                             </graphic>
                             <tooltip>
                                 <Tooltip text="%menu.showHint" />
@@ -236,7 +256,7 @@
                         </Button>
                         <Button fx:id="btnClearHint" mnemonicParsing="false" onAction="#onClearHint">
                             <graphic>
-                                <FontAwesomeIconView glyphName="EYE_SLASH" size="18.0" />
+                                <FontIcon iconLiteral="mdi-eye-off" iconSize="18" />
                             </graphic>
                             <tooltip>
                                 <Tooltip text="%menu.clearHint" />
@@ -254,10 +274,7 @@
                     <content>
                         <StackPane prefHeight="137.0" prefWidth="598.0">
                             <children>
-                                <TagGroup fx:id="tagGroup">
-                           <StackPane.margin>
-                              <Insets />
-                           </StackPane.margin></TagGroup>
+                                <TagGroup fx:id="tagGroup"/>
                             </children>
                         </StackPane>
                     </content>

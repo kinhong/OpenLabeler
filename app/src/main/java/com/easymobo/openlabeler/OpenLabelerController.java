@@ -48,6 +48,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.DataFormat;
@@ -55,6 +56,7 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.apache.commons.lang3.SystemUtils;
 import org.fxmisc.easybind.EasyBind;
 import org.fxmisc.easybind.monadic.MonadicBinding;
@@ -75,6 +77,7 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
 import static org.reactfx.EventStreams.changesOf;
 import static org.reactfx.EventStreams.merge;
 
@@ -91,9 +94,9 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     @FXML
     private Menu menuOpenRecent;
     @FXML
-    private MenuItem miPrevMediaFile, miNextMediaFile, miClose, miSave, msPreference, miPreference, msExit, miExit, miUndo, miRedo, miCut, miCopy, miPaste, miDelete, miZoomIn, miZoomOut, miZoomFit, miShowHint, miClearHint, msAbout, miAbout;
+    private MenuItem miPrevMediaFile, miNextMediaFile, miClose, miSave, msPreference, miPreference, msExit, miExit, miUndo, miRedo, miCut, miCopy, miPaste, miDelete, miZoomIn, miZoomOut, miZoomFit, miRotateLeft, miRotateRight, miShowHint, miClearHint, msAbout, miAbout;
     @FXML
-    private Button btnPrevMediaFile, btnNextMediaFile, btnSave, btnUndo, btnRedo, btnDelete, btnZoomIn, btnZoomOut, btnZoomFit, btnShowHint, btnClearHint;
+    private Button btnPrevMediaFile, btnNextMediaFile, btnSave, btnUndo, btnRedo, btnDelete, btnZoomIn, btnZoomOut, btnZoomFit, btnRotateLeft, btnRotateRight, btnShowHint, btnClearHint;
     @FXML
     private MediaPane mediaPane;
     @FXML
@@ -149,9 +152,19 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         trainer.init();
 
         bindProperties();
+    }
 
-        // Initial focus
-        Platform.runLater(() -> tagGroup.requestFocus());
+    public void handleWindowEvent(WindowEvent event) {
+        if (event.getEventType() == WindowEvent.WINDOW_SHOWN) {
+            // Initial focus
+            tagGroup.requestFocus();
+
+            // Open last media file/folder
+            if (Settings.isOpenLastMedia() && Settings.recentFiles.size() > 0) {
+                File fileOrDir = new File(Settings.recentFiles.get(0));
+                openFileOrDir(fileOrDir);
+            }
+        }
     }
 
     public void onFileOpenFile(ActionEvent actionEvent) {
@@ -284,6 +297,18 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         tagGroup.getScale().setY(factor);
     }
 
+    public void onRotateLeft(ActionEvent event) {
+        rotate(-90);
+    }
+
+    public void onRotateRight(ActionEvent event) {
+        rotate(90);
+    }
+
+    private void rotate(int angle) {
+        tagGroup.rotate(angle);
+    }
+
     public void onShowHint(ActionEvent event) {
         tagGroup.showHints();
     }
@@ -353,8 +378,16 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         if (btnSave.isDisabled()) {
             return true;
         }
-        Optional<ButtonType> result = Util.showConfirmation(bundle.getString("menu.alert"), bundle.getString("msg.confirmClose"));
-        return result.get() == ButtonType.OK;
+        ButtonType saveAndClose = new ButtonType(bundle.getString("menu.saveAndClose"), ButtonData.OTHER);
+        Alert alert = Util.createAlert(CONFIRMATION, bundle.getString("menu.alert"), bundle.getString("msg.confirmClose"));
+        alert.getButtonTypes().clear();
+        alert.getButtonTypes().addAll(saveAndClose, ButtonType.OK, ButtonType.CANCEL);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.get() == saveAndClose) {
+            save(true);
+        }
+
+        return result.get() != ButtonType.CANCEL;
     }
 
     private void bindProperties() {
@@ -362,6 +395,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         boolean loading[] = { false };
         mediaPane.getSelectionModel().selectedItemProperty().addListener((observable, oldFile, newFile) -> {
             if (newFile == null) {
+                updateAppTitle(newFile);
                 return;
             }
             if (oldFile != null && oldFile.equals(tagGroup.getModel().getFile()) && !canClose()) {
@@ -392,6 +426,8 @@ public class OpenLabelerController implements Initializable, AutoCloseable
                 zoomFit();
 
                 undoManager.forgetHistory();
+
+                updateAppTitle(newFile);
             }
             catch (Exception ex) {
                 LOG.log(Level.SEVERE, "Unable to load", ex);
@@ -502,6 +538,12 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         miZoomFit.disableProperty().bind(tagGroup.modelProperty().isNull());
         btnZoomFit.disableProperty().bind(miZoomFit.disableProperty());
 
+        // View -> Rotate
+        miRotateLeft.disableProperty().bind(tagGroup.modelProperty().isNull());
+        btnRotateLeft.disableProperty().bind(miRotateLeft.disableProperty());
+        miRotateRight.disableProperty().bind(tagGroup.modelProperty().isNull());
+        btnRotateRight.disableProperty().bind(miRotateRight.disableProperty());
+
         // View -> Show/Clear Hints
         ObservableValue<Long> visibleHints = EasyBind.combine(
                 EasyBind.map(tagGroup.hintsProperty().get(), t -> t.visibleProperty()),
@@ -556,6 +598,14 @@ public class OpenLabelerController implements Initializable, AutoCloseable
             }
         }
         return null;
+    }
+
+    private void updateAppTitle(File file) {
+        String title = bundle.getString("app.name");
+        if (file != null && file.exists()) {
+            title += " - " + file.getAbsolutePath();
+        }
+        ((Stage)tagGroup.getScene().getWindow()).setTitle(title);
     }
 
     /**

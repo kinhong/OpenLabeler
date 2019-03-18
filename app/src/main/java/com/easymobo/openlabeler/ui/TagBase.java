@@ -18,6 +18,8 @@
 package com.easymobo.openlabeler.ui;
 
 import com.easymobo.openlabeler.model.ObjectModel;
+import com.easymobo.openlabeler.util.Util;
+import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -30,6 +32,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.TransformChangedEvent;
 import javafx.scene.transform.Translate;
@@ -68,9 +71,9 @@ public abstract class TagBase extends Group
     protected Translate translate;
     protected Scale scale;
 
-    public TagBase(Image image, Translate translate, Scale scale, ObjectModel model) {
+    public TagBase(Image image, Translate translate, Scale scale, Rotate rotate, ObjectModel model) {
         bundle = ResourceBundle.getBundle("bundle");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ObjectTag.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TagBase.fxml"));
         loader.setRoot(this);
         loader.setController(this);
 
@@ -85,8 +88,16 @@ public abstract class TagBase extends Group
         this.translate = translate;
         this.scale = scale;
 
-        name.translateXProperty().bind(translate.xProperty().add(rect.xProperty().multiply(scale.xProperty())));
-        name.translateYProperty().bind(translate.yProperty().add(rect.yProperty().multiply(scale.yProperty())));
+        // Prevent name from rotating so it is always upright
+        this.getTransforms().add(rotate);
+        name.getTransforms().add(new Rotate(-rotate.getAngle(), 0, 0));
+        rotate.addEventFilter(TransformChangedEvent.TRANSFORM_CHANGED, event -> {
+            Util.getTransform(name, Rotate.class).setAngle(-rotate.getAngle());
+            name.translateXProperty().bind(getNameTranslateXProperty(rotate));
+            name.translateYProperty().bind(getNameTranslateYProperty(rotate));
+        });
+        name.translateXProperty().bind(getNameTranslateXProperty(rotate));
+        name.translateYProperty().bind(getNameTranslateYProperty(rotate));
 
         rect.setX(model.getBoundBox().getXMin());
         rect.setY(model.getBoundBox().getYMin());
@@ -111,6 +122,32 @@ public abstract class TagBase extends Group
                 setSelected(false);
             }
         });
+    }
+
+    private DoubleBinding getNameTranslateXProperty(Rotate rotate) {
+        DoubleBinding anchor = rect.xProperty().add(0);
+        switch ((int)rotate.getAngle()) {
+            case 180: case -180:
+                anchor = rect.xProperty().add(rect.widthProperty()).subtract(name.heightProperty());
+                break;
+            case -90: case 270:
+                anchor = rect.xProperty().add(rect.widthProperty());
+                break;
+        }
+        return translate.xProperty().add(anchor.multiply(scale.xProperty()));
+    }
+
+    private DoubleBinding getNameTranslateYProperty(Rotate rotate) {
+        DoubleBinding anchor = rect.yProperty().add(0);
+        switch ((int)rotate.getAngle()) {
+            case -270: case 90:
+                anchor = rect.yProperty().add(rect.heightProperty());
+                break;
+            case 180: case -180:
+                anchor = rect.yProperty().add(rect.heightProperty());
+                break;
+        }
+        return translate.yProperty().add(anchor.multiply(scale.yProperty()));
     }
 
     public abstract ObjectModel getModel();
@@ -166,8 +203,7 @@ public abstract class TagBase extends Group
 
     public BooleanProperty selectionProperty() {
         if (selectionProperty == null) {
-            selectionProperty = new SimpleBooleanProperty()
-            {
+            selectionProperty = new SimpleBooleanProperty() {
                 @Override
                 public boolean get() {
                     super.get();
@@ -370,7 +406,7 @@ public abstract class TagBase extends Group
     }
 
     private static ImageCursor createImageCursor(String path) {
-        Image image = new Image(path);
+        Image image = new Image(path, true);
         return new ImageCursor(image, image.getWidth() / 2, image.getHeight() / 2);
     }
 

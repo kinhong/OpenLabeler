@@ -31,12 +31,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.SeparatorMenuItem;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -75,6 +77,21 @@ public class OpenLabeler extends Application
                     FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/OpenLabeler.fxml"), bundle);
                     Parent root = loader.load();
 
+                    stage.setOnCloseRequest(e -> {
+                        OpenLabelerController controller = loader.getController();
+                        if (!controller.canClose()) {
+                            e.consume();
+                            return;
+                        }
+                        controller.close();
+                        Platform.exit();
+                    });
+
+                    stage.addEventHandler(WindowEvent.ANY, (event) -> {
+                        OpenLabelerController controller = loader.getController();
+                        controller.handleWindowEvent(event);
+                    });
+
                     Platform.runLater(() -> {
                         if (SystemUtils.IS_OS_MAC) {
                             initOSMac(bundle);
@@ -83,17 +100,8 @@ public class OpenLabeler extends Application
                         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
                         Scene scene = new Scene(root, screenBounds.getWidth() * 0.8, screenBounds.getHeight() * 0.8); // 80% of monitor size
                         stage.setTitle(bundle.getString("app.name"));
+                        stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream("icon.png")));
                         stage.setScene(scene);
-
-                        stage.setOnCloseRequest(e -> {
-                            OpenLabelerController controller = loader.getController();
-                            if (!controller.canClose()) {
-                                e.consume();
-                                return;
-                            }
-                            controller.close();
-                            Platform.exit();
-                        });
 
                         stage.show();
                     });

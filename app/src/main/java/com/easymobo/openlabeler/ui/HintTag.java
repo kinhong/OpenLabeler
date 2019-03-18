@@ -19,11 +19,15 @@ package com.easymobo.openlabeler.ui;
 
 import com.easymobo.openlabeler.model.HintModel;
 import com.easymobo.openlabeler.preference.Settings;
-import javafx.beans.property.*;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
 
@@ -34,11 +38,12 @@ public class HintTag extends TagBase
     private static final Logger LOG = Logger.getLogger(HintTag.class.getCanonicalName());
     private HintModel model;
 
-    public HintTag(Image image, Translate translate, Scale scale, HintModel model) {
-        super(image, translate, scale, model);
+    public HintTag(Image image, Translate translate, Scale scale, Rotate rotate, HintModel model) {
+        super(image, translate, scale, rotate, model);
         this.model = model;
 
         name.setText(String.format("%s (%.2f)", model.getName(), model.getScore()));
+        name.setMouseTransparent(true);
     }
 
     @Override
@@ -56,22 +61,15 @@ public class HintTag extends TagBase
         return Settings.hintFillColorProperty;
     }
 
-    private BooleanProperty hintConfirmProperty;
-
+    private BooleanProperty hintConfirmProperty = new SimpleBooleanProperty();
     public BooleanProperty hintConfirmProperty() {
-        if (hintConfirmProperty == null) {
-            hintConfirmProperty = new SimpleBooleanProperty();
-        }
-
         return hintConfirmProperty;
     }
 
     @Override
     protected void onMouseClicked(MouseEvent me) {
-        if (me.getButton().equals(MouseButton.PRIMARY)){
-            if (me.getClickCount() == 2){
-                hintConfirmProperty.set(true);
-            }
+        if (me.getButton().equals(MouseButton.PRIMARY) && me.getClickCount() == 2) {
+            hintConfirmProperty.set(true);
         }
     }
 }

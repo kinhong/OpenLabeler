@@ -17,7 +17,6 @@
 
 package com.easymobo.openlabeler.ui;
 
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
@@ -27,16 +26,17 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
 import java.util.ResourceBundle;
 
-import static de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon.FOLDER_OPEN_ALT;
+import static org.kordamp.ikonli.materialdesign.MaterialDesign.MDI_FOLDER_OUTLINE;
 
 public class InputFileChooser extends HBox
 {
     private TextField txt = new TextField();
-    private Button btn = new Button(null, new FontAwesomeIconView(FOLDER_OPEN_ALT));
+    private Button btn = new Button(null, FontIcon.of(MDI_FOLDER_OUTLINE, 18));
     private ResourceBundle bundle;
     private boolean file;
 

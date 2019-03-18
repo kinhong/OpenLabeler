@@ -23,6 +23,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -242,19 +243,24 @@ public class Util
         }
     }
 
-    public static void showInformation(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+    public static Alert createAlert(AlertType type, String title, String message) {
+        Alert alert = new Alert(type);
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
-        alert.showAndWait();
+        return alert;
+    }
+
+    public static void showInformation(String title, String message) {
+        createAlert(AlertType.INFORMATION, title, message).showAndWait();
     }
 
     public static Optional<ButtonType> showConfirmation(String title, String message) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(message);
-        return alert.showAndWait();
+        return createAlert(AlertType.CONFIRMATION, title, message).showAndWait();
+    }
+
+    public static <T> T getTransform(Node node, Class<T> clz) {
+        return node.getTransforms().stream()
+                .filter(transform -> transform.getClass().equals(clz)).map(clz::cast).findFirst().get();
     }
 }

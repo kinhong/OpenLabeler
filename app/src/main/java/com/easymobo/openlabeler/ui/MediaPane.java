@@ -21,11 +21,13 @@ import com.easymobo.openlabeler.preference.Settings;
 import com.easymobo.openlabeler.ui.MediaTableView.MediaFile;
 import com.easymobo.openlabeler.util.Util;
 import javafx.application.Platform;
-import javafx.beans.property.*;
+import javafx.beans.property.ListProperty;
+import javafx.beans.property.ReadOnlyIntegerProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableView.TableViewSelectionModel;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
@@ -43,7 +45,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import static java.nio.file.StandardWatchEventKinds.*;
-import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 public class MediaPane extends BorderPane implements AutoCloseable
 {
@@ -156,6 +157,18 @@ public class MediaPane extends BorderPane implements AutoCloseable
                     imageDirWatchKey.cancel();
                 }
                 imageDirWatchKey = inputPath.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+
+                Path annotationPath = Paths.get(file.isDirectory() ? file.getAbsolutePath() : file.getParent(), Settings.getAnnotationDir());
+                annotationPath = annotationPath.normalize();
+                if (!annotationPath.toFile().exists()) {
+                    annotationPath.toFile().mkdir();
+                }
+
+                if (annotationDirWatchKey != null && !annotationDirWatchKey.watchable().equals(annotationPath)) {
+                    annotationDirWatchKey.cancel();
+                }
+                annotationDirWatchKey = annotationPath.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
+
                 new Thread(() -> {
                     try {
                         WatchKey key;
@@ -164,13 +177,19 @@ public class MediaPane extends BorderPane implements AutoCloseable
                                 if (event.kind() == OVERFLOW) {
                                     continue;
                                 }
-                                if (event.kind() == ENTRY_CREATE) {
-                                    Path path = (Path)event.context();
-                                    Platform.runLater(() -> tvMedia.getSource().add(new MediaFile(path.toFile())));
+                                if (key == imageDirWatchKey) {
+                                    if (event.kind() == ENTRY_CREATE) {
+                                        Path path = (Path) event.context();
+                                        Platform.runLater(() -> tvMedia.getSource().add(new MediaFile(path.toFile())));
+                                    }
+                                    else if (event.kind() == ENTRY_DELETE) {
+                                        Path path = (Path) event.context();
+                                        Platform.runLater(() -> tvMedia.getSource().remove(new MediaFile(path.toFile())));
+                                    }
                                 }
-                                else if (event.kind() == ENTRY_DELETE) {
-                                    Path path = (Path)event.context();
-                                    Platform.runLater(() -> tvMedia.getSource().remove(new MediaFile(path.toFile())));
+                                if (key == annotationDirWatchKey) {
+                                    // Observe changes and update stats
+                                    updateFileStats(tvMedia.getSource());
                                 }
                             }
                             // reset the key
@@ -183,44 +202,11 @@ public class MediaPane extends BorderPane implements AutoCloseable
                     catch (Exception ex) {
                         return;
                     }
-                }, "Media Directory Watcher").start();
-            }
-
-            Path annotationPath = Paths.get(file.isDirectory() ? file.getAbsolutePath() : file.getParent(), Settings.getAnnotationDir());
-            annotationPath = annotationPath.normalize();
-            if (!annotationPath.toFile().exists()) {
-                annotationPath.toFile().mkdir();
+                }, "Media/Annotation Directory Watcher").start();
             }
 
             // Initial stats
             updateFileStats(tvMedia.getSource());
-
-            if (annotationDirWatchKey != null && !annotationDirWatchKey.watchable().equals(annotationPath)) {
-                annotationDirWatchKey.cancel();
-            }
-            annotationDirWatchKey = annotationPath.register(watcher, ENTRY_CREATE, ENTRY_DELETE, ENTRY_MODIFY);
-            new Thread(() -> {
-                try {
-                    WatchKey key;
-                    while ((key = watcher.take()) != null) {
-                        for (WatchEvent<?> event : key.pollEvents()) {
-                            if (event.kind() == OVERFLOW) {
-                                continue;
-                            }
-                            // Observe changes and update stats
-                            updateFileStats(tvMedia.getSource());
-                        }
-                        // reset the key
-                        boolean valid = key.reset();
-                        if (!valid) {
-                            break;
-                        }
-                    }
-                }
-                catch (Exception ex) {
-                    return;
-                }
-            }, "Annotations Directory Watcher").start();
         }
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to watch", ex);

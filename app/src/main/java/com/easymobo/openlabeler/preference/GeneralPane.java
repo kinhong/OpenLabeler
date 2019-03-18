@@ -21,28 +21,35 @@ import com.easymobo.openlabeler.util.Util;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ColorPicker;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import org.controlsfx.tools.Borders;
 import org.fxmisc.easybind.EasyBind;
 
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class GeneralPane extends GridPane implements Category
+public class GeneralPane extends VBox implements Category
 {
     @FXML
-    private CheckBox chkSaveEveryChange, chkAutoSetName;
+    private GridPane gpApplication, gpOutput, gpAnnotation;
+    @FXML
+    private CheckBox chkOpenLastMedia, chkSaveEveryChange, chkAutoSetName;
     @FXML
     private TextField textAnnotationsDir;
     @FXML
     private ColorPicker pickerObjectStrokeColor;
     @FXML
-    private Button btnClearUsedNames;
+    private NameListPane nameListPane;
 
     private static final Logger LOG = Logger.getLogger(GeneralPane.class.getCanonicalName());
 
@@ -57,6 +64,10 @@ public class GeneralPane extends GridPane implements Category
 
         try {
             loader.load();
+            getChildren().addAll(
+                    Borders.wrap(gpApplication).lineBorder().title(bundle.getString("menu.application")).buildAll(),
+                    Borders.wrap(gpOutput).lineBorder().title(bundle.getString("menu.output")).buildAll(),
+                    Borders.wrap(gpAnnotation).lineBorder().title(bundle.getString("menu.annotation")).buildAll());
         }
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
@@ -66,10 +77,13 @@ public class GeneralPane extends GridPane implements Category
 
         // Bind Properties
         BooleanBinding changes[] = {
+                chkOpenLastMedia.selectedProperty().isNotEqualTo(Settings.openLastMediaProperty),
                 chkSaveEveryChange.selectedProperty().isNotEqualTo(Settings.saveEveryChangeProperty),
                 textAnnotationsDir.textProperty().isNotEqualTo(Settings.annotationDirProperty),
-                chkAutoSetName.selectedProperty().isNotEqualTo(Settings.autoSetNameProperty),
                 pickerObjectStrokeColor.valueProperty().isNotEqualTo(Settings.objectStrokeColorProperty),
+                chkAutoSetName.selectedProperty().isNotEqualTo(Settings.autoSetNameProperty),
+                new SimpleListProperty(nameListPane.getItems()).isNotEqualTo(
+                        FXCollections.observableList(Settings.recentNames)),
         };
         dirtyProperty.bind(EasyBind.combine(
                 FXCollections.observableArrayList(changes), stream -> stream.reduce((a, b) -> a | b).orElse(false)));
@@ -97,10 +111,12 @@ public class GeneralPane extends GridPane implements Category
 
     @Override
     public void load() {
+        chkOpenLastMedia.setSelected(Settings.isOpenLastMedia());
         chkSaveEveryChange.setSelected(Settings.isSaveEveryChange());
         textAnnotationsDir.setText(Settings.getAnnotationDir());
-        chkAutoSetName.setSelected(Settings.getAutoSetName());
         pickerObjectStrokeColor.setValue(Settings.getObjectStrokeColor());
+        chkAutoSetName.setSelected(Settings.getAutoSetName());
+        nameListPane.getItems().addAll(Settings.recentNames);
     }
 
     @Override
@@ -108,9 +124,12 @@ public class GeneralPane extends GridPane implements Category
         if (!isDirty()) {
             return;
         }
+        Settings.setOpenLastMedia(chkOpenLastMedia.isSelected());
         Settings.setSaveEveryChange(chkSaveEveryChange.isSelected());
         Settings.setAnnotationDir(textAnnotationsDir.getText());
-        Settings.setAutoSetName(chkAutoSetName.isSelected());
         Settings.setObjectStrokeColor(pickerObjectStrokeColor.getValue());
+        Settings.setAutoSetName(chkAutoSetName.isSelected());
+        Settings.recentNames.clear();
+        Settings.recentNames.addAll(nameListPane.getItems());
     }
 }

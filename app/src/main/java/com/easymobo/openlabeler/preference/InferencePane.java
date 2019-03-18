@@ -27,14 +27,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import org.controlsfx.tools.Borders;
 import org.fxmisc.easybind.EasyBind;
 
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class InferencePane extends GridPane implements Category
+public class InferencePane extends VBox implements Category
 {
+    @FXML
+    private GridPane gpTensorFlow;
     @FXML
     private CheckBox chkUseInference;
     @FXML
@@ -55,6 +59,9 @@ public class InferencePane extends GridPane implements Category
 
         try {
             loader.load();
+            getChildren().addAll(
+                    Borders.wrap(gpTensorFlow).lineBorder().title(bundle.getString("menu.tensorFlow")).buildAll()
+            );
         }
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);

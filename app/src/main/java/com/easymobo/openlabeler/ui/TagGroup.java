@@ -31,15 +31,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.*;
 import javafx.scene.Group;
+import javafx.scene.canvas.Canvas;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.TransformChangedEvent;
 import javafx.scene.transform.Translate;
@@ -58,6 +61,8 @@ public class TagGroup extends Group implements AutoCloseable
     private StackPane paddingPane;
     @FXML
     private ImageView imageView;
+    @FXML
+    private Canvas canvas;
 
     private static final Logger LOG = Logger.getLogger(TagGroup.class.getCanonicalName());
 
@@ -66,6 +71,7 @@ public class TagGroup extends Group implements AutoCloseable
     private ResourceBundle bundle;
     private Translate translate;
     private Scale scale;
+    private Rotate rotate;
     private ContextMenu contextMenu;
     private ObjectDetector objectDetector;
 
@@ -112,11 +118,15 @@ public class TagGroup extends Group implements AutoCloseable
 
         scale = new Scale(1, 1);
         translate = new Translate(PADDING, PADDING);
-        paddingPane.getTransforms().add(scale);
+        rotate = new Rotate();
+        paddingPane.getTransforms().addAll(scale, rotate);
 
-        // Maintain constant padding at different zoom level
         scale.addEventHandler(TransformChangedEvent.TRANSFORM_CHANGED, event -> {
+            // Maintain constant padding at different zoom level
             paddingPane.setPadding(new Insets(Math.max(PADDING/scale.getX(), PADDING/scale.getY())));
+
+            canvas.setWidth(imageView.getBoundsInLocal().getWidth());
+            canvas.setHeight(imageView.getBoundsInLocal().getHeight());
         });
 
         paddingPane.setOnMousePressed(event -> onMousePressed(event));
@@ -192,6 +202,7 @@ public class TagGroup extends Group implements AutoCloseable
                     super.set(model);
                     scale.setX(1);
                     scale.setY(1);
+                    rotate.setAngle(0);
                     selectedObjectProperty.setValue(null);
                     tagCoordsProperty.set("");
                     objectsProperty.clear();
@@ -216,52 +227,55 @@ public class TagGroup extends Group implements AutoCloseable
         return scale;
     }
 
+    public void rotate(int angle) {
+        rotate.setAngle((rotate.getAngle()+angle) % 360);
+    }
+
     public ImageView getImageView() {
         return imageView;
     }
 
     // Temporary mouse drag states
-    private Rectangle dragRect;
+    private BoundingBox dragBox;
     private Point2D anchor;
 
+    // padding pane mouse listener
     private void onMousePressed(MouseEvent me) {
+        requestFocus();
         deselectObjects();
 
         Point2D pt = imageView.parentToLocal(me.getX(), me.getY());
-
-        // Prepare to create object
         anchor = pt;
-        dragRect = new Rectangle(pt.getX(), pt.getY(), 0, 0);
-        dragRect.setFill(Settings.getObjectFillColor());
-        dragRect.getTransforms().addAll(translate, scale);
-        dragRect.boundsInLocalProperty().addListener((observable, oldValue, newValue) -> tagCoordsProperty.set(getCoordinates(newValue)));
-        getChildren().add(dragRect);
+        dragBox = new BoundingBox(pt.getX(), pt.getY(), 0, 0);
         me.consume();
     }
 
+    // padding pane mouse listener
     private void onMouseDragged(MouseEvent me) {
-        if (dragRect == null) {
+        if (dragBox == null) {
             return;
         }
-        updateDragRect(imageView.parentToLocal(me.getX(), me.getY()));
+        updateDragBox(imageView.parentToLocal(me.getX(), me.getY()));
+        me.consume();
     }
 
+    // padding pane mouse listener
     private void onMouseReleased(MouseEvent me) {
-        if (dragRect == null) {
+        if (dragBox == null) {
             return;
         }
-        updateDragRect(imageView.parentToLocal(me.getX(), me.getY()));
+        updateDragBox(imageView.parentToLocal(me.getX(), me.getY()));
 
         // Clip selection to image view bounds
         Bounds bounds = imageView.getBoundsInLocal();
-        dragRect.setX(dragRect.getX() < 0 ? 0 : dragRect.getX());
-        dragRect.setY(dragRect.getY() < 0 ? 0 : dragRect.getY());
-        dragRect.setWidth(dragRect.getWidth() > bounds.getWidth() ? bounds.getWidth() : dragRect.getWidth());
-        dragRect.setHeight(dragRect.getHeight() > bounds.getHeight() ? bounds.getHeight() : dragRect.getHeight());
+        double x = dragBox.getMinX() < 0 ? 0 : dragBox.getMinX();
+        double y = dragBox.getMinY() < 0 ? 0 : dragBox.getMinY();
+        double w = dragBox.getWidth() > bounds.getWidth() ? bounds.getWidth() : dragBox.getWidth();
+        double h = dragBox.getHeight() > bounds.getHeight() ? bounds.getHeight() : dragBox.getHeight();
 
-        if (dragRect.getBoundsInLocal().getHeight() > ObjectTag.MIN_SIZE && dragRect.getBoundsInLocal().getWidth() > ObjectTag.MIN_SIZE) {
+        if (w > ObjectTag.MIN_SIZE && h > ObjectTag.MIN_SIZE) {
             String lastLabel = NameEditor.getLastLabel(bundle);
-            ObjectTag objectTag = addObjectTag(lastLabel, dragRect);
+            ObjectTag objectTag = addObjectTag(lastLabel, x, y, x + w, y + h);
             if (!Settings.getAutoSetName() || Settings.recentNames.size() <= 0) {
                 NameEditor editor = new NameEditor(lastLabel);
                 lastLabel = editor.showPopup(me.getScreenX(), me.getScreenY(), getScene().getWindow());
@@ -276,15 +290,60 @@ public class TagGroup extends Group implements AutoCloseable
             }
         }
 
-        getChildren().remove(dragRect);
-        dragRect = null;
+        canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        dragBox = null;
         anchor = null;
+    }
+
+    private void updateDragBox(Point2D me) {
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+        gc.setFill(Settings.getObjectFillColor());
+        final double maxX = imageView.getImage().getWidth();
+        final double maxY = imageView.getImage().getHeight();
+        double x = me.getX() < maxX ? (me.getX() < 0 ? 0 : me.getX()) : maxX;
+        double y = me.getY() < maxY ? (me.getY() < 0 ? 0 : me.getY()) : maxY;;
+        double w = x - anchor.getX();
+        double h = y - anchor.getY();
+
+        if (w < 0) {
+            w = anchor.getX() - x;
+        }
+        else {
+            x = anchor.getX();
+        }
+
+        if (h < 0) {
+            h = anchor.getY() - y;
+        }
+        else {
+            y = anchor.getY();
+        }
+
+        gc.clearRect(dragBox.getMinX(), dragBox.getMinY(), dragBox.getWidth(), dragBox.getHeight());
+        gc.fillRect(x, y, w, h);
+        dragBox = new BoundingBox(x, y, w, h);
     }
 
     private void onContextMenuEvent(ContextMenuEvent event) {
         ObjectTag selected = selectedObjectProperty.get();
         if (selected == null) {
             return;
+        }
+        contextMenu = new ContextMenu();
+        for (int i = 0; i < 10 && i < Settings.recentNames.size(); i++) {
+            String name = Settings.recentNames.get(i);
+            if (name.isEmpty() || name.isBlank()) {
+                continue;
+            }
+            MenuItem mi = new MenuItem(name);
+            mi.setOnAction(value -> {
+                selected.nameProperty().set(name);
+                Settings.recentNames.add(name);
+            });
+            contextMenu.getItems().add(mi);
+        }
+        if (!contextMenu.getItems().isEmpty()) {
+            contextMenu.getItems().add(new SeparatorMenuItem());
         }
         MenuItem editName = new MenuItem(bundle.getString("menu.editName"));
         editName.setOnAction(value -> {
@@ -295,7 +354,7 @@ public class TagGroup extends Group implements AutoCloseable
         });
         MenuItem delete = new MenuItem(bundle.getString("menu.delete"));
         delete.setOnAction(value -> deleteSelected(bundle.getString("menu.delete")));
-        contextMenu = new ContextMenu(editName, delete);
+        contextMenu.getItems().addAll(editName, delete);
         contextMenu.setAutoHide(true);
         contextMenu.show(imageView, event.getScreenX(), event.getScreenY());
         event.consume();
@@ -326,6 +385,7 @@ public class TagGroup extends Group implements AutoCloseable
 
         // Deselect all objects
         objectsProperty.stream().forEach(ov -> ov.setSelected(false));
+        hintsProperty.stream().forEach(hv -> hv.setSelected(false));
     }
 
     public void deleteSelected(String action) {
@@ -347,30 +407,6 @@ public class TagGroup extends Group implements AutoCloseable
         hintsProperty().forEach(hintTag -> hintTag.setVisible(false));
     }
 
-    private void updateDragRect(Point2D me) {
-        final double maxX = imageView.getImage().getWidth();
-        final double maxY = imageView.getImage().getHeight();
-        final double x = me.getX() < maxX ? (me.getX() < 0 ? 0 : me.getX()) : maxX;
-        final double y = me.getY() < maxY ? (me.getY() < 0 ? 0 : me.getY()) : maxY;
-        final double w = x - anchor.getX();
-        final double h = y - anchor.getY();
-
-        if (w < 0) {
-            dragRect.setX(x);
-            dragRect.setWidth(anchor.getX()-x);
-        }
-        else {
-            dragRect.setWidth(w);
-        }
-        if (h < 0) {
-            dragRect.setY(y);
-            dragRect.setHeight(anchor.getY()-y);
-        }
-        else {
-            dragRect.setHeight(h);
-        }
-    }
-
     public ObjectTag addObjectTag(ObjectModel om, String action) {
         ObjectTag objectTag = createObjectTag(om);
         objectTag.setAction(action);
@@ -379,20 +415,19 @@ public class TagGroup extends Group implements AutoCloseable
     }
 
     private ObjectTag createObjectTag(ObjectModel om) {
-        ObjectTag objectTag = new ObjectTag(imageView.getImage(), translate, scale, om);
+        ObjectTag objectTag = new ObjectTag(imageView.getImage(), translate, scale, rotate, om);
         objectTag.selectionProperty().addListener(observable -> tagSelectionChanged(objectTag));
         objectsProperty.add(objectTag);
         return objectTag;
     }
 
-    private ObjectTag addObjectTag(String label, Rectangle selection) {
-        Bounds bounds = selection.getBoundsInLocal();
-        ObjectModel om = new ObjectModel(label, bounds.getMinX(), bounds.getMinY(), bounds.getMaxX(), bounds.getMaxY());
+    private ObjectTag addObjectTag(String label, double minX, double minY, double maxX, double maxY) {
+        ObjectModel om = new ObjectModel(label, minX, minY, maxX, maxY);
         return addObjectTag(om, bundle.getString("menu.create"));
     }
 
     private HintTag createHintTag(HintModel hm) {
-        HintTag hintTag = new HintTag(imageView.getImage(), translate, scale, hm);
+        HintTag hintTag = new HintTag(imageView.getImage(), translate, scale, rotate, hm);
         hintTag.selectionProperty().addListener(observable -> tagSelectionChanged(hintTag));
         hintTag.hintConfirmProperty().addListener(observable -> onHintAccepted(hintTag));
         hintsProperty.add(hintTag);

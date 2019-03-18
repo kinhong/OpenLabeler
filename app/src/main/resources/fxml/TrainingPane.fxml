@@ -19,53 +19,56 @@
 
 <?import com.easymobo.openlabeler.preference.LabelMapPane?>
 <?import com.easymobo.openlabeler.ui.InputFileChooser?>
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<fx:root hgap="10.0" maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity" type="GridPane" vgap="10.0" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/OpenLabeler.css">
-  <columnConstraints>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0"/>
-    <ColumnConstraints hgrow="SOMETIMES" minWidth="100.0"/>
-  </columnConstraints>
-   <children>
-       <Label styleClass="title" text="%menu.trainUsingTF" GridPane.columnSpan="2147483647" GridPane.halignment="LEFT" GridPane.valignment="BOTTOM"></Label>
+<fx:root maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity"
+         stylesheets="@/css/OpenLabeler.css" type="VBox" xmlns="http://javafx.com/javafx/8.0.172-ea"
+         xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <GridPane fx:id="gpTrainingData" hgap="10.0" vgap="10">
+            <children>
+                <Label text="%menu.tfImageDir" GridPane.halignment="RIGHT"/>
+                <InputFileChooser fx:id="txtTFImageDir" minWidth="400" GridPane.columnIndex="1"/>
 
-       <Label text="%menu.tfImageDir" GridPane.halignment="LEFT" GridPane.rowIndex="1" />
-       <InputFileChooser fx:id="txtTFImageDir" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                <Label text="%menu.tfAnnotationDir" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                <InputFileChooser fx:id="txtTFAnnotationDir" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-       <Label text="%menu.tfAnnotationDir" GridPane.halignment="LEFT" GridPane.rowIndex="2" />
-       <InputFileChooser fx:id="txtTFAnnotationDir" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label text="%menu.numSamples" GridPane.rowIndex="2"/>
+                <Label fx:id="labelNumSamples" text="" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-       <Label text="%menu.numSamples" GridPane.rowIndex="3" />
-       <Label fx:id="labelNumSamples" text="" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                <Label text="%menu.tfDataDir" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
+                <InputFileChooser fx:id="txtTFDataDir" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-       <Label text="%menu.tfDataDir" GridPane.halignment="LEFT" GridPane.rowIndex="4" />
-       <InputFileChooser fx:id="txtTFDataDir" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                <Label text="%menu.labelMap" GridPane.halignment="RIGHT" GridPane.valignment="TOP" GridPane.rowIndex="4"/>
+                <LabelMapPane fx:id="labelMapPane" prefHeight="250.0" prefWidth="285.0" GridPane.columnIndex="1"
+                              GridPane.rowIndex="4"/>
+            </children>
+        </GridPane>
+        <GridPane fx:id="gpModel" hgap="10.0" vgap="10">
+            <children>
+                <Label text="%menu.tfBaseModelDir" GridPane.halignment="RIGHT"/>
+                <InputFileChooser fx:id="txtTFBaseModelDir" minWidth="400" GridPane.columnIndex="1" />
 
-       <Label text="%menu.labelMap" GridPane.rowIndex="5" />
-       <LabelMapPane fx:id="labelMapPane" prefHeight="244.0" prefWidth="285.0" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                <Label text="%menu.modelType" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                <Label fx:id="labelModelType" text="" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-       <Label text="%menu.tfBaseModelDir" GridPane.halignment="LEFT" GridPane.rowIndex="6" />
-       <InputFileChooser fx:id="txtTFBaseModelDir" GridPane.columnIndex="1" GridPane.rowIndex="6"/>
+                <Label text="%menu.trainCkpt" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+                <Label fx:id="labelTrainCkpt" text="" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+            </children>
+        </GridPane>
+        <GridPane fx:id="gpDocker" hgap="10.0" vgap="10">
+            <children>
+                <Label text="%menu.containerHostName" GridPane.halignment="RIGHT"/>
+                <TextField fx:id="txtContainerHostName" text="" GridPane.columnIndex="1"/>
 
-       <Label text="%menu.modelType" GridPane.rowIndex="7" />
-       <Label fx:id="labelModelType" text="" GridPane.columnIndex="1" GridPane.rowIndex="7" />
+                <Label text="%menu.image" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                <TextField fx:id="txtDockerImage" text="" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-       <Label text="%menu.trainCkpt" GridPane.rowIndex="8" />
-        <Label fx:id="labelTrainCkpt" text="" GridPane.columnIndex="1" GridPane.rowIndex="8"/>
+                <Label text="%menu.containerName" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+                <TextField fx:id="txtContainerName" text="" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-       <Label text="%menu.containerHostName" GridPane.rowIndex="9" />
-       <TextField fx:id="txtContainerHostName" text="" GridPane.columnIndex="1" GridPane.rowIndex="9" />
-
-       <Label text="%menu.dockerImage" GridPane.rowIndex="10" />
-       <TextField fx:id="txtDockerImage" text="" GridPane.columnIndex="1" GridPane.rowIndex="10" />
-
-       <Label text="%menu.containerName"  GridPane.rowIndex="11" />
-       <TextField fx:id="txtContainerName" text="" GridPane.columnIndex="1" GridPane.rowIndex="11" />
-
-       <HBox fx:id="boxTrain" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="12" />
-   </children>
-   <padding>
-      <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-   </padding>
+                <HBox fx:id="boxTrain" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+            </children>
+        </GridPane>
+    </children>
 </fx:root>

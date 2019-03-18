@@ -17,8 +17,8 @@
   ~ ==============================================================================
   -->
 
-<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.scene.control.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <fx:root editable="false" type="TableView" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/OpenLabeler.css">
    <placeholder>
       <Label text="%menu.noMedia" />
@@ -30,7 +30,7 @@
          </graphic></TableColumn>
       <TableColumn fx:id="colThumb" editable="false" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" sortable="false" text="">
       <graphic>
-         <FontAwesomeIconView glyphName="FILE_IMAGE_ALT" size="18.0" />
+         <FontIcon iconLiteral="mdi-file-image" iconSize="18" />
       </graphic>
       </TableColumn>
       <TableColumn fx:id="colName" prefWidth="240.0" text="%menu.fileName" />

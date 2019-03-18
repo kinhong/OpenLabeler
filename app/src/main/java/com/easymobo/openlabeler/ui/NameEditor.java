@@ -18,6 +18,7 @@
 package com.easymobo.openlabeler.ui;
 
 import com.easymobo.openlabeler.preference.Settings;
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
@@ -33,7 +34,10 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import org.apache.commons.collections4.IteratorUtils;
+import org.controlsfx.control.textfield.CustomTextField;
+import org.controlsfx.control.textfield.TextFields;
 
+import java.lang.reflect.Method;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -42,7 +46,7 @@ import java.util.logging.Logger;
 public class NameEditor extends VBox
 {
     @FXML
-    private TextField text;
+    private CustomTextField text;
     @FXML
     private ListView<String> list;
 
@@ -58,6 +62,7 @@ public class NameEditor extends VBox
 
         try {
             loader.load();
+            setupClearButtonField(text);
         }
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
@@ -119,7 +124,7 @@ public class NameEditor extends VBox
                     if (index >= 0) {
                         text.setText(list.getSelectionModel().getSelectedItem());
                     }
-                    if (text.getText().isEmpty()) {
+                    if (text.getText().trim().isEmpty()) {
                         text.setText(label);
                     }
                     popupStage.close();
@@ -156,7 +161,10 @@ public class NameEditor extends VBox
             }
         });
         popupStage.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
-            if (! isNowFocused) {
+            if (!isNowFocused) {
+                if (text.getText().trim().isEmpty()) {
+                    text.setText(label);
+                }
                 popupStage.hide();
             }
         });
@@ -171,4 +179,11 @@ public class NameEditor extends VBox
         popupStage.showAndWait();
         return text.getText();
     }
+
+    private void setupClearButtonField(CustomTextField customTextField)  throws Exception {
+        Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
+        m.setAccessible(true);
+        m.invoke(null, customTextField, customTextField.rightProperty());
+    }
+
 }

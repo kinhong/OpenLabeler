@@ -200,10 +200,10 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
 
         private ObjectProperty<Image> thumbProperty;
         public ReadOnlyObjectProperty<Image> thumbProperty() {
-            if (nameProperty == null) {
+            if (thumbProperty == null) {
                 Image image = null;
                 try {
-                    image = new Image(toURI().toURL().toExternalForm());
+                    image = new Image(toURI().toURL().toExternalForm(), 120, 120, true, false, true);
                 }
                 catch (MalformedURLException ex) {
                     LOG.log(Level.SEVERE, "Unable to load image", ex);
