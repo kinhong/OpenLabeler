@@ -66,7 +66,7 @@ public abstract class TagBase extends Group
     private static final Logger LOG = Logger.getLogger(TagBase.class.getCanonicalName());
 
     protected ResourceBundle bundle;
-    protected Image image;
+    protected Dimension2D imageDim;
     protected List<Rectangle> handles = new ArrayList();
     protected Translate translate;
     protected Scale scale;
@@ -84,7 +84,7 @@ public abstract class TagBase extends Group
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
         }
 
-        this.image = image;
+        this.imageDim = new Dimension2D(image.getWidth(), image.getHeight());
         this.translate = translate;
         this.scale = scale;
 
@@ -238,7 +238,7 @@ public abstract class TagBase extends Group
     }
 
     protected void onMousePressed(MouseEvent me) {
-        selectionProperty().set(true);
+        setSelected(true);
         offset = new Point2D(me.getX() - rect.getX(), me.getY() - rect.getY());
     }
 
@@ -252,14 +252,14 @@ public abstract class TagBase extends Group
         if (x < 0) {
             x = 0;
         }
-        else if (x + rect.getWidth() > image.getWidth()) {
-            x = image.getWidth() - rect.getWidth();
+        else if (x + rect.getWidth() > imageDim.getWidth()) {
+            x = imageDim.getWidth() - rect.getWidth();
         }
         if (y < 0) {
             y = 0;
         }
-        else if (y + rect.getHeight() > image.getHeight()) {
-            y = image.getHeight() - rect.getHeight();
+        else if (y + rect.getHeight() > imageDim.getHeight()) {
+            y = imageDim.getHeight() - rect.getHeight();
         }
         rect.setX(x);
         rect.setY(y);
@@ -371,8 +371,8 @@ public abstract class TagBase extends Group
         else {
             x1 = rect.getX();
             x2 = event.getX() - offset.getX();
-            if (x2 > image.getWidth()) {
-                x2 = image.getWidth();
+            if (x2 > imageDim.getWidth()) {
+                x2 = imageDim.getWidth();
             }
             else if (x2 < x1 + MIN_SIZE) {
                 x2 = x1 + MIN_SIZE;
@@ -392,8 +392,8 @@ public abstract class TagBase extends Group
         else {
             y1 = rect.getY();
             y2 = event.getY() - offset.getY();
-            if (y2 > image.getHeight()) {
-                y2 = image.getHeight();
+            if (y2 > imageDim.getHeight()) {
+                y2 = imageDim.getHeight();
             }
             else if (y2 < y1 + MIN_SIZE) {
                 y2 = y1 + MIN_SIZE;

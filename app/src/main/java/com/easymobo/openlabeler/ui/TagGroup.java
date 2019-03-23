@@ -52,6 +52,9 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -65,7 +68,6 @@ public class TagGroup extends Group implements AutoCloseable
     private Canvas canvas;
 
     private static final Logger LOG = Logger.getLogger(TagGroup.class.getCanonicalName());
-
     private static final int PADDING = 10;
 
     private ResourceBundle bundle;
@@ -74,6 +76,7 @@ public class TagGroup extends Group implements AutoCloseable
     private Rotate rotate;
     private ContextMenu contextMenu;
     private ObjectDetector objectDetector;
+    private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
 
     // Root model
     private ObjectProperty<Annotation> modelProperty;
@@ -115,19 +118,6 @@ public class TagGroup extends Group implements AutoCloseable
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
         }
-
-        scale = new Scale(1, 1);
-        translate = new Translate(PADDING, PADDING);
-        rotate = new Rotate();
-        paddingPane.getTransforms().addAll(scale, rotate);
-
-        scale.addEventHandler(TransformChangedEvent.TRANSFORM_CHANGED, event -> {
-            // Maintain constant padding at different zoom level
-            paddingPane.setPadding(new Insets(Math.max(PADDING/scale.getX(), PADDING/scale.getY())));
-
-            canvas.setWidth(imageView.getBoundsInLocal().getWidth());
-            canvas.setHeight(imageView.getBoundsInLocal().getHeight());
-        });
 
         paddingPane.setOnMousePressed(event -> onMousePressed(event));
         paddingPane.setOnMouseDragged(event -> onMouseDragged(event));
@@ -196,31 +186,48 @@ public class TagGroup extends Group implements AutoCloseable
     }
     public ObjectProperty<Annotation> modelProperty() {
         if (modelProperty == null) {
-            modelProperty = new SimpleObjectProperty<Annotation>() {
+            modelProperty = new SimpleObjectProperty<>() {
                 @Override
                 public void set(Annotation model) {
                     super.set(model);
-                    scale.setX(1);
-                    scale.setY(1);
-                    rotate.setAngle(0);
-                    selectedObjectProperty.setValue(null);
-                    tagCoordsProperty.set("");
-                    objectsProperty.clear();
-                    hintsProperty.clear();
-                    getChildren().removeIf(node -> node instanceof HintTag);
-                    imageView.setImage(model == null ? null : model.getSize().getImage());
-                    if (model != null && model.getObjects().size() > 0) {
-                        model.getObjects().forEach(obj -> createObjectTag(obj));
-                        statusProperty.set(MessageFormat.format(bundle.getString("msg.objectsCount"), model.getObjects().size()));
-                    }
-                    else {
-                        statusProperty.set(bundle.getString("msg.noObjects"));
-                    }
-                    findHints();
+                    initModel(model);
                 }
             };
         }
         return modelProperty;
+    }
+
+    private void initModel(Annotation model) {
+        scale = new Scale(1, 1);
+        translate = new Translate(PADDING, PADDING);
+        rotate = new Rotate();
+        paddingPane.getTransforms().clear();
+        paddingPane.getTransforms().addAll(scale, rotate);
+
+        scale.addEventHandler(TransformChangedEvent.TRANSFORM_CHANGED, event -> {
+            // Maintain constant padding at different zoom level
+            paddingPane.setPadding(new Insets(Math.max(PADDING/scale.getX(), PADDING/scale.getY())));
+
+            canvas.setWidth(imageView.getBoundsInLocal().getWidth());
+            canvas.setHeight(imageView.getBoundsInLocal().getHeight());
+        });
+
+        scale.setX(1);
+        scale.setY(1);
+        rotate.setAngle(0);
+        selectedObjectProperty.setValue(null);
+        tagCoordsProperty.set("");
+        objectsProperty.clear();
+        hintsProperty.clear();
+        imageView.setImage(model == null ? null : model.getSize().getImage());
+        if (model != null && model.getObjects().size() > 0) {
+            model.getObjects().forEach(obj -> createObjectTag(obj));
+            statusProperty.set(MessageFormat.format(bundle.getString("msg.objectsCount"), model.getObjects().size()));
+        }
+        else {
+            statusProperty.set(bundle.getString("msg.noObjects"));
+        }
+        findHints();
     }
 
     public Scale getScale() {
@@ -360,6 +367,7 @@ public class TagGroup extends Group implements AutoCloseable
         event.consume();
     }
 
+    private StringBuffer prefix = new StringBuffer();
     public void onKeyPressed(KeyEvent event) {
         if (event.isConsumed()) {
             return;
@@ -368,11 +376,21 @@ public class TagGroup extends Group implements AutoCloseable
         if (code == KeyCode.BACK_SPACE) {
             deleteSelected(bundle.getString("menu.delete"));
         }
-        else if (code.isArrowKey() && event.isShortcutDown()) {
-            selectedObjectProperty.get().move(
-                code == KeyCode.LEFT ? HorizontalDirection.LEFT : (code == KeyCode.RIGHT ? HorizontalDirection.RIGHT : null),
-                code == KeyCode.UP ? VerticalDirection.UP : (code == KeyCode.DOWN ? VerticalDirection.DOWN : null)
-            );
+        else if (selectedObjectProperty.get() != null && code.isArrowKey() && event.isShortcutDown()) {
+            if (selectedObjectProperty.get() != null) {
+                selectedObjectProperty.get().move(
+                        code == KeyCode.LEFT ? HorizontalDirection.LEFT : (code == KeyCode.RIGHT ? HorizontalDirection.RIGHT : null),
+                        code == KeyCode.UP ? VerticalDirection.UP : (code == KeyCode.DOWN ? VerticalDirection.DOWN : null)
+                );
+            }
+        }
+        else if (selectedObjectProperty.get() != null && code.isLetterKey()) {
+            // Try to assign label name by user-entered prefix
+            scheduler.schedule(() -> prefix.delete(0, prefix.length()), 500, TimeUnit.MILLISECONDS);
+            String name = Settings.recentNames.getByPrefix(prefix.append(code.getChar()).toString());
+            if (name != null) {
+                selectedObjectProperty.get().nameProperty().set(name);
+            }
         }
     }
 
@@ -507,5 +525,6 @@ public class TagGroup extends Group implements AutoCloseable
     @Override
     public void close() {
         Optional.ofNullable(objectDetector).ifPresent(obj -> obj.close());
+        scheduler.shutdown();
     }
 }
