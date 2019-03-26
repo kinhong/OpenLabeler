@@ -31,112 +31,124 @@
             <children>
                 <MenuBar fx:id="menuBar">
                     <menus>
-                        <Menu fx:id="menuFile" mnemonicParsing="false" onShowing="#onFileMenu" text="%menu.file">
+                        <Menu fx:id="menuFile" onShowing="#onFileMenu" text="%menu.file">
                             <items>
-                                <MenuItem fx:id="miOpenMediaFile" mnemonicParsing="false" onAction="#onFileOpenFile" text="%menu.openMediaFile">
+                                <MenuItem fx:id="miOpenMediaFile" onAction="#onFileOpenFile" text="%menu.openMediaFile">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem mnemonicParsing="false" onAction="#onFileOpenDir" text="%menu.openMediaDir">
-                                <accelerator>
-                                    <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
-                                </accelerator>
+                                <MenuItem onAction="#onFileOpenDir" text="%menu.openMediaDir">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                    </accelerator>
                                 </MenuItem>
-                                <Menu fx:id="menuOpenRecent" mnemonicParsing="false" text="%menu.openRecent" />
-                                <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem fx:id="miClose" mnemonicParsing="false" onAction="#onClose" text="%menu.close"/>
-                                <MenuItem fx:id="miSave" mnemonicParsing="false" onAction="#onSave" text="%menu.save">
+                                <Menu fx:id="menuOpenRecent" text="%menu.openRecent" />
+                                <SeparatorMenuItem />
+                                <MenuItem fx:id="miClose" onAction="#onClose" text="%menu.close"/>
+                                <MenuItem fx:id="miSave" onAction="#onSave" text="%menu.save">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
-                                <SeparatorMenuItem fx:id="msPreference" mnemonicParsing="false" />
-                                <MenuItem fx:id="miPreference" mnemonicParsing="false" onAction="#onPreference" text="%menu.preferences"/>
-                                <SeparatorMenuItem fx:id="msExit" mnemonicParsing="false" />
-                                <MenuItem fx:id="miExit" mnemonicParsing="false" onAction="#onExit" text="%menu.exit"/>
+                                <SeparatorMenuItem fx:id="msPreference" />
+                                <MenuItem fx:id="miPreference" onAction="#onPreference" text="%menu.preferences"/>
+                                <SeparatorMenuItem fx:id="msExit" />
+                                <MenuItem fx:id="miExit" onAction="#onExit" text="%menu.exit"/>
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="%menu.edit">
+                        <Menu text="%menu.edit">
                             <items>
-                                <MenuItem fx:id="miUndo" mnemonicParsing="false" onAction="#onUndo" text="%menu.undo">
+                                <MenuItem fx:id="miUndo" onAction="#onUndo" text="%menu.undo">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem fx:id="miRedo" mnemonicParsing="false" onAction="#onRedo" text="%menu.redo">
+                                <MenuItem fx:id="miRedo" onAction="#onRedo" text="%menu.redo">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
-                                <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem fx:id="miCut" mnemonicParsing="false" onAction="#onCut" text="%menu.cut">
+                                <SeparatorMenuItem />
+                                <MenuItem fx:id="miCut" onAction="#onCut" text="%menu.cut">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="X" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem fx:id="miCopy" mnemonicParsing="false" onAction="#onCopy" text="%menu.copy">
+                                <MenuItem fx:id="miCopy" onAction="#onCopy" text="%menu.copy">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="C" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem fx:id="miPaste" mnemonicParsing="false" onAction="#onPaste" text="%menu.paste">
+                                <MenuItem fx:id="miPaste" onAction="#onPaste" text="%menu.paste">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="V" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem fx:id="miDelete" mnemonicParsing="false" onAction="#onDelete" text="%menu.delete">
+                                <MenuItem fx:id="miDelete" onAction="#onDelete" text="%menu.delete">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="UP" shift="UP" shortcut="UP" />
                                     </accelerator>
                                 </MenuItem>
-                                <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem fx:id="miPrevMediaFile" mnemonicParsing="false" onAction="#onPrevMediaFile" text="%menu.previousMediaFile">
+                                <SeparatorMenuItem />
+                                <MenuItem fx:id="miPrevMediaFile" onAction="#onPrevMedia" text="%menu.previousMediaFile">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem fx:id="miNextMediaFile" mnemonicParsing="false" onAction="#onNextMediaFile" text="%menu.nextMediaFile">
+                                <MenuItem fx:id="miNextMediaFile" onAction="#onNextMediaFile" text="%menu.nextMediaFile">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
-
+                                <SeparatorMenuItem />
+                                <MenuItem fx:id="miGoToUnlabeledMediaFile" onAction="#onGoToUnlabeledMediaFile" text="%menu.goToUnlabeledMediaFile">
+                                    <accelerator>
+                                        <KeyCodeCombination alt="UP" code="G" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                    </accelerator>
+                                </MenuItem>
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="%menu.view">
+                        <Menu text="%menu.view">
                             <items>
-                                <MenuItem fx:id="miZoomOut" mnemonicParsing="false" onAction="#onZoomOut" text="%menu.zoomOut" />
-                                <MenuItem fx:id="miZoomIn" mnemonicParsing="false" onAction="#onZoomIn" text="%menu.zoomIn" />
-                                <MenuItem fx:id="miZoomFit" mnemonicParsing="false" onAction="#onZoomFit" text="%menu.zoomFit" />
-                                <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem fx:id="miRotateLeft" mnemonicParsing="false" onAction="#onRotateLeft" text="%menu.rotateLeft" />
-                                <MenuItem fx:id="miRotateRight" mnemonicParsing="false" onAction="#onRotateRight" text="%menu.rotateRight" />
-                                <SeparatorMenuItem mnemonicParsing="false" />
-                                <MenuItem fx:id="miShowHint" mnemonicParsing="false" onAction="#onShowHint" text="%menu.showHint">
+                                <MenuItem fx:id="miZoomOut" onAction="#onZoomOut" text="%menu.zoomOut" />
+                                <MenuItem fx:id="miZoomIn" onAction="#onZoomIn" text="%menu.zoomIn" />
+                                <MenuItem fx:id="miZoomFit" onAction="#onZoomFit" text="%menu.zoomFit" />
+                                <SeparatorMenuItem />
+                                <MenuItem fx:id="miRotateLeft" onAction="#onRotateLeft" text="%menu.rotateLeft" />
+                                <MenuItem fx:id="miRotateRight" onAction="#onRotateRight" text="%menu.rotateRight" />
+                                <SeparatorMenuItem />
+                                <MenuItem fx:id="miShowHint" onAction="#onShowHint" text="%menu.showHint">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem fx:id="miClearHint" mnemonicParsing="false" onAction="#onClearHint" text="%menu.clearHint">
+                                <MenuItem fx:id="miClearHint" onAction="#onClearHint" text="%menu.clearHint">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
                                     </accelerator>
                                 </MenuItem>
                             </items>
                         </Menu>
-                        <Menu mnemonicParsing="false" text="%menu.help">
+                        <!--
+                        <Menu text="%menu.tools">
+                        <items>
+                        <MenuItem fx:id="miInspectLabels" onAction="#onInspectLabels" text="%menu.inspectLabels" />
+                        </items>
+                        </Menu>
+                        -->
+                        <Menu text="%menu.help">
                             <items>
-                                <MenuItem mnemonicParsing="false" onAction="#onSupportInfo" text="%menu.supportInfo" />
-                                <SeparatorMenuItem fx:id="msAbout" mnemonicParsing="false" />
-                                <MenuItem fx:id="miAbout" mnemonicParsing="false" onAction="#onAbout" text="%menu.about" />
+                                <MenuItem onAction="#onSupportInfo" text="%menu.supportInfo" />
+                                <SeparatorMenuItem fx:id="msAbout" />
+                                <MenuItem fx:id="miAbout" onAction="#onAbout" text="%menu.about" />
                             </items>
                         </Menu>
                     </menus>
                 </MenuBar>
                 <ToolBar prefHeight="14.0" prefWidth="600.0">
                     <items>
-                        <Button fx:id="btnOpenMediaFile" mnemonicParsing="false" onAction="#onFileOpenFile">
+                        <Button fx:id="btnOpenMediaFile" onAction="#onFileOpenFile">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-file-image" iconSize="18" />
                             </graphic>
@@ -144,7 +156,7 @@
                                 <Tooltip text="%menu.openMediaFile" />
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnOpenMediaDir" mnemonicParsing="false" onAction="#onFileOpenDir">
+                        <Button fx:id="btnOpenMediaDir" onAction="#onFileOpenDir">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-folder-multiple-image" iconSize="18" />
                             </graphic>
@@ -153,7 +165,7 @@
                             </tooltip>
                         </Button>
                         <Separator prefHeight="27.0" prefWidth="10.0" />
-                        <Button fx:id="btnSave" mnemonicParsing="false" onAction="#onSave">
+                        <Button fx:id="btnSave" onAction="#onSave">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-content-save" iconSize="18" />
                             </graphic>
@@ -162,7 +174,7 @@
                             </tooltip>
                         </Button>
                         <Separator prefHeight="27.0" prefWidth="10.0" />
-                        <Button fx:id="btnPrevMediaFile" mnemonicParsing="false" onAction="#onPrevMediaFile">
+                        <Button fx:id="btnPrevMedia" onAction="#onPrevMedia">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-arrow-left" iconSize="18" />
                             </graphic>
@@ -170,7 +182,7 @@
                                 <Tooltip text="%menu.previousMediaFile" />
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnNextMediaFile" mnemonicParsing="false" onAction="#onNextMediaFile">
+                        <Button fx:id="btnNextMedia" onAction="#onNextMediaFile">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-arrow-right" iconSize="18" />
                             </graphic>
@@ -179,7 +191,7 @@
                             </tooltip>
                         </Button>
                         <Separator prefHeight="27.0" prefWidth="10.0" />
-                        <Button fx:id="btnUndo" mnemonicParsing="false" onAction="#onUndo">
+                        <Button fx:id="btnUndo" onAction="#onUndo">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-undo" iconSize="18" />
                             </graphic>
@@ -187,7 +199,7 @@
                                 <Tooltip text="%menu.undo" />
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnRedo" mnemonicParsing="false" onAction="#onRedo">
+                        <Button fx:id="btnRedo" onAction="#onRedo">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-redo" iconSize="18" />
                             </graphic>
@@ -195,7 +207,7 @@
                                 <Tooltip text="%menu.redo" />
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnDelete" mnemonicParsing="false" onAction="#onDelete">
+                        <Button fx:id="btnDelete" onAction="#onDelete">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-delete" iconSize="18" />
                             </graphic>
@@ -204,7 +216,7 @@
                             </tooltip>
                         </Button>
                         <Separator prefHeight="27.0" prefWidth="10.0" />
-                        <Button fx:id="btnZoomOut" mnemonicParsing="false" onAction="#onZoomOut">
+                        <Button fx:id="btnZoomOut" onAction="#onZoomOut">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-magnify-minus" iconSize="18" />
                             </graphic>
@@ -212,7 +224,7 @@
                                 <Tooltip text="%menu.zoomOut" />
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnZoomIn" mnemonicParsing="false" onAction="#onZoomIn">
+                        <Button fx:id="btnZoomIn" onAction="#onZoomIn">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-magnify-plus" iconSize="18" />
                             </graphic>
@@ -220,7 +232,7 @@
                                 <Tooltip text="%menu.zoomIn" />
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnZoomFit" mnemonicParsing="false" onAction="#onZoomFit">
+                        <Button fx:id="btnZoomFit" onAction="#onZoomFit">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-magnify" iconSize="18" />
                             </graphic>
@@ -229,7 +241,7 @@
                             </tooltip>
                         </Button>
                         <Separator prefHeight="27.0" prefWidth="10.0" />
-                        <Button fx:id="btnRotateLeft" mnemonicParsing="false" onAction="#onRotateLeft">
+                        <Button fx:id="btnRotateLeft" onAction="#onRotateLeft">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-rotate-left" iconSize="18" />
                             </graphic>
@@ -237,7 +249,7 @@
                                 <Tooltip text="%menu.rotateLeft" />
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnRotateRight" mnemonicParsing="false" onAction="#onRotateRight">
+                        <Button fx:id="btnRotateRight" onAction="#onRotateRight">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-rotate-right" iconSize="18" />
                             </graphic>
@@ -246,7 +258,7 @@
                             </tooltip>
                         </Button>
                         <Separator prefHeight="27.0" prefWidth="10.0" />
-                        <Button fx:id="btnShowHint" mnemonicParsing="false" onAction="#onShowHint">
+                        <Button fx:id="btnShowHint" onAction="#onShowHint">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-eye" iconSize="18" />
                             </graphic>
@@ -254,7 +266,7 @@
                                 <Tooltip text="%menu.showHint" />
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnClearHint" mnemonicParsing="false" onAction="#onClearHint">
+                        <Button fx:id="btnClearHint" onAction="#onClearHint">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-eye-off" iconSize="18" />
                             </graphic>

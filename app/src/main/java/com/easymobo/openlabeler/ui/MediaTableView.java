@@ -97,22 +97,36 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
 
         setRowFactory(tableView -> {
             final TableRow<MediaFile> row = new TableRow();
-            final ContextMenu rowMenu = new ContextMenu();
-            String text = bundle.getString("menu.showInFileBrowser");
-            if (SystemUtils.IS_OS_MAC) {
-                text = bundle.getString("menu.revealInFinder");
-            }
-            else if (SystemUtils.IS_OS_WINDOWS) {
-                text = bundle.getString("menu.showInExplorer");
-            }
-            MenuItem showFile = new MenuItem(text);
-            showFile.setOnAction(ev -> {
+            row.setOnContextMenuRequested(event -> {
+                if (row.isEmpty()) {
+                    return;
+                }
+                ContextMenu menu = row.getContextMenu();
+                menu.getItems().clear();
+
                 MediaFile file = tableView.getSelectionModel().getSelectedItem();
-                Desktop.getDesktop().browseFileDirectory(file);
+                String media = bundle.getString("menu.showMediaInFileBrowser");
+                String annotation = bundle.getString("menu.showAnnotationInFileBrowser");
+                if (SystemUtils.IS_OS_MAC) {
+                    media = bundle.getString("menu.revealMediaInFinder");
+                    annotation = bundle.getString("menu.revealAnnotationInFinder");
+                }
+                else if (SystemUtils.IS_OS_WINDOWS) {
+                    media = bundle.getString("menu.showMediaInExplorer");
+                    annotation = bundle.getString("menu.showAnnotationInExplorer");
+                }
+                MenuItem item = new MenuItem(media);
+                item.setOnAction(ev -> Desktop.getDesktop().browseFileDirectory(file));
+                menu.getItems().add(item);
+                if (file.isAnnotated()) {
+                    item = new MenuItem(annotation);
+                    item.setOnAction(ev -> Desktop.getDesktop().browseFileDirectory(Util.getAnnotationFile(file)));
+                    menu.getItems().add(item);
+                }
             });
-            rowMenu.getItems().add(showFile);
 
             // only display context menu for non-null items:
+            final ContextMenu rowMenu = new ContextMenu();
             row.contextMenuProperty().bind(
                     Bindings.when(Bindings.isNotNull(row.itemProperty())).then(rowMenu).otherwise((ContextMenu) null));
             return row;
@@ -194,8 +208,9 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
         public boolean isAnnotated() {
             return isAnnotatedProperty.get();
         }
-        public void refresh() {
+        public MediaFile refresh() {
             isAnnotatedProperty.set(Util.getAnnotationFile(this).exists());
+            return this;
         }
 
         private ObjectProperty<Image> thumbProperty;

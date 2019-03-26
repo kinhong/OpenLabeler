@@ -24,7 +24,7 @@
 <?import javafx.scene.layout.StackPane?>
 <fx:root stylesheets="@/css/OpenLabeler.css" type="Group" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-      <StackPane fx:id="paddingPane" prefHeight="230.0" prefWidth="212.0">
+      <StackPane fx:id="paddingPane">
          <children>
              <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true" />
              <Canvas fx:id="canvas" pickOnBounds="true" />

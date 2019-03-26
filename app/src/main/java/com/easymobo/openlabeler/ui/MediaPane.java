@@ -21,9 +21,7 @@ import com.easymobo.openlabeler.preference.Settings;
 import com.easymobo.openlabeler.ui.MediaTableView.MediaFile;
 import com.easymobo.openlabeler.util.Util;
 import javafx.application.Platform;
-import javafx.beans.property.ListProperty;
-import javafx.beans.property.ReadOnlyIntegerProperty;
-import javafx.beans.property.SimpleListProperty;
+import javafx.beans.property.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -97,6 +95,14 @@ public class MediaPane extends BorderPane implements AutoCloseable
         return mediaSizeProperty;
     }
 
+    private SimpleObjectProperty<MediaFile> nextUnlabeledMediaProperty;
+    public ReadOnlyObjectProperty<MediaFile> nextUnlabeledMediaProperty() {
+        if (nextUnlabeledMediaProperty == null) {
+            nextUnlabeledMediaProperty = new SimpleObjectProperty();
+        }
+        return nextUnlabeledMediaProperty;
+    }
+
     public TableViewSelectionModel<MediaFile> getSelectionModel() {
         return tvMedia.getSelectionModel();
     }
@@ -130,6 +136,14 @@ public class MediaPane extends BorderPane implements AutoCloseable
     public void onNextMediaFile(ActionEvent actionEvent) {
         // JavaFX bug - TableView#selectionModel#select does not scroll into view
         Util.fireKeyPressedEvent(tvMedia, KeyCode.DOWN);
+    }
+
+    public void onGoToUnlabeledMediaFile(ActionEvent actionEvent) {
+        MediaFile nextMedia = nextUnlabeledMediaProperty.get();
+        if (nextMedia != null) {
+            tvMedia.getSelectionModel().select(nextMedia);
+            tvMedia.scrollTo(tvMedia.getSelectionModel().getSelectedIndex());
+        }
     }
 
     public void clear() {
@@ -206,7 +220,7 @@ public class MediaPane extends BorderPane implements AutoCloseable
             }
 
             // Initial stats
-            updateFileStats(tvMedia.getSource());
+            updateFileStats();
         }
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to watch", ex);
@@ -214,17 +228,21 @@ public class MediaPane extends BorderPane implements AutoCloseable
     }
 
     public void updateFileStats() {
-        updateFileStats(tvMedia.getSource());
+        new Thread(() -> updateFileStats(tvMedia.getSource())).run();
     }
 
     private void updateFileStats(List<MediaFile> files) {
-        final int annotated[] = {0};
-        files.stream().forEach(media -> {
-            media.refresh();
-            if (Util.getAnnotationFile(media).exists()) {
+        final long annotated[] = {0};
+        MediaFile nextUnlabeled = null;
+        for (MediaFile media : files) {
+            if (media.refresh().isAnnotated()) {
                 annotated[0]++;
             }
-        });
+            else if (nextUnlabeled == null) {
+                nextUnlabeled = media;
+            }
+        }
+        nextUnlabeledMediaProperty.set(nextUnlabeled);
 
         Platform.runLater(() -> {
             fileStats.setText(MessageFormat.format(bundle.getString("msg.fileStats"), annotated[0], files.size()));

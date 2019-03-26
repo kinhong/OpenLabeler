@@ -17,9 +17,11 @@
 
 package com.easymobo.openlabeler.preference;
 
+import com.easymobo.openlabeler.util.Util;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -55,7 +57,7 @@ public class PreferencePane extends DialogPane
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
         }
         this.bundle = bundle;
-        getButtonTypes().addAll(ButtonType.OK, ButtonType.CLOSE);
+        getButtonTypes().addAll(ButtonType.APPLY, ButtonType.CLOSE);
 
         bindProperties();
     }
@@ -65,9 +67,22 @@ public class PreferencePane extends DialogPane
         dialog.setDialogPane(this);
         dialog.setTitle(bundle.getString("menu.titlePrefs"));
         dialog.setResizable(true);
+
+        lookupButton(ButtonType.CLOSE).addEventFilter(
+            ActionEvent.ACTION,
+            event -> {
+                if (!lookupButton(ButtonType.APPLY).isDisabled()) {
+                    var res = Util.showConfirmation(bundle.getString("menu.alert"), bundle.getString("msg.confirmClose"));
+                    if (res.get() != ButtonType.OK) {
+                        event.consume();
+                    }
+                }
+            }
+        );
+
         Optional<ButtonType> result = dialog.showAndWait();
         result.ifPresent(res -> {
-            if (res.equals(ButtonType.OK)) {
+            if (res.equals(ButtonType.APPLY)) {
                 categories.forEach(c -> c.save());
             }
         });
@@ -86,7 +101,7 @@ public class PreferencePane extends DialogPane
         });
 
         ObservableList<ObservableValue<Boolean>> dirties = EasyBind.map(categories, c -> c.dirtyProperty());
-        lookupButton(ButtonType.OK).disableProperty().bind(EasyBind.combine(dirties, stream -> stream.allMatch(a -> !a)));
+        lookupButton(ButtonType.APPLY).disableProperty().bind(EasyBind.combine(dirties, stream -> stream.allMatch(a -> !a)));
 
         categoryList.getSelectionModel().select(0);
     }

@@ -27,6 +27,7 @@ import javafx.geometry.Bounds;
 import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
@@ -46,24 +47,24 @@ public class ObjectTag extends TagBase
             model.setName(newValue);
             Settings.recentNames.add(newValue);
         });
-        name.setOnMouseClicked(me -> {
-            setSelected(true);
-            if (me.getClickCount() != 2) {
-                return;
-            }
-            NameEditor editor = new NameEditor(nameProperty().get());
-            String label = editor.showPopup(me.getScreenX(), me.getScreenY(), getScene().getWindow());
-            nameProperty().set(label);
-            Settings.recentNames.add(label);
-        });
 
         // object thumbnail
         thumbProperty.bind(Bindings.createObjectBinding(() -> {
-
             PixelReader reader = image.getPixelReader();
             Bounds b = boundsProperty().get();
             return new WritableImage(reader, (int) b.getMinX(), (int) b.getMinY(), (int) b.getWidth(), (int) b.getHeight());
         }, boundsProperty()));
+    }
+
+    @Override
+    protected void onMouseClicked(MouseEvent me) {
+        if (me.getClickCount() != 2 || !name.localToScreen(name.getBoundsInLocal()).contains(me.getScreenX(), me.getScreenY())) {
+            return;
+        }
+        NameEditor editor = new NameEditor(nameProperty().get());
+        String label = editor.showPopup(me.getScreenX(), me.getScreenY(), getScene().getWindow());
+        nameProperty().set(label);
+        Settings.recentNames.add(label);
     }
 
     @Override

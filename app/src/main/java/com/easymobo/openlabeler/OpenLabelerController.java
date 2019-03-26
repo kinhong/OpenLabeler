@@ -94,9 +94,9 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     @FXML
     private Menu menuOpenRecent;
     @FXML
-    private MenuItem miPrevMediaFile, miNextMediaFile, miClose, miSave, msPreference, miPreference, msExit, miExit, miUndo, miRedo, miCut, miCopy, miPaste, miDelete, miZoomIn, miZoomOut, miZoomFit, miRotateLeft, miRotateRight, miShowHint, miClearHint, msAbout, miAbout;
+    private MenuItem miClose, miSave, msPreference, miPreference, msExit, miExit, miUndo, miRedo, miCut, miCopy, miPaste, miDelete, miZoomIn, miZoomOut, miZoomFit, miPrevMediaFile, miNextMediaFile, miGoToUnlabeledMediaFile, miRotateLeft, miRotateRight, miShowHint, miClearHint, msAbout, miAbout, miInspectLabels;
     @FXML
-    private Button btnPrevMediaFile, btnNextMediaFile, btnSave, btnUndo, btnRedo, btnDelete, btnZoomIn, btnZoomOut, btnZoomFit, btnRotateLeft, btnRotateRight, btnShowHint, btnClearHint;
+    private Button btnPrevMedia, btnNextMedia, btnSave, btnUndo, btnRedo, btnDelete, btnZoomIn, btnZoomOut, btnZoomFit, btnRotateLeft, btnRotateRight, btnShowHint, btnClearHint;
     @FXML
     private MediaPane mediaPane;
     @FXML
@@ -261,6 +261,18 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         tagGroup.deleteSelected(bundle.getString("menu.delete"));
     }
 
+    public void onPrevMedia(ActionEvent actionEvent) {
+        mediaPane.onPrevMediaFile(actionEvent);
+    }
+
+    public void onNextMediaFile(ActionEvent actionEvent) {
+        mediaPane.onNextMediaFile(actionEvent);
+    }
+
+    public void onGoToUnlabeledMediaFile(ActionEvent actionEvent) {
+        mediaPane.onGoToUnlabeledMediaFile(actionEvent);
+    }
+
     public void onZoomIn(ActionEvent actionEvent) {
         tagGroup.getScale().setX(tagGroup.getScale().getX() * 1.1);
         tagGroup.getScale().setY(tagGroup.getScale().getY() * 1.1);
@@ -297,6 +309,10 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         tagGroup.getScale().setY(factor);
     }
 
+    public void onPreference(ActionEvent actionEvent) {
+        new PreferencePane(bundle).showAndWait();
+    }
+
     public void onRotateLeft(ActionEvent event) {
         rotate(-90);
     }
@@ -317,16 +333,8 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         tagGroup.clearHints();
     }
 
-    public void onPrevMediaFile(ActionEvent actionEvent) {
-        mediaPane.onPrevMediaFile(actionEvent);
-    }
+    public void onInspectLabels(ActionEvent event) {
 
-    public void onNextMediaFile(ActionEvent actionEvent) {
-        mediaPane.onNextMediaFile(actionEvent);
-    }
-
-    public void onPreference(ActionEvent actionEvent) {
-        new PreferencePane(bundle).showAndWait();
     }
 
     public void onAbout(ActionEvent actionEvent) {
@@ -439,11 +447,11 @@ public class OpenLabelerController implements Initializable, AutoCloseable
 
         BooleanBinding hasPrev = mediaPane.sizeProperty().greaterThan(1).and(mediaPane.getSelectionModel().selectedIndexProperty().greaterThan(0));
         miPrevMediaFile.disableProperty().bind(hasPrev.not());
-        btnPrevMediaFile.disableProperty().bind(miPrevMediaFile.disableProperty());
+        btnPrevMedia.disableProperty().bind(miPrevMediaFile.disableProperty());
 
         BooleanBinding hasNext = mediaPane.sizeProperty().greaterThan(1).and(mediaPane.getSelectionModel().selectedIndexProperty().lessThan(mediaPane.sizeProperty().subtract(1)));
         miNextMediaFile.disableProperty().bind(hasNext.not());
-        btnNextMediaFile.disableProperty().bind(miNextMediaFile.disableProperty());
+        btnNextMedia.disableProperty().bind(miNextMediaFile.disableProperty());
 
         // File -> Close
         miClose.disableProperty().bind(tagGroup.modelProperty().isNull());
@@ -518,6 +526,8 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         // Edit -> Delete
         miDelete.disableProperty().bind(tagGroup.selectedObjectProperty().isNull());
         btnDelete.disableProperty().bind(miDelete.disableProperty());
+
+        miGoToUnlabeledMediaFile.disableProperty().bind(mediaPane.nextUnlabeledMediaProperty().isNull());
 
         // Link object table and object group
         objectTable.setItems(tagGroup.objectsProperty());

@@ -17,8 +17,10 @@
 
 package com.easymobo.openlabeler.ui;
 
+import com.easymobo.openlabeler.preference.Settings;
 import com.easymobo.openlabeler.util.Util.ImageTableCell;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,7 +30,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
-import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.image.Image;
 import org.fxmisc.easybind.EasyBind;
 
@@ -78,7 +80,7 @@ public class ObjectTableView extends TableView<ObjectTag>
         thumbColumn.setCellFactory(param -> new ImageTableCell());
         thumbColumn.setCellValueFactory(cell -> cell.getValue().thumbProperty());
 
-        nameColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        nameColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableList(Settings.recentNames)));
         nameColumn.setCellValueFactory(cell -> cell.getValue().nameProperty());
 
         itemsProperty().addListener((observable, oldValue, newValue) -> {
@@ -98,11 +100,10 @@ public class ObjectTableView extends TableView<ObjectTag>
                 }
             });
         });
-
     }
 
     public void onShowAll(ActionEvent actionEvent) {
         boolean select = showAllCheckBox.isIndeterminate() || showAllCheckBox.isSelected();
-        ((ObservableList<ObjectTag>) getItems()).stream().forEach(item -> item.setVisible(select));
+        getItems().stream().forEach(item -> item.setVisible(select));
     }
 }

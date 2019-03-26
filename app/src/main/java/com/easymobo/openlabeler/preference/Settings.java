@@ -260,6 +260,11 @@ public class Settings
             save();
         }
 
+        public String getByPrefix(String prefix) {
+            String pre = prefix.toLowerCase();
+            return stream().map(String::toLowerCase).filter(item -> item.startsWith(pre)).findFirst().orElse(null);
+        }
+
         private void reduce() {
             while (size() > maxLength) {
                 remove(size() - 1);

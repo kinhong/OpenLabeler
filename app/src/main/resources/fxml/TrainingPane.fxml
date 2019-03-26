@@ -59,13 +59,13 @@
         <GridPane fx:id="gpDocker" hgap="10.0" vgap="10">
             <children>
                 <Label text="%menu.containerHostName" GridPane.halignment="RIGHT"/>
-                <TextField fx:id="txtContainerHostName" text="" GridPane.columnIndex="1"/>
+                <TextField fx:id="txtContainerHostName" text="" minWidth="300" GridPane.columnIndex="1"/>
 
                 <Label text="%menu.image" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
-                <TextField fx:id="txtDockerImage" text="" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                <TextField fx:id="txtDockerImage" text="" minWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
                 <Label text="%menu.containerName" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
-                <TextField fx:id="txtContainerName" text="" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                <TextField fx:id="txtContainerName" text="" minWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
                 <HBox fx:id="boxTrain" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
             </children>
