@@ -26,6 +26,10 @@ For example, you have thousands of images to annotate. After labeling the first 
 
 ![Inference Preferences](assets/pref-inference.png)
 
+The **Label Map File** is the label map file in protobuf format (`.pbtxt`)
+
+The **Saved Model Location** is the *folder* where the `.pb` file is located. If it is at `/opt/model/saved_model/saved_model.pb`, then the location should be specified as `/opt/model/saved_model`. Also, the `.pb` file must be named `saved_model.pb`
+
 ## Training Support
 
 *Note: This is currently an experimental feature.*
@@ -39,9 +43,35 @@ OpenLabeler can be used to start/stop a training process in TensorFlow within a 
 ![Train Preferences](assets/pref-train.png)
 5. You can then start, stop, continue, restart training, or export the inference graph
 
+## Shortcut Keys
+
+The following shortcut keys are supported:
+
+| Key Combination  | Action
+| ------------- | -------------
+| Ctrl (or ⌘) + o | Open media file
+| Ctrl (or ⌘) + d | Open media directory
+| Ctrl (or ⌘) + s | Save changes
+| Ctrl (or ⌘) + x | Cut
+| Ctrl (or ⌘) + c | Copy
+| Ctrl (or ⌘) + v | Paste
+| ⌫ (Delete Key)  | Delete selected box
+| Ctrl (or ⌘) + p | Go to previous media file
+| Ctrl (or ⌘) + n | Go to next media file
+| Ctrl (or ⌘) + g | Go to next unlabeled media file
+| Ctrl (or ⌘) + h | Show inference hints
+| Ctrl (or ⌘) + Shift + h | Hide inference hits
+| Ctrl (or ⌘) + z | Undo
+| Ctrl (or ⌘) + Shift + z | Redo
+| ↑→↓← (Arrow Keys) | Move selected bounding box  
+| Any character | Match/change label by prefix of selected box 
+
+
 ## Installation
 
-If you have previously installed OpenLabeler, uninstall it first. Find the .pkg, .deb or .msi installation packages for macOS, Linux, and Windows respectively on the [releases](https://github.com/kinhong/OpenLabeler/releases) page.
+If you have previously installed OpenLabeler, uninstall it first.
+
+Download and execute the `.pkg`, `.deb` or `.msi` installation packages for macOS, Linux, and Windows respectively on the [releases](https://github.com/kinhong/OpenLabeler/releases) page.
 
 ## Recommended Directory Structure
 ```
