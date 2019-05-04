@@ -26,9 +26,9 @@ For example, you have thousands of images to annotate. After labeling the first 
 
 ![Inference Preferences](assets/pref-inference.png)
 
-The **Label Map File** is the label map file in protobuf format (`.pbtxt`)
+The **Label Map File** is the label map file in protobuf format (`.pbtxt`).
 
-The **Saved Model Location** is the *folder* where the `.pb` file is located. If it is at `/opt/model/saved_model/saved_model.pb`, then the location should be specified as `/opt/model/saved_model`. Also, the `.pb` file must be named `saved_model.pb`
+The **Saved Model Location** is the *folder* where the `.pb` file is located. If it is at `/opt/model/saved_model/saved_model.pb`, then the location should be specified as `/opt/model/saved_model`. Also, the `.pb` file must be named `saved_model.pb`.
 
 ## Training Support
 
@@ -55,7 +55,7 @@ The following shortcut keys are supported:
 | Ctrl (or ⌘) + x | Cut
 | Ctrl (or ⌘) + c | Copy
 | Ctrl (or ⌘) + v | Paste
-| ⌫ (Delete Key)  | Delete selected box
+| ⌫ (Backspace or Delete)  | Delete selected box
 | Ctrl (or ⌘) + p | Go to previous media file
 | Ctrl (or ⌘) + n | Go to next media file
 | Ctrl (or ⌘) + g | Go to next unlabeled media file
@@ -64,7 +64,7 @@ The following shortcut keys are supported:
 | Ctrl (or ⌘) + z | Undo
 | Ctrl (or ⌘) + Shift + z | Redo
 | ↑→↓← (Arrow Keys) | Move selected bounding box  
-| Any character | Match/change label by prefix of selected box 
+| Any character(s) | Match/change label by prefix (on recent labels) of the selected box 
 
 
 ## Installation
