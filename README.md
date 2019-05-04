@@ -63,7 +63,7 @@ The following shortcut keys are supported:
 | Ctrl (or ⌘) + Shift + h | Hide inference hits
 | Ctrl (or ⌘) + z | Undo
 | Ctrl (or ⌘) + Shift + z | Redo
-| ↑→↓← (Arrow Keys) | Move selected bounding box  
+| Ctrl (or ⌘) + ↑→↓← (Arrow Keys) | Move selected bounding box  
 | Any character(s) | Match/change label by prefix (on recent labels) of the selected box 
 
 
