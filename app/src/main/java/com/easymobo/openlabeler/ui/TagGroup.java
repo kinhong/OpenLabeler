@@ -124,7 +124,7 @@ public class TagGroup extends Group implements AutoCloseable
         paddingPane.setOnMouseReleased(event -> onMouseReleased(event));
 
         // context menu
-        addEventFilter(ContextMenuEvent.ANY, event -> onContextMenuEvent(event));
+        addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, event -> onContextMenuEvent(event));
 
         // add/remove ObjectTag
         objectsProperty().addListener((ListChangeListener<ObjectTag>) c -> {
@@ -377,12 +377,11 @@ public class TagGroup extends Group implements AutoCloseable
             deleteSelected(bundle.getString("menu.delete"));
         }
         else if (selectedObjectProperty.get() != null && code.isArrowKey() && event.isShortcutDown()) {
-            if (selectedObjectProperty.get() != null) {
-                selectedObjectProperty.get().move(
-                        code == KeyCode.LEFT ? HorizontalDirection.LEFT : (code == KeyCode.RIGHT ? HorizontalDirection.RIGHT : null),
-                        code == KeyCode.UP ? VerticalDirection.UP : (code == KeyCode.DOWN ? VerticalDirection.DOWN : null)
-                );
-            }
+            selectedObjectProperty.get().move(
+                    code == KeyCode.LEFT ? HorizontalDirection.LEFT : (code == KeyCode.RIGHT ? HorizontalDirection.RIGHT : null),
+                    code == KeyCode.UP ? VerticalDirection.UP : (code == KeyCode.DOWN ? VerticalDirection.DOWN : null),
+                    1/scale.getX(), 1/scale.getY()
+            );
         }
         else if (selectedObjectProperty.get() != null && code.isLetterKey()) {
             // Try to assign label name by user-entered prefix

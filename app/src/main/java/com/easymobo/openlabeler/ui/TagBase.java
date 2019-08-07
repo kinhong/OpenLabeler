@@ -265,9 +265,24 @@ public abstract class TagBase extends Group
         rect.setY(y);
     }
 
-    public void move(HorizontalDirection horizontal, VerticalDirection vertical) {
-        double x = horizontal == null ? 0 : (horizontal == HorizontalDirection.LEFT ? -1 : 1);
-        double y = vertical == null ? 0 : (vertical == VerticalDirection.UP ? -1 : 1);
+    public void move(HorizontalDirection horizontal, VerticalDirection vertical, double deltaX, double deltaY) {
+        double x = horizontal == null ? 0 : (horizontal == HorizontalDirection.LEFT ? -deltaX : deltaX);
+        double y = vertical == null ? 0 : (vertical == VerticalDirection.UP ? -deltaY : deltaY);
+        Rotate rotate = Util.getTransform(this, Rotate.class);
+        switch ((int)rotate.getAngle()) {
+            case 90:
+                x = vertical == null ? 0 : (vertical == VerticalDirection.UP ? -deltaY : deltaY);
+                y = horizontal == null ? 0 : (horizontal == HorizontalDirection.LEFT ? deltaX : -deltaX);
+                break;
+            case 180:
+                x = horizontal == null ? 0 : (horizontal == HorizontalDirection.LEFT ? deltaX : -deltaX);
+                y = vertical == null ? 0 : (vertical == VerticalDirection.UP ? deltaY : -deltaY);
+                break;
+            case 270:
+                x = vertical == null ? 0 : (vertical == VerticalDirection.UP ? deltaY : -deltaY);
+                y = horizontal == null ? 0 : (horizontal == HorizontalDirection.LEFT ? -deltaX : deltaX);
+                break;
+        }
         setLocation(rect.getX() + x, rect.getY() + y);
         boundsProperty().set(getRectBounds());
     }

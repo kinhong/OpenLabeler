@@ -28,7 +28,10 @@ import org.tensorflow.hadoop.util.TFRecordWriter;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
-import java.io.*;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
@@ -44,25 +47,24 @@ public class TFRecordCreator
 {
     private static final Logger LOG = Logger.getLogger(TFRecordCreator.class.getCanonicalName());
 
-    private final Path imagePath, annotationPath, outputPath;
+    private final Path imagePath, annotationPath, dataPath;
 
     // For PASCAL VOC xml persistence
     private JAXBContext jaxbContext;
 
-    public TFRecordCreator(Path imagePath, Path annotationPath, Path outputPath) {
+    public TFRecordCreator(Path imagePath, Path annotationPath, Path dataPath) {
         this.imagePath = imagePath;
         this.annotationPath = annotationPath;
-        this.outputPath = outputPath;
+        this.dataPath = dataPath;
         try {
             jaxbContext = JAXBContext.newInstance(Annotation.class);
         }
         catch (JAXBException ex) {
             LOG.log(Level.SEVERE, "Unable to create JAXBContext", ex);
         }
-
     }
 
-    public void create(String workDir) {
+    public void createData(List<LabelMapItem> items) {
         if (!imagePath.toFile().exists()) {
             LOG.severe("Image path does not exist");
             return;
@@ -71,8 +73,8 @@ public class TFRecordCreator
             LOG.severe("Annotation path does not exist");
             return;
         }
-        if (!outputPath.toFile().exists()) {
-            outputPath.toFile().mkdirs();
+        if (!dataPath.toFile().exists()) {
+            dataPath.toFile().mkdirs();
         }
 
         // Randomly divide examples into 70% train and 30% eval
@@ -86,17 +88,16 @@ public class TFRecordCreator
         List<File> eval = files.subList(separator, files.size());
 
         // Generate the train and eval records
-        Map<String, Integer> labelMap = TFTrainer.getLabelMapItems(workDir).stream().collect(
+        Map<String, Integer> labelMap = items.stream().collect(
                 Collectors.toMap(LabelMapItem::getName, LabelMapItem::getId));
-        createTFRecord(train, labelMap, Paths.get(outputPath.toString(), "train.record"));
-        createTFRecord(eval, labelMap, Paths.get(outputPath.toString(), "eval.record"));
-        LOG.info("Created train/eval records in " + outputPath);
+        createTFRecord(train, labelMap, Paths.get(dataPath.toString(), "train.record"));
+        createTFRecord(eval, labelMap, Paths.get(dataPath.toString(), "eval.record"));
+        LOG.info("Created train/eval records in " + dataPath);
     }
 
     private void createTFRecord(List<File> annotations, Map<String, Integer>labelMap, Path outputPath) {
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        TFRecordWriter writer = new TFRecordWriter(new DataOutputStream(baos));
-        try {
+        try (FileOutputStream fos = new FileOutputStream(outputPath.toFile())) {
+            TFRecordWriter writer = new TFRecordWriter(new DataOutputStream(fos));
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             for (File file : annotations) {
                 Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
@@ -166,17 +167,10 @@ public class TFRecordCreator
 
                 writer.write(Example.newBuilder().setFeatures(builder.build()).build().toByteArray());
                 fio.close();
-            };
-
-            FileOutputStream fos = new FileOutputStream(outputPath.toFile());
-            baos.writeTo(fos);
-            fos.close();
+            }
         }
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to create TFRecord", ex);
-        }
-        finally {
-            IOUtils.closeQuietly(baos);
         }
     }
 

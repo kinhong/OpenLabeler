@@ -33,7 +33,7 @@
                     <menus>
                         <Menu fx:id="menuFile" onShowing="#onFileMenu" text="%menu.file">
                             <items>
-                                <MenuItem fx:id="miOpenMediaFile" onAction="#onFileOpenFile" text="%menu.openMediaFile">
+                                <MenuItem onAction="#onFileOpenFile" text="%menu.openMediaFile">
                                     <accelerator>
                                         <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
                                     </accelerator>

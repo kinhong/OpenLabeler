@@ -33,7 +33,7 @@
                 <Label text="%menu.tfAnnotationDir" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
                 <InputFileChooser fx:id="txtTFAnnotationDir" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                <Label text="%menu.numSamples" GridPane.rowIndex="2"/>
+                <Label text="%menu.numSamples" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
                 <Label fx:id="labelNumSamples" text="" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
                 <Label text="%menu.tfDataDir" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
@@ -42,6 +42,8 @@
                 <Label text="%menu.labelMap" GridPane.halignment="RIGHT" GridPane.valignment="TOP" GridPane.rowIndex="4"/>
                 <LabelMapPane fx:id="labelMapPane" prefHeight="250.0" prefWidth="285.0" GridPane.columnIndex="1"
                               GridPane.rowIndex="4"/>
+
+                <Button fx:id="btnCreateTrainData" text="%menu.createTrainData" onAction="#onCreateTrainData" GridPane.columnIndex="1" GridPane.rowIndex="5"/>
             </children>
         </GridPane>
         <GridPane fx:id="gpModel" hgap="10.0" vgap="10">

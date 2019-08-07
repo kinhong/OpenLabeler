@@ -32,6 +32,7 @@ import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import object_detection.protos.InputReaderOuterClass;
+import object_detection.protos.Model;
 import object_detection.protos.Pipeline;
 import object_detection.protos.StringIntLabelMapOuterClass;
 import object_detection.protos.StringIntLabelMapOuterClass.StringIntLabelMap;
@@ -201,6 +202,22 @@ public class TFTrainer implements AutoCloseable
         return false;
     }
 
+    public static void createTrainData(List<LabelMapItem> items) {
+        try {
+            FileUtils.deleteDirectory(getDataPath().toFile());
+            String dataDir = Settings.getTFDataDir();
+            getDataPath().toFile().mkdirs();
+            saveLabelMap(items, dataDir);
+            LOG.info("Creating training data in " + dataDir + "...");
+            TFRecordCreator recordCreator = new TFRecordCreator(Paths.get(Settings.getTFImageDir()), Paths.get(Settings.getTFAnnotationDir()), getDataPath());
+            recordCreator.createData(items);
+            LOG.info("Created training data in " + dataDir);
+        }
+        catch (Exception ex) {
+            LOG.log(Level.SEVERE, "Unable to create training data", ex);
+        }
+    }
+
     public static void exportGraph(int checkpoint) {
         try {
             // Clean up
@@ -274,8 +291,7 @@ public class TFTrainer implements AutoCloseable
 
     public static void train(boolean start, boolean restart) {
         try {
-            String dataDir = Settings.getTFDataDir();
-            String baseModelDir = Settings.getTFDataDir();
+            String baseModelDir = Settings.getTFBaseModelDir();
             String containerName = Settings.getContainerName();
             if (start) {
                 Container trainer = null;
@@ -287,17 +303,14 @@ public class TFTrainer implements AutoCloseable
                         break;
                     }
                 }
+
                 if (restart) {
-                    List<LabelMapItem> items = getLabelMapItems(dataDir);
-                    FileUtils.deleteDirectory(getDataPath().toFile());
+                    List<LabelMapItem> items = getLabelMapItems(Settings.getTFDataDir());
+                    createTrainData(items);
+
                     FileUtils.deleteDirectory(getTrainPath(baseModelDir).toFile());
                     FileUtils.deleteDirectory(getSavedModelPath(baseModelDir).toFile());
-                    getDataPath().toFile().mkdirs();
-                    LOG.info("Finished clean up");
-
-                    saveLabelMap(items, dataDir);
-                    TFRecordCreator recordCreator = new TFRecordCreator(Paths.get(Settings.getTFImageDir()), Paths.get(Settings.getTFAnnotationDir()), getDataPath());
-                    recordCreator.create(baseModelDir);
+                    LOG.info("Finished cleaning up train directory");
 
                     // Kill/remove existing training
                     if (trainer != null) {
@@ -371,13 +384,14 @@ public class TFTrainer implements AutoCloseable
             else if (getPipelinePath(baseModelDir).toFile().exists()) {
                 config = parse(getPipelinePath(baseModelDir));
             }
-            config = updatePaths(config);
+            config = update(config);
         }
 
         public void save() throws IOException {
             if (config == null) {
                 return;
             }
+            config = update(config);
             String pipelineConfig = TextFormat.printToString(config);
             Files.write(getModelConfigPath(baseModelDir), pipelineConfig.getBytes());
             LOG.info("Created "+ getModelConfigPath(baseModelDir));
@@ -421,7 +435,7 @@ public class TFTrainer implements AutoCloseable
         }
 
         // Update pipeline config with paths expected in docker container
-        private Pipeline.TrainEvalPipelineConfig updatePaths(Pipeline.TrainEvalPipelineConfig config) {
+        private Pipeline.TrainEvalPipelineConfig update(Pipeline.TrainEvalPipelineConfig config) {
             if (config == null) {
                 return config;
             }
@@ -429,10 +443,21 @@ public class TFTrainer implements AutoCloseable
             Pipeline.TrainEvalPipelineConfig.Builder builder = config.toBuilder();
             builder.setTrainConfig(config.getTrainConfig().toBuilder().setFineTuneCheckpoint(getDockerFineTuneCkptPath()));
 
+            // number of classes
+            int numClasses = getLabelMapItems(Settings.getTFDataDir()).size();
+            Model.DetectionModel.Builder modelBuilder = config.getModel().toBuilder();
+            if (config.getModel().hasSsd()) {
+                modelBuilder.setSsd(config.getModel().getSsd().toBuilder().setNumClasses(numClasses));
+            }
+            else if (config.getModel().hasFasterRcnn()) {
+                modelBuilder.setFasterRcnn(config.getModel().getFasterRcnn().toBuilder().setNumClasses(numClasses));
+            }
+            builder.setModel(modelBuilder);
+
             // train_input_reader
-            InputReaderOuterClass.InputReader.Builder b = config.getTrainInputReader().toBuilder();
-            b.setLabelMapPath(getDockerLabelMapPath());
-            builder.setTrainInputReader(b.setTfRecordInputReader(b.getTfRecordInputReader().toBuilder().setInputPath(0, getDockerTrainRecordPath())));
+            InputReaderOuterClass.InputReader.Builder b1 = config.getTrainInputReader().toBuilder();
+            b1.setLabelMapPath(getDockerLabelMapPath());
+            builder.setTrainInputReader(b1.setTfRecordInputReader(b1.getTfRecordInputReader().toBuilder().setInputPath(0, getDockerTrainRecordPath())));
 
             // eval_input_reader
             InputReaderOuterClass.InputReader.Builder b2 = config.getEvalInputReader(0).toBuilder();

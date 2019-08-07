@@ -47,6 +47,8 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Locale;
+import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
@@ -70,6 +72,13 @@ public class OpenLabeler extends Application
         Task task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
+                try {
+                    ResourceBundle.getBundle("bundle");
+                }
+                catch (MissingResourceException mse) {
+                    LOG.log(Level.WARNING, "Can't get bundle: ", mse);
+                    Locale.setDefault(Locale.US);
+                }
                 try {
                     ResourceBundle bundle = ResourceBundle.getBundle("bundle");
                     LOG.info(bundle.getString("app.name") + " " + bundle.getString("app.version"));

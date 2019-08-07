@@ -26,9 +26,11 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -37,6 +39,7 @@ import javafx.scene.layout.VBox;
 import org.controlsfx.tools.Borders;
 import org.fxmisc.easybind.EasyBind;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
@@ -59,6 +62,8 @@ public class TrainingPane extends VBox implements Category
     private LabelMapPane labelMapPane;
     @FXML
     private Label labelNumSamples, labelModelType, labelTrainCkpt;
+    @FXML
+    private Button btnCreateTrainData;
     @FXML
     private HBox boxTrain;
 
@@ -146,6 +151,23 @@ public class TrainingPane extends VBox implements Category
         catch (IOException ex) {
             LOG.log(Level.SEVERE, "Unable to save changes", ex);
         }
+    }
+
+    public void onCreateTrainData(ActionEvent actionEvent) {
+        Settings.setTFImageDir(txtTFImageDir.getText());
+        Settings.setTFAnnotationDir(txtTFAnnotationDir.getText());
+        Settings.setTFDataDir(txtTFDataDir.getText());
+        File dataDir = new File(Settings.getTFDataDir());
+        if (dataDir.isDirectory() && dataDir.exists()) {
+            var res = Util.showConfirmation(bundle.getString("menu.alert"), bundle.getString("msg.confirmCreateTrainData"));
+            if (res.get() != ButtonType.OK) {
+                return;
+            }
+        }
+        btnCreateTrainData.setDisable(true);
+        TFTrainer.createTrainData(labelMapPane.getItems());
+        Util.showInformation(bundle.getString("menu.alert"), bundle.getString("msg.trainDataCreated"));
+        btnCreateTrainData.setDisable(false);
     }
 
     private void bindProperties() {
