@@ -23,7 +23,7 @@ import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -38,8 +38,8 @@ public class HintTag extends TagBase
     private static final Logger LOG = Logger.getLogger(HintTag.class.getCanonicalName());
     private HintModel model;
 
-    public HintTag(Image image, Translate translate, Scale scale, Rotate rotate, HintModel model) {
-        super(image, translate, scale, rotate, model);
+    public HintTag(ImageView imageView, Translate translate, Scale scale, Rotate rotate, HintModel model) {
+        super(imageView.getImage(), translate, scale, rotate, model);
         this.model = model;
 
         name.setText(String.format("%s (%.2f)", model.getName(), model.getScore()));

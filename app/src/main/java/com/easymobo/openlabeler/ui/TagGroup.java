@@ -432,7 +432,7 @@ public class TagGroup extends Group implements AutoCloseable
     }
 
     private ObjectTag createObjectTag(ObjectModel om) {
-        ObjectTag objectTag = new ObjectTag(imageView.getImage(), translate, scale, rotate, om);
+        ObjectTag objectTag = new ObjectTag(imageView, translate, scale, rotate, om);
         objectTag.selectionProperty().addListener(observable -> tagSelectionChanged(objectTag));
         objectsProperty.add(objectTag);
         return objectTag;
@@ -444,7 +444,7 @@ public class TagGroup extends Group implements AutoCloseable
     }
 
     private HintTag createHintTag(HintModel hm) {
-        HintTag hintTag = new HintTag(imageView.getImage(), translate, scale, rotate, hm);
+        HintTag hintTag = new HintTag(imageView, translate, scale, rotate, hm);
         hintTag.selectionProperty().addListener(observable -> tagSelectionChanged(hintTag));
         hintTag.hintConfirmProperty().addListener(observable -> onHintAccepted(hintTag));
         hintsProperty.add(hintTag);

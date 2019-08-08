@@ -24,8 +24,10 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Bounds;
+import javafx.geometry.Rectangle2D;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
-import javafx.scene.image.PixelReader;
+import javafx.scene.image.ImageView;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
@@ -38,8 +40,8 @@ public class ObjectTag extends TagBase
     private ObjectModel model;
     private String action;
 
-    public ObjectTag(Image image, Translate translate, Scale scale, Rotate rotate, ObjectModel model) {
-        super(image, translate, scale, rotate, model);
+    public ObjectTag(ImageView imageView, Translate translate, Scale scale, Rotate rotate, ObjectModel model) {
+        super(imageView.getImage(), translate, scale, rotate, model);
         this.model = model;
 
         name.setText(model.getName());
@@ -50,10 +52,14 @@ public class ObjectTag extends TagBase
 
         // object thumbnail
         thumbProperty.bind(Bindings.createObjectBinding(() -> {
-            PixelReader reader = image.getPixelReader();
-            Bounds b = boundsProperty().get();
-            return new WritableImage(reader, (int) b.getMinX(), (int) b.getMinY(), (int) b.getWidth(), (int) b.getHeight());
-        }, boundsProperty()));
+            Bounds bounds = boundsProperty().get();
+            SnapshotParameters parameters = new SnapshotParameters();
+            parameters.setFill(Color.TRANSPARENT);
+            parameters.setViewport(new Rectangle2D(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));
+
+            WritableImage wi = new WritableImage((int)bounds.getWidth(), (int)bounds.getHeight());
+            return imageView.snapshot(parameters, wi);
+         }, boundsProperty()));
     }
 
     @Override
