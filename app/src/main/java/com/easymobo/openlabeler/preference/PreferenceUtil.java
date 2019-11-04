@@ -101,7 +101,7 @@ public class PreferenceUtil
         }
     }
 
-    private static String fromColor(Color color) {
+    public static String fromColor(Color color) {
         return String.valueOf(
                 (int) (color.getRed() * 0xFF) |
                 ((int) (color.getGreen() * 0xFF)) << 010 |
@@ -109,7 +109,7 @@ public class PreferenceUtil
                 ((int) (color.getOpacity() * 0xFF)) << 030);
     }
 
-    private static Color toColor(String c) {
+    public static Color toColor(String c) {
         int color = Integer.valueOf(c);
         return Color.rgb(
                 color & 0xFF,
@@ -117,5 +117,4 @@ public class PreferenceUtil
                 (color >>> 020) & 0xFF,
                 (color >>> 030) / 255d);
     }
-
 }

@@ -17,7 +17,7 @@
   ~ ==============================================================================
   -->
 
-<?import com.easymobo.openlabeler.preference.NameListPane?>
+<?import com.easymobo.openlabeler.preference.NameTablePane?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <fx:root maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity"
@@ -43,12 +43,12 @@
             <children>
                 <Label text="%menu.autoSetName" GridPane.halignment="RIGHT"/>
                 <CheckBox fx:id="chkAutoSetName" mnemonicParsing="false" GridPane.columnIndex="1"/>
-                <Label text="%menu.bndBoxColor" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                <Label text="%menu.defaultLabelColor" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
                 <ColorPicker fx:id="pickerObjectStrokeColor" editable="true" GridPane.columnIndex="1"
                              GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
-                <Label text="%menu.labelNames" GridPane.rowIndex="2" GridPane.halignment="RIGHT"
+                <Label text="%menu.labels" GridPane.rowIndex="2" GridPane.halignment="RIGHT"
                        GridPane.valignment="TOP"/>
-                <NameListPane fx:id="nameListPane" prefHeight="250.0" prefWidth="285.0" GridPane.columnIndex="1"
+                <NameTablePane fx:id="nameTablePane" prefHeight="250.0" prefWidth="350.0" GridPane.columnIndex="1"
                               GridPane.rowIndex="2"/>
             </children>
         </GridPane>

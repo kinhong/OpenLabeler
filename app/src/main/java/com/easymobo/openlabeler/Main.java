@@ -17,9 +17,14 @@
 
 package com.easymobo.openlabeler;
 
+import org.apache.commons.lang3.SystemUtils;
+
 public class Main
 {
     public static void main(String[] args) {
+        if (SystemUtils.IS_OS_MAC) {
+            //Desktop.getDesktop();
+        }
         OpenLabeler.main(args);
     }
 }

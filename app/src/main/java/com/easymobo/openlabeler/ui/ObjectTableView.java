@@ -17,6 +17,7 @@
 
 package com.easymobo.openlabeler.ui;
 
+import com.easymobo.openlabeler.preference.NameColor;
 import com.easymobo.openlabeler.preference.Settings;
 import com.easymobo.openlabeler.util.Util.ImageTableCell;
 import javafx.beans.value.ObservableValue;
@@ -32,8 +33,10 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.ComboBoxTableCell;
 import javafx.scene.image.Image;
+import org.apache.commons.collections4.IteratorUtils;
 import org.fxmisc.easybind.EasyBind;
 
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -80,7 +83,8 @@ public class ObjectTableView extends TableView<ObjectTag>
         thumbColumn.setCellFactory(param -> new ImageTableCell());
         thumbColumn.setCellValueFactory(cell -> cell.getValue().thumbProperty());
 
-        nameColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableList(Settings.recentNames)));
+        List<String> names = IteratorUtils.toList(Settings.recentNamesProperty.stream().map(NameColor::getName).iterator());
+        nameColumn.setCellFactory(ComboBoxTableCell.forTableColumn(FXCollections.observableList(names)));
         nameColumn.setCellValueFactory(cell -> cell.getValue().nameProperty());
 
         itemsProperty().addListener((observable, oldValue, newValue) -> {

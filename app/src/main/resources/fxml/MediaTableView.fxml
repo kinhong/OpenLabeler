@@ -27,7 +27,8 @@
       <TableColumn fx:id="colAnnotated" minWidth="25.0" prefWidth="25.0" resizable="false">
          <graphic>
             <CheckBox fx:id="chkShowAll" alignment="CENTER" cache="true" mnemonicParsing="false" onAction="#onShowAll" selected="true" />
-         </graphic></TableColumn>
+         </graphic>
+      </TableColumn>
       <TableColumn fx:id="colThumb" editable="false" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" sortable="false" text="">
       <graphic>
          <FontIcon iconLiteral="mdi-file-image" iconSize="18" />

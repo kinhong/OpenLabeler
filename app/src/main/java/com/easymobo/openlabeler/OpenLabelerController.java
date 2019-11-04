@@ -160,8 +160,8 @@ public class OpenLabelerController implements Initializable, AutoCloseable
             tagGroup.requestFocus();
 
             // Open last media file/folder
-            if (Settings.isOpenLastMedia() && Settings.recentFiles.size() > 0) {
-                File fileOrDir = new File(Settings.recentFiles.get(0));
+            if (Settings.isOpenLastMedia() && Settings.recentFilesProperty.size() > 0) {
+                File fileOrDir = new File(Settings.recentFilesProperty.get(0));
                 openFileOrDir(fileOrDir);
             }
         }
@@ -196,7 +196,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
 
     public void onFileMenu(Event event) {
         menuOpenRecent.getItems().clear();
-        for (Iterator<String> it = Settings.recentFiles.iterator(); it.hasNext(); ) {
+        for (Iterator<String> it = Settings.recentFilesProperty.iterator(); it.hasNext(); ) {
             File fileOrDir = new File(it.next());
             MenuItem item = new MenuItem(fileOrDir.getAbsolutePath());
             item.setOnAction(value -> openFileOrDir(fileOrDir));
@@ -206,7 +206,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         if (menuOpenRecent.getItems().size() > 0) {
             menuOpenRecent.getItems().add(new SeparatorMenuItem());
             MenuItem clear = new MenuItem(bundle.getString("menu.clear"));
-            clear.setOnAction(value -> Settings.recentFiles.clear());
+            clear.setOnAction(value -> Settings.recentFilesProperty.clear());
             menuOpenRecent.getItems().add(clear);
         }
         menuOpenRecent.setDisable(menuOpenRecent.getItems().size() <= 0);

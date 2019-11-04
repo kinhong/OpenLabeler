@@ -124,7 +124,7 @@ public class MediaPane extends BorderPane implements AutoCloseable
         tvMedia.getSource().clear();
         Arrays.stream(files).forEach(f -> tvMedia.getSource().add(new MediaFile(f)));
         tvMedia.getSelectionModel().select(0);
-        Settings.recentFiles.add(file.getAbsolutePath());
+        Settings.recentFilesProperty.add(file.getAbsolutePath());
         watch(file);
     }
 

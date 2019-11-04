@@ -17,6 +17,7 @@
 
 package com.easymobo.openlabeler.ui;
 
+import com.easymobo.openlabeler.preference.NameColor;
 import com.easymobo.openlabeler.preference.Settings;
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
@@ -68,7 +69,8 @@ public class NameEditor extends VBox
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
         }
 
-        List<String> labels = IteratorUtils.toList(Settings.recentNames.iterator());
+
+        List<String> labels = IteratorUtils.toList(Settings.recentNamesProperty.stream().map(NameColor::getName).iterator());
         FilteredList<String> filtered = new FilteredList<>(FXCollections.observableArrayList(labels), s -> true);
         text.textProperty().addListener(obs -> {
             String filter = text.getText();
@@ -101,11 +103,10 @@ public class NameEditor extends VBox
     }
 
     public static String getLastLabel(ResourceBundle bundle) {
-        String lastLabel = "";
-        if (Settings.recentNames.size() > 0) {
-            lastLabel = Settings.recentNames.get(0);
+        if (Settings.recentNamesProperty.size() > 0) {
+           return Settings.recentNamesProperty.get(0).getName();
         }
-        return lastLabel;
+        return "";
     }
 
     public String showPopup(double screenX, double screenY, Window window) {
@@ -185,5 +186,4 @@ public class NameEditor extends VBox
         m.setAccessible(true);
         m.invoke(null, customTextField, customTextField.rightProperty());
     }
-
 }

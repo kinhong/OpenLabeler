@@ -71,7 +71,7 @@ public abstract class TagBase extends Group
     protected Translate translate;
     protected Scale scale;
 
-    public TagBase(Image image, Translate translate, Scale scale, Rotate rotate, ObjectModel model) {
+    public TagBase() {
         bundle = ResourceBundle.getBundle("bundle");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TagBase.fxml"));
         loader.setRoot(this);
@@ -83,7 +83,9 @@ public abstract class TagBase extends Group
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
         }
+    }
 
+    public void init(Image image, Translate translate, Scale scale, Rotate rotate) {
         this.imageDim = new Dimension2D(image.getWidth(), image.getHeight());
         this.translate = translate;
         this.scale = scale;
@@ -99,10 +101,10 @@ public abstract class TagBase extends Group
         name.translateXProperty().bind(getNameTranslateXProperty(rotate));
         name.translateYProperty().bind(getNameTranslateYProperty(rotate));
 
-        rect.setX(model.getBoundBox().getXMin());
-        rect.setY(model.getBoundBox().getYMin());
-        rect.setWidth(model.getBoundBox().getXMax() - model.getBoundBox().getXMin());
-        rect.setHeight(model.getBoundBox().getYMax() - model.getBoundBox().getYMin());
+        rect.setX(getModel().getBoundBox().getXMin());
+        rect.setY(getModel().getBoundBox().getYMin());
+        rect.setWidth(getModel().getBoundBox().getXMax() - getModel().getBoundBox().getXMin());
+        rect.setHeight(getModel().getBoundBox().getYMax() - getModel().getBoundBox().getYMin());
         rect.getTransforms().addAll(translate, scale);
         rect.setFill(Color.TRANSPARENT);
         rect.setStrokeWidth(2 / scale.getX());
@@ -111,9 +113,9 @@ public abstract class TagBase extends Group
             rect.setStrokeWidth(2 / scale.getX()); // Retain box stroke width at all zoom levels
         });
 
-        rect.setOnMouseClicked(event -> onMouseClicked(event));
-        rect.setOnMousePressed(event -> onMousePressed(event));
-        rect.setOnMouseDragged(event -> onMouseDragged(event));
+        rect.setOnMouseClicked(this::onMouseClicked);
+        rect.setOnMousePressed(this::onMousePressed);
+        rect.setOnMouseDragged(this::onMouseDragged);
         rect.setOnMouseReleased(event -> onMouseReleased(event));
 
         // deselect before hidden
@@ -151,7 +153,7 @@ public abstract class TagBase extends Group
     }
 
     public abstract ObjectModel getModel();
-    public abstract ObjectProperty<Color> strokeColorProperty();
+    public abstract ReadOnlyObjectProperty<Color> strokeColorProperty();
     public abstract ReadOnlyObjectProperty<Color> fillColorProperty();
 
     public StringProperty nameProperty() {
@@ -266,21 +268,23 @@ public abstract class TagBase extends Group
     }
 
     public void move(HorizontalDirection horizontal, VerticalDirection vertical, double deltaX, double deltaY) {
+        Rotate rotate = Util.getTransform(this, Rotate.class);
         double x = horizontal == null ? 0 : (horizontal == HorizontalDirection.LEFT ? -deltaX : deltaX);
         double y = vertical == null ? 0 : (vertical == VerticalDirection.UP ? -deltaY : deltaY);
-        Rotate rotate = Util.getTransform(this, Rotate.class);
+        final double x1 = horizontal == null ? 0 : (horizontal == HorizontalDirection.LEFT ? deltaX : -deltaX);
+        final double y1 = vertical == null ? 0 : (vertical == VerticalDirection.UP ? deltaY : -deltaY);
         switch ((int)rotate.getAngle()) {
             case 90:
-                x = vertical == null ? 0 : (vertical == VerticalDirection.UP ? -deltaY : deltaY);
-                y = horizontal == null ? 0 : (horizontal == HorizontalDirection.LEFT ? deltaX : -deltaX);
+                x = y;
+                y = x1;
                 break;
             case 180:
-                x = horizontal == null ? 0 : (horizontal == HorizontalDirection.LEFT ? deltaX : -deltaX);
-                y = vertical == null ? 0 : (vertical == VerticalDirection.UP ? deltaY : -deltaY);
+                x = x1;
+                y = y1;
                 break;
             case 270:
-                x = vertical == null ? 0 : (vertical == VerticalDirection.UP ? deltaY : -deltaY);
-                y = horizontal == null ? 0 : (horizontal == HorizontalDirection.LEFT ? -deltaX : deltaX);
+                x = y1;
+                y = x;
                 break;
         }
         setLocation(rect.getX() + x, rect.getY() + y);

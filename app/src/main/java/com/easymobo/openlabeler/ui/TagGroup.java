@@ -21,6 +21,7 @@ import com.easymobo.openlabeler.model.Annotation;
 import com.easymobo.openlabeler.model.BoundBox;
 import com.easymobo.openlabeler.model.HintModel;
 import com.easymobo.openlabeler.model.ObjectModel;
+import com.easymobo.openlabeler.preference.NameColor;
 import com.easymobo.openlabeler.preference.Settings;
 import com.easymobo.openlabeler.tensorflow.ObjectDetector;
 import javafx.application.Platform;
@@ -283,11 +284,11 @@ public class TagGroup extends Group implements AutoCloseable
         if (w > ObjectTag.MIN_SIZE && h > ObjectTag.MIN_SIZE) {
             String lastLabel = NameEditor.getLastLabel(bundle);
             ObjectTag objectTag = addObjectTag(lastLabel, x, y, x + w, y + h);
-            if (!Settings.getAutoSetName() || Settings.recentNames.size() <= 0) {
+            if (!Settings.getAutoSetName() || Settings.recentNamesProperty.size() <= 0) {
                 NameEditor editor = new NameEditor(lastLabel);
                 lastLabel = editor.showPopup(me.getScreenX(), me.getScreenY(), getScene().getWindow());
                 objectTag.nameProperty().set(lastLabel);
-                Settings.recentNames.add(lastLabel);
+                Settings.recentNamesProperty.addName(lastLabel);
             }
         }
         else {
@@ -337,15 +338,16 @@ public class TagGroup extends Group implements AutoCloseable
             return;
         }
         contextMenu = new ContextMenu();
-        for (int i = 0; i < 10 && i < Settings.recentNames.size(); i++) {
-            String name = Settings.recentNames.get(i);
+        for (int i = 0; i < 10 && i < Settings.recentNamesProperty.size(); i++) {
+            NameColor nameColor = Settings.recentNamesProperty.get(i);
+            String name = nameColor.getName();
             if (name.isEmpty() || name.isBlank()) {
                 continue;
             }
             MenuItem mi = new MenuItem(name);
             mi.setOnAction(value -> {
                 selected.nameProperty().set(name);
-                Settings.recentNames.add(name);
+                Settings.recentNamesProperty.addName(name);
             });
             contextMenu.getItems().add(mi);
         }
@@ -357,7 +359,7 @@ public class TagGroup extends Group implements AutoCloseable
             NameEditor editor = new NameEditor(selected.nameProperty().get());
             String label = editor.showPopup(event.getScreenX(), event.getScreenY(), getScene().getWindow());
             selected.nameProperty().set(label);
-            Settings.recentNames.add(label);
+            Settings.recentNamesProperty.addName(label);
         });
         MenuItem delete = new MenuItem(bundle.getString("menu.delete"));
         delete.setOnAction(value -> deleteSelected(bundle.getString("menu.delete")));
@@ -386,9 +388,9 @@ public class TagGroup extends Group implements AutoCloseable
         else if (selectedObjectProperty.get() != null && code.isLetterKey()) {
             // Try to assign label name by user-entered prefix
             scheduler.schedule(() -> prefix.delete(0, prefix.length()), 500, TimeUnit.MILLISECONDS);
-            String name = Settings.recentNames.getByPrefix(prefix.append(code.getChar()).toString());
-            if (name != null) {
-                selectedObjectProperty.get().nameProperty().set(name);
+            NameColor nameColor = Settings.recentNamesProperty.getByPrefix(prefix.append(code.getChar()).toString());
+            if (nameColor != null) {
+                selectedObjectProperty.get().nameProperty().set(nameColor.getName());
             }
         }
     }

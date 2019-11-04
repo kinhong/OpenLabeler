@@ -21,9 +21,9 @@ import com.easymobo.openlabeler.preference.PreferenceUtil.BooleanPrefProperty;
 import com.easymobo.openlabeler.preference.PreferenceUtil.ColorPrefProperty;
 import com.easymobo.openlabeler.preference.PreferenceUtil.StringPrefProperty;
 import javafx.beans.property.*;
+import javafx.collections.FXCollections;
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.prefs.Preferences;
 
@@ -48,7 +48,7 @@ public class Settings
     private static final String USE_INFERENCE = "useInference";
     private static final String TF_LABEL_MAP_FILE = "tfLabelMapFile";
     private static final String TF_SAVED_MODEL_DIR = "tfSavedModelDir";
-    private static final String HINT_STROKE_COLOR = "HintBoxColor";
+    private static final String HINT_STROKE_COLOR = "hintBoxColor";
     // Other
     private static final String RECENT_FILES = "recentFiles";
     private static final String RECENT_NAMES = "recentNames";
@@ -218,24 +218,43 @@ public class Settings
     }
 
     // Recent files
-    public static final RecentList recentFiles = new RecentList(4, RECENT_FILES);
+    public static final RecentList<String> recentFilesProperty = new RecentList(4, RECENT_FILES, String.class);
 
     // Recent labels
-    public static final RecentList recentNames = new RecentList(50, RECENT_NAMES);
+    public static final RecentList<NameColor> recentNamesProperty = new RecentList(50, RECENT_NAMES, NameColor.class);
 
-    public static class RecentList extends ArrayList<String>
+    public static class RecentList<T> extends SimpleListProperty<T>
     {
+        private Class<T> type;
         private final int maxLength;
         private final String baseKey;
 
-        public RecentList(int maxLength, String baseKey) {
+        public RecentList(int maxLength, String baseKey, Class<T> type) {
+            super(FXCollections.observableArrayList());
             this.maxLength = maxLength;
             this.baseKey = baseKey;
+            this.type = type;
             load();
         }
 
+        private T newInstance(String s) {
+            try {
+                return type.getDeclaredConstructor(String.class).newInstance(s);
+            }
+            catch (Exception ex) {}
+            return null;
+        }
+
+        public boolean addName(String name) {
+            T element = getByPrefix(name);
+            if (element == null) {
+                element = newInstance(name);
+            }
+           return add(element);
+        }
+
         @Override
-        public boolean add(String element) {
+        public boolean add(T element) {
             remove(element);
             add(0, element);
             reduce();
@@ -244,7 +263,7 @@ public class Settings
         }
 
         @Override
-        public boolean addAll(Collection<? extends String> elements) {
+        public boolean addAll(Collection<? extends T> elements) {
             elements.forEach(e -> {
                 remove(e);
                 add(0, e);
@@ -260,9 +279,15 @@ public class Settings
             save();
         }
 
-        public String getByPrefix(String prefix) {
+        public T getByPrefix(String prefix) {
             String pre = prefix.toLowerCase();
-            return stream().map(String::toLowerCase).filter(item -> item.startsWith(pre)).findFirst().orElse(null);
+            for (T item : get()) {
+                String s = item.toString().toLowerCase();
+                if (s.startsWith(pre)) {
+                    return item;
+                }
+            }
+            return null;
         }
 
         private void reduce() {
@@ -277,19 +302,24 @@ public class Settings
                 if (val.equals("")) { /*$NON-NLS-1$*/
                     break;
                 }
-                super.add(val);
+                super.add(newInstance(val));
             }
         }
 
         private void save () {
             for (int i = 0; i < maxLength; i++) {
                 if (i < size()) {
-                    pref.put(baseKey + i, get(i));
+                    pref.put(baseKey + i, get(i).toString());
                 }
                 else {
                     pref.remove(baseKey + i);
                 }
             }
+        }
+
+        @Override
+        public RecentList<T> clone() {
+            return new RecentList(maxLength, baseKey, type);
         }
     }
 }

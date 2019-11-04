@@ -18,9 +18,9 @@
 package com.easymobo.openlabeler.ui;
 
 import com.easymobo.openlabeler.model.ObjectModel;
+import com.easymobo.openlabeler.preference.NameColor;
 import com.easymobo.openlabeler.preference.Settings;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Bounds;
@@ -40,14 +40,18 @@ public class ObjectTag extends TagBase
     private ObjectModel model;
     private String action;
 
+    private ReadOnlyObjectWrapper<Image> thumbProperty = new ReadOnlyObjectWrapper();
+    private ReadOnlyObjectWrapper<Color> strokeColorProperty = new ReadOnlyObjectWrapper();
+    private ReadOnlyObjectWrapper<Color> fillColorProperty = new ReadOnlyObjectWrapper();
+
     public ObjectTag(ImageView imageView, Translate translate, Scale scale, Rotate rotate, ObjectModel model) {
-        super(imageView.getImage(), translate, scale, rotate, model);
         this.model = model;
+        init(imageView.getImage(), translate, scale, rotate);
 
         name.setText(model.getName());
         name.textProperty().addListener((observable, oldValue, newValue) -> {
             model.setName(newValue);
-            Settings.recentNames.add(newValue);
+            Settings.recentNamesProperty.addName(newValue);
         });
 
         // object thumbnail
@@ -60,6 +64,16 @@ public class ObjectTag extends TagBase
             WritableImage wi = new WritableImage((int)bounds.getWidth(), (int)bounds.getHeight());
             return imageView.snapshot(parameters, wi);
          }, boundsProperty()));
+
+        strokeColorProperty.bind(Bindings.createObjectBinding(() -> {
+            NameColor item = Settings.recentNamesProperty.getByPrefix(getModel().getName());
+            return item == null ? Settings.getObjectStrokeColor() : item.getColor();
+        },  Settings.recentNamesProperty));
+
+        fillColorProperty.bind(Bindings.createObjectBinding(() -> {
+            NameColor item = Settings.recentNamesProperty.getByPrefix(getModel().getName());
+            return item == null ? Settings.getObjectFillColor() :  new Color(item.getColor().getRed(), item.getColor().getGreen(), item.getColor().getBlue(), 0.3);
+        },  Settings.recentNamesProperty));
     }
 
     @Override
@@ -70,7 +84,7 @@ public class ObjectTag extends TagBase
         NameEditor editor = new NameEditor(nameProperty().get());
         String label = editor.showPopup(me.getScreenX(), me.getScreenY(), getScene().getWindow());
         nameProperty().set(label);
-        Settings.recentNames.add(label);
+        Settings.recentNamesProperty.addName(label);
     }
 
     @Override
@@ -87,16 +101,15 @@ public class ObjectTag extends TagBase
     }
 
     @Override
-    public ObjectProperty<Color> strokeColorProperty() {
-        return Settings.objectStrokeColorProperty;
+    public ReadOnlyObjectProperty<Color> strokeColorProperty() {
+        return strokeColorProperty;
     }
 
     @Override
     public ReadOnlyObjectProperty<Color> fillColorProperty() {
-        return Settings.objectFillColorProperty;
+        return fillColorProperty;
     }
 
-    private ReadOnlyObjectWrapper<Image> thumbProperty = new ReadOnlyObjectWrapper();
     public ReadOnlyObjectProperty<Image> thumbProperty() {
         return thumbProperty.getReadOnlyProperty();
     }

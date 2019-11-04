@@ -18,7 +18,6 @@
 package com.easymobo.openlabeler;
 
 import com.easymobo.openlabeler.preference.PreferencePane;
-import com.sun.javafx.application.LauncherImpl;
 import de.codecentric.centerdevice.MenuToolkit;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -113,6 +112,7 @@ public class OpenLabeler extends Application
                         stage.setScene(scene);
 
                         stage.show();
+                        stage.requestFocus();
                     });
 
                     notifyPreloader(new StateChangeNotification(BEFORE_START));
@@ -128,7 +128,8 @@ public class OpenLabeler extends Application
     }
 
     public static void main(String[] args) {
-        LauncherImpl.launchApplication(OpenLabeler.class, SplashScreenLoader.class, args);
+        System.setProperty("javafx.preloader", "com.easymobo.openlabeler.SplashScreenLoader");
+        launch(OpenLabeler.class, args);
     }
 
     private void initOSMac(ResourceBundle bundle) {

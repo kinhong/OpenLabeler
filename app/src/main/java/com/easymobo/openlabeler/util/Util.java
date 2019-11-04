@@ -28,6 +28,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -239,6 +240,41 @@ public class Util
                     columns.addAll(getLeaves(column));
                 }
                 return columns;
+            }
+        }
+    }
+
+    public static class ColorTableCell<T> extends TableCell<T, Color> {
+        private final ColorPicker colorPicker;
+
+        public ColorTableCell(TableColumn<T, Color> column) {
+            colorPicker = new ColorPicker();
+            colorPicker.editableProperty().bind(column.editableProperty());
+            colorPicker.disableProperty().bind(column.editableProperty().not());
+            colorPicker.setOnShowing(event -> {
+                final TableView<T> tableView = getTableView();
+                tableView.getSelectionModel().select(getTableRow().getIndex());
+                tableView.edit(tableView.getSelectionModel().getSelectedIndex(), column);
+            });
+            colorPicker.valueProperty().addListener((observable, oldValue, newValue) -> {
+                if (isEditing()) {
+                    commitEdit(newValue);
+                }
+            });
+            setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+        }
+
+        @Override
+        protected void updateItem(Color item, boolean empty) {
+            super.updateItem(item, empty);
+
+            setText(null);
+            if (empty) {
+                setGraphic(null);
+            }
+            else {
+                colorPicker.setValue(item);
+                setGraphic(this.colorPicker);
             }
         }
     }
