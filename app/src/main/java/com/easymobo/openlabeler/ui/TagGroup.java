@@ -221,6 +221,7 @@ public class TagGroup extends Group implements AutoCloseable
         objectsProperty.clear();
         hintsProperty.clear();
         imageView.setImage(model == null ? null : model.getSize().getImage());
+        imageView.setCache(true);
         if (model != null && model.getObjects().size() > 0) {
             model.getObjects().forEach(obj -> createObjectTag(obj));
             statusProperty.set(MessageFormat.format(bundle.getString("msg.objectsCount"), model.getObjects().size()));
@@ -427,9 +428,11 @@ public class TagGroup extends Group implements AutoCloseable
     }
 
     public ObjectTag addObjectTag(ObjectModel om, String action) {
-        ObjectTag objectTag = createObjectTag(om);
+        ObjectTag objectTag = new ObjectTag(imageView, translate, scale, rotate, om);
+        objectTag.selectionProperty().addListener(observable -> tagSelectionChanged(objectTag));
         objectTag.setAction(action);
         objectTag.setSelected(true);
+        objectsProperty.add(objectTag);
         return objectTag;
     }
 

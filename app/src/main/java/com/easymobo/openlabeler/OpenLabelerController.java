@@ -168,7 +168,8 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     }
 
     public void onFileOpenFile(ActionEvent actionEvent) {
-        ExtensionFilter imageFilter = new ExtensionFilter("Image Files", "*.jpg", "*.png", ".gif");
+        ExtensionFilter imageFilter = new ExtensionFilter("Image Files (*.jpg, *.png, *.gif)", "*.JPG", "*.jpg",
+                "*.JPEG", "*.jpeg", "*.PNG", "*.png", "*.GIF", ".gif");
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(bundle.getString("menu.openMediaFile"));
         fileChooser.getExtensionFilters().add(imageFilter);
