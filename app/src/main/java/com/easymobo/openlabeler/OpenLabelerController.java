@@ -96,6 +96,8 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     @FXML
     private MenuItem miClose, miSave, msPreference, miPreference, msExit, miExit, miUndo, miRedo, miCut, miCopy, miPaste, miDelete, miZoomIn, miZoomOut, miZoomFit, miPrevMediaFile, miNextMediaFile, miGoToUnlabeledMediaFile, miRotateLeft, miRotateRight, miShowHint, miClearHint, msAbout, miAbout, miInspectLabels;
     @FXML
+    private ToolBar toolBar;
+    @FXML
     private Button btnPrevMedia, btnNextMedia, btnSave, btnUndo, btnRedo, btnDelete, btnZoomIn, btnZoomOut, btnZoomFit, btnRotateLeft, btnRotateRight, btnShowHint, btnClearHint;
     @FXML
     private MediaPane mediaPane;
@@ -147,6 +149,9 @@ public class OpenLabelerController implements Initializable, AutoCloseable
             Clipboard clipboard = Clipboard.getSystemClipboard();
             miPaste.disableProperty().set(!clipboard.getContentTypes().contains(DATA_FORMAT_JAXB));
         });
+
+        // Remove mnemonics from toolbar button tooltips
+        fixTooltipMnemonics(toolBar);
 
         trainer = new TFTrainer(bundle);
         trainer.init();
@@ -617,6 +622,15 @@ public class OpenLabelerController implements Initializable, AutoCloseable
             title += " - " + file.getAbsolutePath();
         }
         ((Stage)tagGroup.getScene().getWindow()).setTitle(title);
+    }
+
+    private void fixTooltipMnemonics(ToolBar toolBar) {
+        toolBar.getItems().stream().filter(Button.class::isInstance).forEach(node -> {
+            Tooltip tooltip = ((Button) node).getTooltip();
+            if (tooltip != null) {
+                tooltip.setText(tooltip.getText().replaceAll("_", ""));
+            }
+        });
     }
 
     /**

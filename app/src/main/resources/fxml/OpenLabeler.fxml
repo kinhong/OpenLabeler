@@ -146,7 +146,7 @@
                         </Menu>
                     </menus>
                 </MenuBar>
-                <ToolBar prefHeight="14.0" prefWidth="600.0">
+                <ToolBar fx:id="toolBar" prefHeight="14.0" prefWidth="600.0">
                     <items>
                         <Button fx:id="btnOpenMediaFile" onAction="#onFileOpenFile">
                             <graphic>

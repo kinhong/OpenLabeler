@@ -6,13 +6,13 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="openlabeler-app" />
         <module name="openlabeler-preloader" />
+        <module name="openlabeler-app" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="openlabeler" target="11" />
-      <module name="openlabeler-app" target="11" />
+      <module name="openlabeler" target="1.11" />
+      <module name="openlabeler-app" target="1.11" />
       <module name="openlabeler-preloader" target="11" />
     </bytecodeTargetLevel>
   </component>

@@ -28,6 +28,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang.ArrayUtils;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Tensor;
+import org.tensorflow.TensorFlow;
 import org.tensorflow.framework.MetaGraphDef;
 import org.tensorflow.framework.SignatureDef;
 import org.tensorflow.framework.TensorInfo;
@@ -76,6 +77,8 @@ public class ObjectDetector implements AutoCloseable
             Settings.tfSavedModelDirProperty.addListener((observable, oldValue, newValue) -> {
                 watch(Paths.get(newValue));
             });
+
+            LOG.log(Level.INFO, "TensorFlow: " + TensorFlow.version());
         }
     }
 
