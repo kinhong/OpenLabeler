@@ -176,7 +176,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         ExtensionFilter imageFilter = new ExtensionFilter("Image Files (*.jpg, *.png, *.gif)", "*.JPG", "*.jpg",
                 "*.JPEG", "*.jpeg", "*.PNG", "*.png", "*.GIF", ".gif");
         FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle(bundle.getString("menu.openMediaFile"));
+        fileChooser.setTitle(bundle.getString("menu.openMediaFile").replaceAll("_", ""));
         fileChooser.getExtensionFilters().add(imageFilter);
         File file = fileChooser.showOpenDialog(tagGroup.getScene().getWindow());
         openFileOrDir(file);
@@ -184,7 +184,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
 
     public void onFileOpenDir(ActionEvent actionEvent) {
         DirectoryChooser dirChooser = new DirectoryChooser();
-        dirChooser.setTitle(bundle.getString("menu.openMediaDir"));
+        dirChooser.setTitle(bundle.getString("menu.openMediaDir").replaceAll("_", ""));
         File dir = dirChooser.showDialog(tagGroup.getScene().getWindow());
         openFileOrDir(dir);
     }
