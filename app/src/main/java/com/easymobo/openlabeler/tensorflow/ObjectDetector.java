@@ -99,7 +99,11 @@ public class ObjectDetector implements AutoCloseable
     private void watch(Path savedModelPath) {
         try {
             Path savedModelParent = savedModelPath.getParent();
-            if (savedModelParent == null || !savedModelParent.toFile().exists()) {
+            if (savedModelParent == null) {
+                return;
+            }
+            if (!savedModelParent.toFile().exists()) {
+                LOG.info(savedModelParent.toString() + " does not exist");
                 return;
             }
             if (tfSavedModelWatchKey != null && !tfSavedModelWatchKey.watchable().equals(tfSavedModelWatchKey)) {
@@ -118,7 +122,7 @@ public class ObjectDetector implements AutoCloseable
         try {
             File savedModelFile = new File(Settings.getTFSavedModelDir());
             if (savedModelFile.exists() && (path == null || "saved_model".equals(path.toString()))) {
-                if (path != null) {
+                if (path != null) { // coming from watched file
                     Thread.sleep(5000); // Wait a while for model to be exported
                 }
                 synchronized (ObjectDetector.this) {
@@ -130,6 +134,9 @@ public class ObjectDetector implements AutoCloseable
                     LOG.info(message);
                     Platform.runLater(() -> statusProperty.set(message));
                 }
+            }
+            else if (!savedModelFile.exists() && path == null) {
+                LOG.info(savedModelFile.toString() + " does not exist");
             }
         }
         catch (Exception ex) {

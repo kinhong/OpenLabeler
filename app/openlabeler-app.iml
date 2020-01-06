@@ -11,6 +11,11 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:11.0.0" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow:1.15.0" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:libtensorflow:1.15.0" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:libtensorflow_jni:1.15.0" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:proto:1.15.0" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:11.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:11.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:11.0.2" level="project" />

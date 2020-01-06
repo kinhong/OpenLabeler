@@ -171,9 +171,11 @@ public class TagGroup extends Group implements AutoCloseable
             }
         });
 
+        // Object detector and hints
         objectDetector = new ObjectDetector(bundle);
         new Thread(() -> objectDetector.init(), "Object Detector Initializer").start();
         objectDetector.statusProperty().addListener((observable, oldValue, newValue) -> statusProperty.set(newValue));
+        Settings.useInferenceProperty.addListener((observable, oldValue, newValue) -> findHints());
 
         // keyboard
         setOnKeyPressed(event -> onKeyPressed(event));

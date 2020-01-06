@@ -16,13 +16,10 @@
  */
 
 .root {
+    -fx-font-family: "SansSerif";
     -fx-base: #ececec;
     -fx-background: derive(-fx-base,26.4%);
     -fx-background-color: -fx-background;
-}
-
-.title {
-    -fx-font-size: 1.2em;
 }
 
 .flat, .tool-bar .button, .tool-bar .toggle-button {
@@ -39,3 +36,7 @@
     -fx-focus-color: transparent;
 }
 
+/* Tooltips */
+.tooltip {
+    -fx-background-radius: 3 3 3 3;
+}

@@ -32,13 +32,8 @@ public class PreferenceUtil
         private final boolean defVal;
 
         public BooleanPrefProperty(Preferences pref, String baseKey, boolean defVal) {
-            super(pref, baseKey, defVal);
+            super(pref, baseKey, pref.getBoolean(baseKey, defVal));
             this.defVal = defVal;
-        }
-
-        @Override
-        public boolean get() {
-            return ((Preferences)getBean()).getBoolean(getName(), defVal);
         }
 
         @Override
@@ -53,13 +48,8 @@ public class PreferenceUtil
         private final String defVal;
 
         public StringPrefProperty(Preferences pref, String baseKey, String defVal) {
-            super(pref, baseKey);
+            super(pref, baseKey, pref.get(baseKey, defVal));
             this.defVal = defVal;
-        }
-
-        @Override
-        public String get() {
-            return ((Preferences)getBean()).get(getName(), defVal);
         }
 
         @Override
@@ -76,15 +66,10 @@ public class PreferenceUtil
         private final Function<T, String> toString;
 
         public ObjectPrefProperty(Preferences pref, String baseKey, T defVal, Function<String, T> fromString, Function<T, String> toString)  {
-            super(pref, baseKey);
+            super(pref, baseKey, fromString.apply(pref.get(baseKey, toString.apply(defVal))));
             this.defVal = defVal;
             this.fromString = fromString;
             this.toString = toString;
-        }
-
-        @Override
-        public T get() {
-            return fromString.apply(((Preferences)getBean()).get(getName(), toString.apply(defVal)));
         }
 
         @Override
