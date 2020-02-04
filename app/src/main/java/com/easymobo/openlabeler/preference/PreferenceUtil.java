@@ -18,6 +18,7 @@
 package com.easymobo.openlabeler.preference;
 
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.scene.paint.Color;
@@ -34,12 +35,34 @@ public class PreferenceUtil
         public BooleanPrefProperty(Preferences pref, String baseKey, boolean defVal) {
             super(pref, baseKey, pref.getBoolean(baseKey, defVal));
             this.defVal = defVal;
+            this.addListener((observable, oldVal, newVal) -> {
+                ((Preferences)getBean()).putBoolean(getName(), newVal);
+            });
         }
 
         @Override
         public void set(boolean use) {
             ((Preferences)getBean()).putBoolean(getName(), use);
             super.set(use);
+        }
+    }
+
+    public static class IntegerPrefProperty extends SimpleIntegerProperty
+    {
+        private final int defVal;
+
+        public IntegerPrefProperty(Preferences pref, String baseKey, int defVal) {
+            super(pref, baseKey, pref.getInt(baseKey, defVal));
+            this.defVal = defVal;
+            this.addListener((observable, oldVal, newVal) -> {
+                ((Preferences)getBean()).putInt(getName(), newVal.intValue());
+            });
+        }
+
+        @Override
+        public void set(int val) {
+            ((Preferences)getBean()).putInt(getName(), val);
+            super.set(val);
         }
     }
 
@@ -50,6 +73,9 @@ public class PreferenceUtil
         public StringPrefProperty(Preferences pref, String baseKey, String defVal) {
             super(pref, baseKey, pref.get(baseKey, defVal));
             this.defVal = defVal;
+            this.addListener((observable, oldVal, newVal) -> {
+                ((Preferences)getBean()).put(getName(), newVal);
+            });
         }
 
         @Override
@@ -70,6 +96,9 @@ public class PreferenceUtil
             this.defVal = defVal;
             this.fromString = fromString;
             this.toString = toString;
+            this.addListener((observable, oldVal, newVal) -> {
+                ((Preferences)getBean()).put(getName(), toString.apply(newVal));
+            });
         }
 
         @Override

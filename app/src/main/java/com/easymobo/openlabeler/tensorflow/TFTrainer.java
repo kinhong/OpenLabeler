@@ -26,6 +26,7 @@ import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Bind;
 import com.github.dockerjava.api.model.Container;
 import com.github.dockerjava.api.model.HostConfig;
+import com.github.dockerjava.api.model.Volume;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.google.protobuf.TextFormat;
 import javafx.application.Platform;
@@ -494,8 +495,8 @@ public class TFTrainer implements AutoCloseable
     }
 
     public static Bind[] getDockerBinds() {
-        Bind dataDir = Bind.parse(Settings.getTFDataDir() + ":/root/data");
-        Bind modelDir = Bind.parse(Settings.getTFBaseModelDir() + ":/root/model");
+        Bind dataDir = new Bind(Settings.getTFDataDir(), new Volume("/root/data"));
+        Bind modelDir = new Bind(Settings.getTFBaseModelDir(), new Volume("/root/model"));
         return new Bind[] { dataDir, modelDir };
     }
 }
