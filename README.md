@@ -38,7 +38,7 @@ OpenLabeler can be used to start/stop a training process in TensorFlow within a 
 
 1. [Install Docker](https://docs.docker.com/install) on your host machine
 2. *Windows only* Open Docker > Settings > General and check "Expose daemon on tcp://localhost:2375 without TLS"
-3. *Windows only* Create a `<home>\.docker-java.properties` file. Add a `DOCKER_HOST=tcp://localhost:2376 entry`. See [reference](https://github.com/docker-java/docker-java)
+3. *Windows only* Create a `<home>\.docker-java.properties` file. Add a `DOCKER_HOST=tcp://localhost:2375 entry`. See [reference](https://github.com/docker-java/docker-java)
 4. Choose a pre-built, `kinhong/openlabeler:latest-py3` or `kinhong/openlabeler:latest-gpu-py3`, [docker image](https://cloud.docker.com/repository/docker/kinhong/openlabeler/tags) from [Docker Hub](https://hub.docker.com/) and pull it to your docker host
 5. Download a base model from the [TensorFlow Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) for transfer learning
 6. Configure the Training Preference settings (and add the label map entries)
