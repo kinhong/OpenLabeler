@@ -251,7 +251,10 @@ public class ObjectDetector implements AutoCloseable
     }
 
     private static Tensor<UInt8> makeImageTensor(BufferedImage img) throws IOException {
-        if (img.getType() == BufferedImage.TYPE_BYTE_INDEXED || img.getType() == BufferedImage.TYPE_BYTE_BINARY) {
+        if (img.getType() == BufferedImage.TYPE_BYTE_INDEXED
+              || img.getType() == BufferedImage.TYPE_BYTE_BINARY
+              || img.getType() == BufferedImage.TYPE_BYTE_GRAY
+              || img.getType() == BufferedImage.TYPE_USHORT_GRAY) {
             BufferedImage bgr = new BufferedImage(img.getWidth(), img.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
             bgr.getGraphics().drawImage(img, 0, 0, null);
             img = bgr;
