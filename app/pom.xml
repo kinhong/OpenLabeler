@@ -229,6 +229,12 @@
             </plugin>
         </plugins>
     </build>
+    <properties>
+        <project.build.add-modules>
+            java.base,java.logging,java.desktop,java.prefs,java.xml,javafx.base,javafx.graphics,javafx.controls,javafx.fxml,javafx.web,javafx.media
+        </project.build.add-modules>
+        <project.vendor>OpenLabeler</project.vendor>
+    </properties>
     <profiles>
         <profile>
             <id>mac</id>
@@ -274,6 +280,8 @@
                                         <argument>${project.build.directory}/libs</argument>
                                         <argument>--class</argument>
                                         <argument>com.easymobo.openlabeler.Main</argument>
+                                        <argument>--vendor</argument>
+                                        <argument>${project.vendor}</argument>
                                         <argument>--version</argument>
                                         <argument>${revision}</argument>
                                         <argument>--main-jar</argument>
@@ -291,9 +299,7 @@
                                         <argument>--module-path</argument>
                                         <argument>${java.home}/jmods:${project.build.directory}/mods</argument>
                                         <argument>--add-modules</argument>
-                                        <argument>
-                                            java.base,java.logging,java.desktop,java.prefs,java.xml,javafx.base,javafx.graphics,javafx.controls,javafx.fxml,javafx.web,javafx.media
-                                        </argument>
+                                        <argument>${project.build.add-modules}</argument>
                                         <argument>--strip-native-commands</argument>
                                     </arguments>
                                 </configuration>
@@ -351,6 +357,8 @@
                                         <argument>${project.build.directory}/libs</argument>
                                         <argument>--class</argument>
                                         <argument>com.easymobo.openlabeler.Main</argument>
+                                        <argument>--vendor</argument>
+                                        <argument>${project.vendor}</argument>
                                         <argument>--version</argument>
                                         <argument>${revision}</argument>
                                         <argument>--main-jar</argument>
@@ -370,9 +378,7 @@
                                         <argument>--module-path</argument>
                                         <argument>${java.home}/jmods:${project.build.directory}/mods</argument>
                                         <argument>--add-modules</argument>
-                                        <argument>
-                                            java.base,java.logging,java.desktop,java.prefs,java.xml,javafx.base,javafx.graphics,javafx.controls,javafx.fxml,javafx.web,javafx.media
-                                        </argument>
+                                        <argument>${project.build.add-modules}</argument>
                                         <argument>--strip-native-commands</argument>
                                     </arguments>
                                 </configuration>
@@ -434,6 +440,8 @@
                                         <argument>${project.build.directory}/libs</argument>
                                         <argument>--class</argument>
                                         <argument>com.easymobo.openlabeler.Main</argument>
+                                        <argument>--vendor</argument>
+                                        <argument>${project.vendor}</argument>
                                         <argument>--version</argument>
                                         <argument>${revision}</argument>
                                         <argument>--main-jar</argument>
@@ -446,14 +454,15 @@
                                         <argument>OpenLabeler</argument>
                                         <argument>--icon</argument>
                                         <argument>${project.build.directory}/classes/icon.ico</argument>
+                                        <argument>--win-dir-chooser</argument>
                                         <argument>--win-shortcut</argument>
-                                        <argument>true</argument>
+                                        <argument>--win-menu</argument>
 
                                         <!-- jlink arguments -->
                                         <argument>--module-path</argument>
                                         <argument>${java.home}/jmods;${project.build.directory}/mods</argument>
                                         <argument>--add-modules</argument>
-                                        <argument>java.base,java.logging,java.desktop,java.prefs,java.xml,javafx.base,javafx.graphics,javafx.controls,javafx.fxml,javafx.web,javafx.media</argument>
+                                        <argument>${project.build.add-modules}</argument>
                                         <argument>--strip-native-commands</argument>
                                     </arguments>
                                 </configuration>

@@ -37,11 +37,13 @@ The **Saved Model Location** is the *folder* where the `.pb` file is located. If
 OpenLabeler can be used to start/stop a training process in TensorFlow within a [Docker](https://www.docker.com) container. Containers with [TensorFlow](https://www.tensorflow.org/install/docker) and [Object Detection API](https://github.com/tensorflow/models/tree/master/research/object_detection) dependencies have been pre-built for your convenience. To use this feature:
 
 1. [Install Docker](https://docs.docker.com/install) on your host machine
-2. Choose a pre-built, `kinhong/openlabeler:latest-py3` or `kinhong/openlabeler:latest-gpu-py3`, [docker image](https://cloud.docker.com/repository/docker/kinhong/openlabeler/tags) from [Docker Hub](https://hub.docker.com/) and pull it to your docker host
-3. Download a base model from the [TensorFlow Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) for transfer learning
-4. Configure the Training Preference settings (and add the label map entries)
+2. *Windows only* Open Docker > Settings > General and check "Expose daemon on tcp://localhost:2375 without TLS"
+3. *Windows only* Create a `<home>\.docker-java.properties` file. Add a `DOCKER_HOST=tcp://localhost:2375 entry`. See [reference](https://github.com/docker-java/docker-java)
+4. Choose a pre-built, `kinhong/openlabeler:latest-py3` or `kinhong/openlabeler:latest-gpu-py3`, [docker image](https://cloud.docker.com/repository/docker/kinhong/openlabeler/tags) from [Docker Hub](https://hub.docker.com/) and pull it to your docker host
+5. Download a base model from the [TensorFlow Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) for transfer learning
+6. Configure the Training Preference settings (and add the label map entries)
 ![Train Preferences](assets/pref-train.png)
-5. You can then start, stop, continue, restart training, or export the inference graph
+7. You can then start, stop, continue, restart training, or export the inference graph
 
 ## Shortcut Keys
 
@@ -99,7 +101,7 @@ This application can be built using [Apache Maven](https://maven.apache.org).
 2. Download and install [Maven](https://maven.apache.org/install.html)
 ```
 cd <openlabeler>
-mvn clean install
+mvn clean package -Drevision=x.y.z
 ```
 The macOS .pkg installer can be found under the app/target/package directory.
 
@@ -114,7 +116,7 @@ sudo apt-get install maven
 sudo apt-get install fakeroot
 
 cd <openlabeler>
-mvn clean install
+mvn clean package -Drevision=x.y.z
 ```
 The Linux .deb bundle can be found under the app/target/package directory.
 
@@ -129,7 +131,7 @@ The Linux .deb bundle can be found under the app/target/package directory.
 cd <openlabeler>
 copy <openlabeler>\bin\jdk.packager-windows\jpackager.exe <java_home>\bin
 copy <openlabeler>\bin\jdk.packager-windows\jdk.packager.jar <java_home>\jmods
-mvn clean install
+mvn clean package -Drevision=x.y.z
 ```
 
 The Windows .msi file can be found under the app\target\package directory.
