@@ -1,0 +1,12 @@
+/*
+ * Copyright (c) 2019. Infolytik. All rights reserved.
+ */
+
+/* General */
+* {
+    -fx-primary-color: #F7941D;
+    -fx-primary-focus-color: #F25E02;
+}
+.root {
+    -fx-font-family: "SansSerif";
+}

@@ -18,12 +18,13 @@
 package com.easymobo.openlabeler;
 
 import javafx.application.Preloader;
-import javafx.scene.Group;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.util.ResourceBundle;
 
 public class SplashScreenLoader extends Preloader
 {
@@ -32,9 +33,10 @@ public class SplashScreenLoader extends Preloader
     @Override
     public void start(Stage stage) throws Exception {
         this.stage = stage;
-        Image img = new Image("splash.png");
-        Group group = new Group(new ImageView(img));
-        stage.setScene(new Scene(group));
+        var bundle = ResourceBundle.getBundle("bundle");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/SplashScreen.fxml"), bundle);
+        Parent root = loader.load();
+        stage.setScene(new Scene(root));
         stage.initStyle(StageStyle.UNDECORATED);
         stage.show();
     }

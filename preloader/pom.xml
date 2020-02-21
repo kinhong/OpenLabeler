@@ -25,10 +25,19 @@
     <artifactId>openlabeler-preloader</artifactId>
     <packaging>jar</packaging>
 
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
     <dependencies>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
+            <version>11.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-fxml</artifactId>
             <version>11.0.2</version>
         </dependency>
     </dependencies>
