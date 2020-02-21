@@ -18,7 +18,7 @@
   -->
 
 <?import javafx.scene.control.*?>
-<fx:root stylesheets="@/css/OpenLabeler.css" type="DialogPane" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root stylesheets="@/css/OpenLabeler.css" type="DialogPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
    <content>
       <SplitPane dividerPositions="0.25" prefHeight="750.0" prefWidth="950.0">
         <items>

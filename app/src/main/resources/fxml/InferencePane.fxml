@@ -21,8 +21,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <fx:root maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity"
-         stylesheets="@/css/OpenLabeler.css" type="VBox" xmlns="http://javafx.com/javafx/8.0.172-ea"
-         xmlns:fx="http://javafx.com/fxml/1">
+         stylesheets="@/css/OpenLabeler.css" type="VBox" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <children>
         <GridPane fx:id="gpTensorFlow" hgap="10.0" vgap="10">
             <children>

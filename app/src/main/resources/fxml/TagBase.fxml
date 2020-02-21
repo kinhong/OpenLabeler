@@ -21,7 +21,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.Group?>
 <?import javafx.scene.shape.Rectangle?>
-<fx:root type="Group" xmlns="http://javafx.com/fxml" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/OpenLabeler.css">
+<fx:root type="Group" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
     <children>
         <Rectangle fx:id="rect" height="409.0" strokeWidth="0.0" width="635.0" />
         <Label fx:id="name" style="-fx-background-color: #00000064;" text="Label" textFill="WHITE" mouseTransparent="true">

@@ -72,11 +72,11 @@ public class OpenLabeler extends Application
             @Override
             protected Void call() throws Exception {
                 try {
+                    // Attempt to get bundle using user's default locale.
                     ResourceBundle.getBundle("bundle");
                 }
                 catch (MissingResourceException mse) {
-                    LOG.log(Level.WARNING, "Can't get bundle: ", mse);
-                    Locale.setDefault(Locale.US);
+                    LOG.log(Level.WARNING, String.format("Can't get bundle for %s. Using en_US locale.", Locale.getDefault()), mse);Locale.setDefault(Locale.US);
                 }
                 try {
                     ResourceBundle bundle = ResourceBundle.getBundle("bundle");

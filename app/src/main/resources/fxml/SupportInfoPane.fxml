@@ -19,7 +19,7 @@
 
 <?import javafx.scene.control.DialogPane?>
 <?import javafx.scene.control.TextArea?>
-<fx:root type="DialogPane" xmlns="http://javafx.com/javafx/8.0.172-ea" xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/OpenLabeler.css">
+<fx:root type="DialogPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
    <content>
       <TextArea fx:id="text" editable="false" prefHeight="600.0" prefWidth="600.0" wrapText="true" />
    </content>
