@@ -65,14 +65,13 @@ public abstract class TagBase extends Group
 
     private static final Logger LOG = Logger.getLogger(TagBase.class.getCanonicalName());
 
-    protected ResourceBundle bundle;
+    protected ResourceBundle bundle = ResourceBundle.getBundle("bundle");
     protected Dimension2D imageDim;
     protected List<Rectangle> handles = new ArrayList();
     protected Translate translate;
     protected Scale scale;
 
     public TagBase() {
-        bundle = ResourceBundle.getBundle("bundle");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TagBase.fxml"));
         loader.setRoot(this);
         loader.setController(this);

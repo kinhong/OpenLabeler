@@ -56,11 +56,11 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
 
     private static final Logger LOG = Logger.getLogger(MediaTableView.class.getCanonicalName());
 
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
+    ;
     private FilteredList<MediaFile> filtered;
 
     public MediaTableView() {
-        bundle = ResourceBundle.getBundle("bundle");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MediaTableView.fxml"), bundle);
         loader.setRoot(this);
         loader.setController(this);

@@ -38,11 +38,10 @@ public class LabelMapPane extends BorderPane
 
     private static final Logger LOG = Logger.getLogger(LabelMapPane.class.getCanonicalName());
 
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     public LabelMapPane() {
-        bundle = ResourceBundle.getBundle("bundle");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LabelMapPane.fxml"), bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/preference/LabelMapPane.fxml"), bundle);
         loader.setRoot(this);
         loader.setController(this);
 

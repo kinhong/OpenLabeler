@@ -70,13 +70,12 @@ public class TrainingPane extends VBox implements Category
     private static final Logger LOG = Logger.getLogger(TrainingPane.class.getCanonicalName());
 
     private final BooleanProperty dirtyProperty =  new SimpleBooleanProperty(false);
-    private String name;
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     private TFTrainer.PipelineConfig config;
 
-    public TrainingPane(String name, ResourceBundle bundle) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TrainingPane.fxml"), bundle);
+    public TrainingPane() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/preference/TrainingPane.fxml"), bundle);
         loader.setRoot(this);
         loader.setController(this);
 
@@ -92,8 +91,6 @@ public class TrainingPane extends VBox implements Category
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
         }
-        this.name = name;
-        this.bundle = bundle;
 
         bindProperties();
 
@@ -116,7 +113,7 @@ public class TrainingPane extends VBox implements Category
 
     @Override
     public String getName() {
-        return name;
+        return bundle.getString("menu.train");
     }
 
     @Override

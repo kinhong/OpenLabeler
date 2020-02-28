@@ -41,11 +41,10 @@ public class NameListPane extends BorderPane
 
     private static final Logger LOG = Logger.getLogger(NameListPane.class.getCanonicalName());
 
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     public NameListPane() {
-        bundle = ResourceBundle.getBundle("bundle");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NameListPane.fxml"), bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/preference/NameListPane.fxml"), bundle);
         loader.setRoot(this);
         loader.setController(this);
 

@@ -53,10 +53,13 @@ public class NameEditor extends VBox
 
     private static final Logger LOG = Logger.getLogger(NameEditor.class.getCanonicalName());
 
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
+
+    public NameEditor() {
+        this("");
+    }
 
     public NameEditor(String label) {
-        bundle = ResourceBundle.getBundle("bundle");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NameEditor.fxml"), bundle);
         loader.setRoot(this);
         loader.setController(this);

@@ -17,14 +17,17 @@
   ~ ==============================================================================
   -->
 
-<?import javafx.scene.control.*?>
-<fx:root editable="true" type="TableView" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
-   <placeholder>
-      <Label />
-   </placeholder>
-   <columns>
-      <TableColumn fx:id="colId" prefWidth="40.0" text="%menu.id" />
-      <TableColumn fx:id="colName" prefWidth="100.0" text="%menu.name" />
-      <TableColumn fx:id="colDisplayName" prefWidth="150.0" text="%menu.displayName" />
-   </columns>
+<?import com.easymobo.openlabeler.preference.LabelMapTableView?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<fx:root editable="true" type="com.easymobo.openlabeler.preference.LabelMapTableView" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
+    <placeholder>
+        <Label/>
+    </placeholder>
+    <columns>
+        <TableColumn fx:id="colId" prefWidth="40.0" text="%menu.id"/>
+        <TableColumn fx:id="colName" prefWidth="100.0" text="%menu.name"/>
+        <TableColumn fx:id="colDisplayName" prefWidth="150.0" text="%menu.displayName"/>
+    </columns>
 </fx:root>

@@ -17,14 +17,18 @@
   ~ ==============================================================================
   -->
 
-<?import javafx.scene.control.*?>
-<fx:root stylesheets="@/css/OpenLabeler.css" type="DialogPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
-   <content>
-      <SplitPane dividerPositions="0.25" prefHeight="750.0" prefWidth="950.0">
-        <items>
-            <ListView fx:id="categoryList" prefHeight="200.0" styleClass="title" />
-            <ScrollPane fx:id="scroller" pannable="true" fitToWidth="true"/>
-        </items>
-      </SplitPane>
-   </content>
+<?import com.easymobo.openlabeler.preference.PreferencePane?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.SplitPane?>
+<fx:root stylesheets="@/css/OpenLabeler.css" type="com.easymobo.openlabeler.preference.PreferencePane"
+         xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+    <content>
+        <SplitPane dividerPositions="0.25" prefHeight="750.0" prefWidth="950.0">
+            <items>
+                <ListView fx:id="categoryList" prefHeight="200.0" styleClass="title"/>
+                <ScrollPane fx:id="scroller" pannable="true" fitToWidth="true"/>
+            </items>
+        </SplitPane>
+    </content>
 </fx:root>

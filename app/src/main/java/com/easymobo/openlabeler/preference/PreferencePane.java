@@ -42,11 +42,11 @@ public class PreferencePane extends DialogPane
 
     private static final Logger LOG = Logger.getLogger(PreferencePane.class.getCanonicalName());
 
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
     private ObservableList<Category> categories = FXCollections.observableArrayList();
 
-    public PreferencePane(ResourceBundle bundle) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/PreferencePane.fxml"), bundle);
+    public PreferencePane() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/preference/PreferencePane.fxml"), bundle);
         loader.setRoot(this);
         loader.setController(this);
 
@@ -56,7 +56,6 @@ public class PreferencePane extends DialogPane
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
         }
-        this.bundle = bundle;
         getButtonTypes().addAll(ButtonType.APPLY, ButtonType.CLOSE);
 
         bindProperties();
@@ -89,9 +88,9 @@ public class PreferencePane extends DialogPane
     }
 
     private void bindProperties() {
-        categories.add(new GeneralPane(bundle.getString("menu.general"), bundle));
-        categories.add(new InferencePane(bundle.getString("menu.inference"), bundle));
-        categories.add(new TrainingPane(bundle.getString("menu.train"), bundle));
+        categories.add(new GeneralPane());
+        categories.add(new InferencePane());
+        categories.add(new TrainingPane());
 
         categoryList.getItems().addAll(EasyBind.map(categories, Category::getName));
 

@@ -54,11 +54,10 @@ public class GeneralPane extends VBox implements Category
     private static final Logger LOG = Logger.getLogger(GeneralPane.class.getCanonicalName());
 
     private final BooleanProperty dirtyProperty =  new SimpleBooleanProperty(false);
-    private String name;
-    private ResourceBundle bundle;
+    private ResourceBundle bundle =  ResourceBundle.getBundle("bundle");
 
-    public GeneralPane(String name, ResourceBundle bundle) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/GeneralPane.fxml"), bundle);
+    public GeneralPane() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/preference/GeneralPane.fxml"), bundle);
         loader.setRoot(this);
         loader.setController(this);
 
@@ -72,8 +71,6 @@ public class GeneralPane extends VBox implements Category
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
         }
-        this.name = name;
-        this.bundle = bundle;
 
         // Bind Properties
         BooleanBinding changes[] = {
@@ -105,7 +102,7 @@ public class GeneralPane extends VBox implements Category
 
     @Override
     public String getName() {
-        return name;
+        return bundle.getString("menu.general");
     }
 
     @Override

@@ -43,11 +43,10 @@ public class LabelMapTableView extends TableView<LabelMapItem>
 
     private static final Logger LOG = Logger.getLogger(LabelMapTableView.class.getCanonicalName());
 
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     public LabelMapTableView() {
-        bundle = ResourceBundle.getBundle("bundle");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/LabelMapTableView.fxml"), bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/preference/LabelMapTableView.fxml"), bundle);
         loader.setRoot(this);
         loader.setController(this);
 

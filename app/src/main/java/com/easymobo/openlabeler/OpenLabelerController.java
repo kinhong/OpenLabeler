@@ -27,7 +27,7 @@ import com.easymobo.openlabeler.ui.MediaPane;
 import com.easymobo.openlabeler.ui.MediaTableView.MediaFile;
 import com.easymobo.openlabeler.ui.ObjectTableView;
 import com.easymobo.openlabeler.ui.ObjectTag;
-import com.easymobo.openlabeler.ui.TagGroup;
+import com.easymobo.openlabeler.ui.TagBoard;
 import com.easymobo.openlabeler.undo.BoundsChange;
 import com.easymobo.openlabeler.undo.ChangeBase;
 import com.easymobo.openlabeler.undo.ListChange;
@@ -88,7 +88,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     @FXML
     private Label status, coords;
     @FXML
-    private TagGroup tagGroup;
+    private TagBoard tagBoard;
     @FXML
     private MenuBar menuBar;
     @FXML
@@ -134,7 +134,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
 
         try {
             bundle = resources;
-            tagGroup.statusProperty().set(bundle.getString("msg.openMedia"));
+            tagBoard.statusProperty().set(bundle.getString("msg.openMedia"));
             jaxbContext = JAXBContext.newInstance(Annotation.class);
         }
         catch (JAXBException ex) {
@@ -142,7 +142,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         }
 
         // ScrollPane steals focus, so it is always the focus owner
-        scrollPane.setOnKeyPressed(event -> tagGroup.onKeyPressed(event));
+        scrollPane.setOnKeyPressed(event -> tagBoard.onKeyPressed(event));
 
         // Paste menu item
         miPaste.getParentMenu().setOnShowing(event -> {
@@ -153,7 +153,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         // Remove mnemonics from toolbar button tooltips
         fixTooltipMnemonics(toolBar);
 
-        trainer = new TFTrainer(bundle);
+        trainer = new TFTrainer();
         trainer.init();
 
         bindProperties();
@@ -162,7 +162,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     public void handleWindowEvent(WindowEvent event) {
         if (event.getEventType() == WindowEvent.WINDOW_SHOWN) {
             // Initial focus
-            tagGroup.requestFocus();
+            tagBoard.requestFocus();
 
             // Open last media file/folder
             if (Settings.isOpenLastMedia() && Settings.recentFilesProperty.size() > 0) {
@@ -178,14 +178,14 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         FileChooser fileChooser = new FileChooser();
         fileChooser.setTitle(bundle.getString("menu.openMediaFile").replaceAll("_", ""));
         fileChooser.getExtensionFilters().add(imageFilter);
-        File file = fileChooser.showOpenDialog(tagGroup.getScene().getWindow());
+        File file = fileChooser.showOpenDialog(tagBoard.getScene().getWindow());
         openFileOrDir(file);
     }
 
     public void onFileOpenDir(ActionEvent actionEvent) {
         DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setTitle(bundle.getString("menu.openMediaDir").replaceAll("_", ""));
-        File dir = dirChooser.showDialog(tagGroup.getScene().getWindow());
+        File dir = dirChooser.showDialog(tagBoard.getScene().getWindow());
         openFileOrDir(dir);
     }
 
@@ -193,7 +193,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         if (file == null || !file.exists()) {
             return;
         }
-        if (tagGroup.getModel() != null && tagGroup.getModel().getFile().equals(file) || !canClose()) {
+        if (tagBoard.getModel() != null && tagBoard.getModel().getFile().equals(file) || !canClose()) {
             return;
         }
 
@@ -220,7 +220,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
 
     public void onClose(ActionEvent actionEvent) {
         if (canClose()) {
-            tagGroup.setModel(null);
+            tagBoard.setModel(null);
             undoManager.forgetHistory();
             mediaPane.clear();
         }
@@ -246,25 +246,25 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     }
 
     public void onCut(ActionEvent event) {
-        ObjectTag tag = tagGroup.selectedObjectProperty().get();
+        ObjectTag tag = tagBoard.selectedObjectProperty().get();
         toClipboard(tag.getModel());
-        tagGroup.deleteSelected(bundle.getString("menu.cut"));
+        tagBoard.deleteSelected(bundle.getString("menu.cut"));
     }
 
     public void onCopy(ActionEvent event) {
-        ObjectTag tag = tagGroup.selectedObjectProperty().get();
+        ObjectTag tag = tagBoard.selectedObjectProperty().get();
         toClipboard((ObjectModel)tag.getModel().clone());
     }
 
     public void onPaste(ActionEvent event) {
         ObjectModel model = fromClipboard();
         if (model != null) {
-            tagGroup.addObjectTag((ObjectModel)model.clone(), bundle.getString("menu.paste"));
+            tagBoard.addObjectTag((ObjectModel)model.clone(), bundle.getString("menu.paste"));
         }
     }
 
     public void onDelete(ActionEvent event) {
-        tagGroup.deleteSelected(bundle.getString("menu.delete"));
+        tagBoard.deleteSelected(bundle.getString("menu.delete"));
     }
 
     public void onPrevMedia(ActionEvent actionEvent) {
@@ -280,13 +280,13 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     }
 
     public void onZoomIn(ActionEvent actionEvent) {
-        tagGroup.getScale().setX(tagGroup.getScale().getX() * 1.1);
-        tagGroup.getScale().setY(tagGroup.getScale().getY() * 1.1);
+        tagBoard.getScale().setX(tagBoard.getScale().getX() * 1.1);
+        tagBoard.getScale().setY(tagBoard.getScale().getY() * 1.1);
     }
 
     public void onZoomOut(ActionEvent actionEvent) {
-        tagGroup.getScale().setX(tagGroup.getScale().getX() * 0.9);
-        tagGroup.getScale().setY(tagGroup.getScale().getY() * 0.9);
+        tagBoard.getScale().setX(tagBoard.getScale().getX() * 0.9);
+        tagBoard.getScale().setY(tagBoard.getScale().getY() * 0.9);
     }
 
     public void onZoomFit(ActionEvent actionEvent) {
@@ -297,11 +297,11 @@ public class OpenLabelerController implements Initializable, AutoCloseable
      * Sets the scale transform to roughly fit the scroll pane view port
      */
     public void zoomFit() {
-        if (tagGroup.getImageView().getImage() == null) {
+        if (tagBoard.getImageView().getImage() == null) {
             return;
         }
-        double imgWidth = tagGroup.getImageView().getImage().getWidth();
-        double imgHeight = tagGroup.getImageView().getImage().getHeight();
+        double imgWidth = tagBoard.getImageView().getImage().getWidth();
+        double imgHeight = tagBoard.getImageView().getImage().getHeight();
         Bounds bounds = scrollPane.getLayoutBounds();
 
         // Take into account scrollbar space so that scroll bars will not be shown after fitting
@@ -311,12 +311,12 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         double factor = Math.min(
                 Math.round((bounds.getWidth() - sbSpace) * 10.0 / imgWidth) / 10.0,
                 Math.round((bounds.getHeight() - sbSpace) * 10.0 / imgHeight) / 10.0);
-        tagGroup.getScale().setX(factor);
-        tagGroup.getScale().setY(factor);
+        tagBoard.getScale().setX(factor);
+        tagBoard.getScale().setY(factor);
     }
 
     public void onPreference(ActionEvent actionEvent) {
-        new PreferencePane(bundle).showAndWait();
+        new PreferencePane().showAndWait();
     }
 
     public void onRotateLeft(ActionEvent event) {
@@ -328,15 +328,15 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     }
 
     private void rotate(int angle) {
-        tagGroup.rotate(angle);
+        tagBoard.rotate(angle);
     }
 
     public void onShowHint(ActionEvent event) {
-        tagGroup.showHints();
+        tagBoard.showHints();
     }
 
     public void onClearHint(ActionEvent event) {
-        tagGroup.clearHints();
+        tagBoard.clearHints();
     }
 
     public void onInspectLabels(ActionEvent event) {
@@ -345,12 +345,12 @@ public class OpenLabelerController implements Initializable, AutoCloseable
 
     public void onAbout(ActionEvent actionEvent) {
         Stage aboutDialog = OpenLabeler.createAboutStage(bundle);
-        aboutDialog.initOwner(tagGroup.getScene().getWindow());
+        aboutDialog.initOwner(tagBoard.getScene().getWindow());
         aboutDialog.showAndWait();
     }
 
     public void onSupportInfo(ActionEvent actionEvent) {
-        new SupportInfoPane(bundle).showAndWait();
+        new SupportInfoPane().showAndWait();
     }
 
     private void save(boolean force) {
@@ -358,7 +358,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
             return;
         }
         try {
-            Annotation model = tagGroup.getModel();
+            Annotation model = tagBoard.getModel();
             if (model == null) {
                 return;
             }
@@ -377,7 +377,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
             marshaller.marshal(model, xmlFile);
 
             mediaPane.updateFileStats();
-            tagGroup.statusProperty().set(bundle.getString("msg.saved"));
+            tagBoard.statusProperty().set(bundle.getString("msg.saved"));
 
             if (!Settings.isSaveEveryChange()) {
                 undoManager.forgetHistory();
@@ -412,12 +412,12 @@ public class OpenLabelerController implements Initializable, AutoCloseable
                 updateAppTitle(newFile);
                 return;
             }
-            if (oldFile != null && oldFile.equals(tagGroup.getModel().getFile()) && !canClose()) {
+            if (oldFile != null && oldFile.equals(tagBoard.getModel().getFile()) && !canClose()) {
                 // Switch back to the previous media selection
                 Platform.runLater(() -> mediaPane.getSelectionModel().select(new MediaFile(oldFile)));
                 return;
             }
-            if (tagGroup.getModel() != null && tagGroup.getModel().getFile().equals(newFile)) {
+            if (tagBoard.getModel() != null && tagBoard.getModel().getFile().equals(newFile)) {
                 return;
             }
 
@@ -436,7 +436,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
                 }
 
                 loading[0] =  true;
-                tagGroup.setModel(annotation);
+                tagBoard.setModel(annotation);
                 zoomFit();
 
                 undoManager.forgetHistory();
@@ -460,7 +460,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         btnNextMedia.disableProperty().bind(miNextMediaFile.disableProperty());
 
         // File -> Close
-        miClose.disableProperty().bind(tagGroup.modelProperty().isNull());
+        miClose.disableProperty().bind(tagBoard.modelProperty().isNull());
 
         // File -> Save
         miSave.disableProperty().bind(Settings.saveEveryChangeProperty.or(miUndo.disableProperty()));
@@ -473,9 +473,9 @@ public class OpenLabelerController implements Initializable, AutoCloseable
                 c -> c.redo(), // function to undo a change
                 (c1, c2) -> c1.mergeWith(c2)); // function to merge two changes
 
-        changes.add(changesOf(tagGroup.objectsProperty().get()).map(c -> new ListChange(tagGroup.objectsProperty().get(), c)));
+        changes.add(changesOf(tagBoard.objectsProperty().get()).map(c -> new ListChange(tagBoard.objectsProperty().get(), c)));
 
-        tagGroup.objectsProperty().addListener((Change<? extends ObjectTag> change) -> {
+        tagBoard.objectsProperty().addListener((Change<? extends ObjectTag> change) -> {
             if (!change.next()) {
                 return;
             }
@@ -524,20 +524,20 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         });
 
         // Edit -> Cut
-        miCut.disableProperty().bind(tagGroup.selectedObjectProperty().isNull());
+        miCut.disableProperty().bind(tagBoard.selectedObjectProperty().isNull());
 
         // Edit -> Copy
-        miCopy.disableProperty().bind(tagGroup.selectedObjectProperty().isNull());
+        miCopy.disableProperty().bind(tagBoard.selectedObjectProperty().isNull());
 
         // Edit -> Delete
-        miDelete.disableProperty().bind(tagGroup.selectedObjectProperty().isNull());
+        miDelete.disableProperty().bind(tagBoard.selectedObjectProperty().isNull());
         btnDelete.disableProperty().bind(miDelete.disableProperty());
 
         miGoToUnlabeledMediaFile.disableProperty().bind(mediaPane.nextUnlabeledMediaProperty().isNull());
 
         // Link object table and object group
-        objectTable.setItems(tagGroup.objectsProperty());
-        tagGroup.selectedObjectProperty().addListener((observable, oldValue, newValue) -> {
+        objectTable.setItems(tagBoard.objectsProperty());
+        tagBoard.selectedObjectProperty().addListener((observable, oldValue, newValue) -> {
             objectTable.getSelectionModel().select(newValue);
         });
         objectTable.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -547,25 +547,25 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         });
 
         // View -> Zoom
-        miZoomIn.disableProperty().bind(tagGroup.modelProperty().isNull());
+        miZoomIn.disableProperty().bind(tagBoard.modelProperty().isNull());
         btnZoomIn.disableProperty().bind(miZoomIn.disableProperty());
-        miZoomOut.disableProperty().bind(tagGroup.modelProperty().isNull());
+        miZoomOut.disableProperty().bind(tagBoard.modelProperty().isNull());
         btnZoomOut.disableProperty().bind(miZoomOut.disableProperty());
-        miZoomFit.disableProperty().bind(tagGroup.modelProperty().isNull());
+        miZoomFit.disableProperty().bind(tagBoard.modelProperty().isNull());
         btnZoomFit.disableProperty().bind(miZoomFit.disableProperty());
 
         // View -> Rotate
-        miRotateLeft.disableProperty().bind(tagGroup.modelProperty().isNull());
+        miRotateLeft.disableProperty().bind(tagBoard.modelProperty().isNull());
         btnRotateLeft.disableProperty().bind(miRotateLeft.disableProperty());
-        miRotateRight.disableProperty().bind(tagGroup.modelProperty().isNull());
+        miRotateRight.disableProperty().bind(tagBoard.modelProperty().isNull());
         btnRotateRight.disableProperty().bind(miRotateRight.disableProperty());
 
         // View -> Show/Clear Hints
         ObservableValue<Long> visibleHints = EasyBind.combine(
-                EasyBind.map(tagGroup.hintsProperty().get(), t -> t.visibleProperty()),
+                EasyBind.map(tagBoard.hintsProperty().get(), t -> t.visibleProperty()),
                 stream -> stream.filter(visible -> visible).count());
         LongBinding vhBinding = Bindings.createLongBinding(() -> ((MonadicBinding<Long>)visibleHints).get(), visibleHints);
-        BooleanBinding canShowHint = tagGroup.hintsProperty().sizeProperty().greaterThan(0).and(vhBinding.lessThan(tagGroup.hintsProperty().sizeProperty()));
+        BooleanBinding canShowHint = tagBoard.hintsProperty().sizeProperty().greaterThan(0).and(vhBinding.lessThan(tagBoard.hintsProperty().sizeProperty()));
         miShowHint.disableProperty().bind(canShowHint.not());
         btnShowHint.disableProperty().bind(canShowHint.not());
 
@@ -574,11 +574,11 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         btnClearHint.disableProperty().bind(canClearHint.not());
 
         // Status bar
-        tagGroup.statusProperty().addListener((observable, oldValue, newValue) -> status.setText(newValue));
+        tagBoard.statusProperty().addListener((observable, oldValue, newValue) -> status.setText(newValue));
         trainer.checkpointProperty().addListener((observable, oldValue, newValue) -> {
             status.setText(MessageFormat.format(bundle.getString("msg.ckptCreated"), newValue));
         });
-        coords.textProperty().bind(tagGroup.tagCoordsProperty());
+        coords.textProperty().bind(tagBoard.tagCoordsProperty());
     }
 
     private void toClipboard(ObjectModel model) {
@@ -621,7 +621,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         if (file != null && file.exists()) {
             title += " - " + file.getAbsolutePath();
         }
-        ((Stage)tagGroup.getScene().getWindow()).setTitle(title);
+        ((Stage) tagBoard.getScene().getWindow()).setTitle(title);
     }
 
     private void fixTooltipMnemonics(ToolBar toolBar) {
@@ -638,7 +638,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
      */
     public void close() {
         trainer.close();
-        tagGroup.close();
+        tagBoard.close();
         mediaPane.close();
     }
 }

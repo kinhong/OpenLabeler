@@ -65,7 +65,7 @@ public class TFTrainer implements AutoCloseable
     private static final Logger LOG = Logger.getLogger(TFTrainer.class.getCanonicalName());
     private static final String EXPORTER = "OpenLabeler-Exporter";
 
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     // Monitors TF training status
     private WatchService watcher;
@@ -77,10 +77,6 @@ public class TFTrainer implements AutoCloseable
     private SimpleIntegerProperty checkpointProperty = new SimpleIntegerProperty(-1);
     public IntegerProperty checkpointProperty() {
         return checkpointProperty;
-    }
-
-    public TFTrainer(ResourceBundle bundle) {
-        this.bundle = bundle;
     }
 
     public void init() {

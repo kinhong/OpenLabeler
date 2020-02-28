@@ -142,7 +142,7 @@ public class OpenLabeler extends Application
 
         MenuItem prefsItem = new MenuItem(bundle.getString("menu.preferences"));
         prefsItem.acceleratorProperty().set(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.SHORTCUT_DOWN));
-        prefsItem.setOnAction(event -> new PreferencePane(bundle).showAndWait());
+        prefsItem.setOnAction(event -> new PreferencePane().showAndWait());
 
         appMenu.getItems().addAll(aboutItem, new SeparatorMenuItem(), prefsItem, new SeparatorMenuItem(),
                 tk.createHideMenuItem(appName), tk.createHideOthersMenuItem(), tk.createUnhideAllMenuItem(),

@@ -17,11 +17,13 @@
   ~ ==============================================================================
   -->
 
+<?import com.easymobo.openlabeler.preference.GeneralPane?>
 <?import com.easymobo.openlabeler.preference.NameTablePane?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<fx:root maxHeight="Infinity" maxWidth="Infinity" minHeight="-Infinity" minWidth="-Infinity"
-         stylesheets="@/css/OpenLabeler.css" type="VBox" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+<fx:root type="com.easymobo.openlabeler.preference.GeneralPane" maxHeight="Infinity" maxWidth="Infinity"
+         minHeight="-Infinity" minWidth="-Infinity"
+         stylesheets="@/css/OpenLabeler.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <children>
         <GridPane fx:id="gpApplication" hgap="10.0" vgap="10">
             <children>
@@ -48,7 +50,7 @@
                 <Label text="%menu.labels" GridPane.rowIndex="2" GridPane.halignment="RIGHT"
                        GridPane.valignment="TOP"/>
                 <NameTablePane fx:id="nameTablePane" prefHeight="250.0" prefWidth="350.0" GridPane.columnIndex="1"
-                              GridPane.rowIndex="2"/>
+                               GridPane.rowIndex="2"/>
             </children>
         </GridPane>
     </children>

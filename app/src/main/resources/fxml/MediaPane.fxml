@@ -17,18 +17,20 @@
   ~ ==============================================================================
   -->
 
+<?import com.easymobo.openlabeler.ui.MediaPane?>
 <?import com.easymobo.openlabeler.ui.MediaTableView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.layout.BorderPane?>
-<fx:root type="BorderPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
+<fx:root type="com.easymobo.openlabeler.ui.MediaPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+         stylesheets="@/css/OpenLabeler.css">
     <center>
         <MediaTableView fx:id="tvMedia"/>
     </center>
     <bottom>
-    <Label fx:id="fileStats">
-        <padding>
-            <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
-        </padding></Label>
+        <Label fx:id="fileStats">
+            <padding>
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+            </padding>
+        </Label>
     </bottom>
 </fx:root>

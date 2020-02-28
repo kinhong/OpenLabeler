@@ -17,23 +17,27 @@
   ~ ==============================================================================
   -->
 
+<?import com.easymobo.openlabeler.ui.ObjectTableView?>
 <?import javafx.scene.control.*?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
-<fx:root editable="true" type="TableView" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
-   <placeholder>
-      <Label text="%menu.noObject"/>
-   </placeholder>
-   <columns>
-      <TableColumn fx:id="visibleColumn" minWidth="25.0" prefWidth="25.0" resizable="false">
-         <graphic>
-            <CheckBox fx:id="showAllCheckBox" alignment="CENTER" cache="true" mnemonicParsing="false" onAction="#onShowAll" />
-         </graphic>
-      </TableColumn>
-      <TableColumn fx:id="thumbColumn" editable="false" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" sortable="false" text="">
-      <graphic>
-         <FontIcon iconLiteral="mdi-image-area" iconSize="18"/>
-      </graphic>
-      </TableColumn>
-      <TableColumn fx:id="nameColumn" prefWidth="240.0" text="%menu.name" />
-   </columns>
+<fx:root editable="true" type="com.easymobo.openlabeler.ui.ObjectTableView" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
+    <placeholder>
+        <Label text="%menu.noObject"/>
+    </placeholder>
+    <columns>
+        <TableColumn fx:id="visibleColumn" minWidth="25.0" prefWidth="25.0" resizable="false">
+            <graphic>
+                <CheckBox fx:id="showAllCheckBox" alignment="CENTER" cache="true" mnemonicParsing="false"
+                          onAction="#onShowAll"/>
+            </graphic>
+        </TableColumn>
+        <TableColumn fx:id="thumbColumn" editable="false" maxWidth="40.0" minWidth="40.0" prefWidth="40.0"
+                     sortable="false" text="">
+            <graphic>
+                <FontIcon iconLiteral="mdi-image-area" iconSize="18"/>
+            </graphic>
+        </TableColumn>
+        <TableColumn fx:id="nameColumn" prefWidth="240.0" text="%menu.name"/>
+    </columns>
 </fx:root>

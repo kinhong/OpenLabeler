@@ -59,7 +59,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TagGroup extends Group implements AutoCloseable
+public class TagBoard extends Group implements AutoCloseable
 {
     @FXML
     private StackPane paddingPane;
@@ -68,10 +68,10 @@ public class TagGroup extends Group implements AutoCloseable
     @FXML
     private Canvas canvas;
 
-    private static final Logger LOG = Logger.getLogger(TagGroup.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(TagBoard.class.getCanonicalName());
     private static final int PADDING = 10;
 
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");;
     private Translate translate;
     private Scale scale;
     private Rotate rotate;
@@ -107,9 +107,8 @@ public class TagGroup extends Group implements AutoCloseable
         return statusProperty;
     }
 
-    public TagGroup() {
-        bundle = ResourceBundle.getBundle("bundle");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TagGroup.fxml"), bundle);
+    public TagBoard() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/TagBoard.fxml"), bundle);
         loader.setRoot(this);
         loader.setController(this);
 
@@ -172,7 +171,7 @@ public class TagGroup extends Group implements AutoCloseable
         });
 
         // Object detector and hints
-        objectDetector = new ObjectDetector(bundle);
+        objectDetector = new ObjectDetector();
         new Thread(() -> objectDetector.init(), "Object Detector Initializer").start();
         objectDetector.statusProperty().addListener((observable, oldValue, newValue) -> statusProperty.set(newValue));
         Settings.useInferenceProperty.addListener((observable, oldValue, newValue) -> findHints());

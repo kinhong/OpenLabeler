@@ -19,13 +19,15 @@
 
 <?import com.easymobo.openlabeler.ui.MediaPane?>
 <?import com.easymobo.openlabeler.ui.ObjectTableView?>
-<?import com.easymobo.openlabeler.ui.TagGroup?>
+<?import com.easymobo.openlabeler.ui.TagBoard?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.input.*?>
 <?import javafx.scene.layout.*?>
 <?import org.kordamp.ikonli.javafx.*?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css" fx:controller="com.easymobo.openlabeler.OpenLabelerController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0"
+            prefWidth="600.0" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+            stylesheets="@/css/OpenLabeler.css" fx:controller="com.easymobo.openlabeler.OpenLabelerController">
     <top>
         <VBox prefHeight="38.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
@@ -35,25 +37,28 @@
                             <items>
                                 <MenuItem onAction="#onFileOpenFile" text="%menu.openMediaFile">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                        <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP"
+                                                            shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <MenuItem onAction="#onFileOpenDir" text="%menu.openMediaDir">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                        <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP"
+                                                            shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
-                                <Menu fx:id="menuOpenRecent" text="%menu.openRecent" />
-                                <SeparatorMenuItem />
+                                <Menu fx:id="menuOpenRecent" text="%menu.openRecent"/>
+                                <SeparatorMenuItem/>
                                 <MenuItem fx:id="miClose" onAction="#onClose" text="%menu.close"/>
                                 <MenuItem fx:id="miSave" onAction="#onSave" text="%menu.save">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                        <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP"
+                                                            shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
-                                <SeparatorMenuItem fx:id="msPreference" />
+                                <SeparatorMenuItem fx:id="msPreference"/>
                                 <MenuItem fx:id="miPreference" onAction="#onPreference" text="%menu.preferences"/>
-                                <SeparatorMenuItem fx:id="msExit" />
+                                <SeparatorMenuItem fx:id="msExit"/>
                                 <MenuItem fx:id="miExit" onAction="#onExit" text="%menu.exit"/>
                             </items>
                         </Menu>
@@ -61,71 +66,85 @@
                             <items>
                                 <MenuItem fx:id="miUndo" onAction="#onUndo" text="%menu.undo">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                        <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="UP"
+                                                            shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <MenuItem fx:id="miRedo" onAction="#onRedo" text="%menu.redo">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
+                                        <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="DOWN"
+                                                            shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
-                                <SeparatorMenuItem />
+                                <SeparatorMenuItem/>
                                 <MenuItem fx:id="miCut" onAction="#onCut" text="%menu.cut">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="X" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                        <KeyCodeCombination alt="UP" code="X" control="UP" meta="UP" shift="UP"
+                                                            shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <MenuItem fx:id="miCopy" onAction="#onCopy" text="%menu.copy">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="C" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                        <KeyCodeCombination alt="UP" code="C" control="UP" meta="UP" shift="UP"
+                                                            shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <MenuItem fx:id="miPaste" onAction="#onPaste" text="%menu.paste">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="V" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                        <KeyCodeCombination alt="UP" code="V" control="UP" meta="UP" shift="UP"
+                                                            shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <MenuItem fx:id="miDelete" onAction="#onDelete" text="%menu.delete">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="UP" shift="UP" shortcut="UP" />
+                                        <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="UP" shift="UP"
+                                                            shortcut="UP"/>
                                     </accelerator>
                                 </MenuItem>
-                                <SeparatorMenuItem />
-                                <MenuItem fx:id="miPrevMediaFile" onAction="#onPrevMedia" text="%menu.previousMediaFile">
+                                <SeparatorMenuItem/>
+                                <MenuItem fx:id="miPrevMediaFile" onAction="#onPrevMedia"
+                                          text="%menu.previousMediaFile">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                        <KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP"
+                                                            shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
-                                <MenuItem fx:id="miNextMediaFile" onAction="#onNextMediaFile" text="%menu.nextMediaFile">
+                                <MenuItem fx:id="miNextMediaFile" onAction="#onNextMediaFile"
+                                          text="%menu.nextMediaFile">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                        <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP"
+                                                            shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
-                                <SeparatorMenuItem />
-                                <MenuItem fx:id="miGoToUnlabeledMediaFile" onAction="#onGoToUnlabeledMediaFile" text="%menu.goToUnlabeledMediaFile">
+                                <SeparatorMenuItem/>
+                                <MenuItem fx:id="miGoToUnlabeledMediaFile" onAction="#onGoToUnlabeledMediaFile"
+                                          text="%menu.goToUnlabeledMediaFile">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="G" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                        <KeyCodeCombination alt="UP" code="G" control="UP" meta="UP" shift="UP"
+                                                            shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                             </items>
                         </Menu>
                         <Menu text="%menu.view">
                             <items>
-                                <MenuItem fx:id="miZoomOut" onAction="#onZoomOut" text="%menu.zoomOut" />
-                                <MenuItem fx:id="miZoomIn" onAction="#onZoomIn" text="%menu.zoomIn" />
-                                <MenuItem fx:id="miZoomFit" onAction="#onZoomFit" text="%menu.zoomFit" />
-                                <SeparatorMenuItem />
-                                <MenuItem fx:id="miRotateLeft" onAction="#onRotateLeft" text="%menu.rotateLeft" />
-                                <MenuItem fx:id="miRotateRight" onAction="#onRotateRight" text="%menu.rotateRight" />
-                                <SeparatorMenuItem />
+                                <MenuItem fx:id="miZoomOut" onAction="#onZoomOut" text="%menu.zoomOut"/>
+                                <MenuItem fx:id="miZoomIn" onAction="#onZoomIn" text="%menu.zoomIn"/>
+                                <MenuItem fx:id="miZoomFit" onAction="#onZoomFit" text="%menu.zoomFit"/>
+                                <SeparatorMenuItem/>
+                                <MenuItem fx:id="miRotateLeft" onAction="#onRotateLeft" text="%menu.rotateLeft"/>
+                                <MenuItem fx:id="miRotateRight" onAction="#onRotateRight" text="%menu.rotateRight"/>
+                                <SeparatorMenuItem/>
                                 <MenuItem fx:id="miShowHint" onAction="#onShowHint" text="%menu.showHint">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="UP" shortcut="DOWN" />
+                                        <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="UP"
+                                                            shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <MenuItem fx:id="miClearHint" onAction="#onClearHint" text="%menu.clearHint">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="DOWN" shortcut="DOWN" />
+                                        <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="DOWN"
+                                                            shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                             </items>
@@ -139,9 +158,9 @@
                         -->
                         <Menu text="%menu.help">
                             <items>
-                                <MenuItem onAction="#onSupportInfo" text="%menu.supportInfo" />
-                                <SeparatorMenuItem fx:id="msAbout" />
-                                <MenuItem fx:id="miAbout" onAction="#onAbout" text="%menu.about" />
+                                <MenuItem onAction="#onSupportInfo" text="%menu.supportInfo"/>
+                                <SeparatorMenuItem fx:id="msAbout"/>
+                                <MenuItem fx:id="miAbout" onAction="#onAbout" text="%menu.about"/>
                             </items>
                         </Menu>
                     </menus>
@@ -150,128 +169,128 @@
                     <items>
                         <Button fx:id="btnOpenMediaFile" onAction="#onFileOpenFile">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-file-image" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-file-image" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.openMediaFile" />
+                                <Tooltip text="%menu.openMediaFile"/>
                             </tooltip>
                         </Button>
                         <Button fx:id="btnOpenMediaDir" onAction="#onFileOpenDir">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-folder-multiple-image" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-folder-multiple-image" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.openMediaDir" />
+                                <Tooltip text="%menu.openMediaDir"/>
                             </tooltip>
                         </Button>
-                        <Separator prefHeight="27.0" prefWidth="10.0" />
+                        <Separator prefHeight="27.0" prefWidth="10.0"/>
                         <Button fx:id="btnSave" onAction="#onSave">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-content-save" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-content-save" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.save" />
+                                <Tooltip text="%menu.save"/>
                             </tooltip>
                         </Button>
-                        <Separator prefHeight="27.0" prefWidth="10.0" />
+                        <Separator prefHeight="27.0" prefWidth="10.0"/>
                         <Button fx:id="btnPrevMedia" onAction="#onPrevMedia">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-arrow-left" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-arrow-left" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.previousMediaFile" />
+                                <Tooltip text="%menu.previousMediaFile"/>
                             </tooltip>
                         </Button>
                         <Button fx:id="btnNextMedia" onAction="#onNextMediaFile">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-arrow-right" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-arrow-right" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.nextMediaFile" />
+                                <Tooltip text="%menu.nextMediaFile"/>
                             </tooltip>
                         </Button>
-                        <Separator prefHeight="27.0" prefWidth="10.0" />
+                        <Separator prefHeight="27.0" prefWidth="10.0"/>
                         <Button fx:id="btnUndo" onAction="#onUndo">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-undo" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-undo" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.undo" />
+                                <Tooltip text="%menu.undo"/>
                             </tooltip>
                         </Button>
                         <Button fx:id="btnRedo" onAction="#onRedo">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-redo" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-redo" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.redo" />
+                                <Tooltip text="%menu.redo"/>
                             </tooltip>
                         </Button>
                         <Button fx:id="btnDelete" onAction="#onDelete">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-delete" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-delete" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.delete" />
+                                <Tooltip text="%menu.delete"/>
                             </tooltip>
                         </Button>
-                        <Separator prefHeight="27.0" prefWidth="10.0" />
+                        <Separator prefHeight="27.0" prefWidth="10.0"/>
                         <Button fx:id="btnZoomOut" onAction="#onZoomOut">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-magnify-minus" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-magnify-minus" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.zoomOut" />
+                                <Tooltip text="%menu.zoomOut"/>
                             </tooltip>
                         </Button>
                         <Button fx:id="btnZoomIn" onAction="#onZoomIn">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-magnify-plus" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-magnify-plus" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.zoomIn" />
+                                <Tooltip text="%menu.zoomIn"/>
                             </tooltip>
                         </Button>
                         <Button fx:id="btnZoomFit" onAction="#onZoomFit">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-magnify" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-magnify" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.zoomFit" />
+                                <Tooltip text="%menu.zoomFit"/>
                             </tooltip>
                         </Button>
-                        <Separator prefHeight="27.0" prefWidth="10.0" />
+                        <Separator prefHeight="27.0" prefWidth="10.0"/>
                         <Button fx:id="btnRotateLeft" onAction="#onRotateLeft">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-rotate-left" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-rotate-left" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.rotateLeft" />
+                                <Tooltip text="%menu.rotateLeft"/>
                             </tooltip>
                         </Button>
                         <Button fx:id="btnRotateRight" onAction="#onRotateRight">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-rotate-right" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-rotate-right" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.rotateRight" />
+                                <Tooltip text="%menu.rotateRight"/>
                             </tooltip>
                         </Button>
-                        <Separator prefHeight="27.0" prefWidth="10.0" />
+                        <Separator prefHeight="27.0" prefWidth="10.0"/>
                         <Button fx:id="btnShowHint" onAction="#onShowHint">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-eye" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-eye" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.showHint" />
+                                <Tooltip text="%menu.showHint"/>
                             </tooltip>
                         </Button>
                         <Button fx:id="btnClearHint" onAction="#onClearHint">
                             <graphic>
-                                <FontIcon iconLiteral="mdi-eye-off" iconSize="18" />
+                                <FontIcon iconLiteral="mdi-eye-off" iconSize="18"/>
                             </graphic>
                             <tooltip>
-                                <Tooltip text="%menu.clearHint" />
+                                <Tooltip text="%menu.clearHint"/>
                             </tooltip>
                         </Button>
                     </items>
@@ -286,14 +305,15 @@
                     <content>
                         <StackPane prefHeight="137.0" prefWidth="598.0">
                             <children>
-                                <TagGroup fx:id="tagGroup"/>
+                                <TagBoard fx:id="tagBoard"/>
                             </children>
                         </StackPane>
                     </content>
                 </ScrollPane>
                 <SplitPane dividerPositions="0.3" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                     <items>
-                        <ObjectTableView fx:id="objectTable" minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0" />
+                        <ObjectTableView fx:id="objectTable" minHeight="0.0" minWidth="0.0" prefHeight="100.0"
+                                         prefWidth="160.0"/>
                         <MediaPane fx:id="mediaPane" prefHeight="200.0" prefWidth="200.0"/>
                     </items>
                 </SplitPane>
@@ -303,11 +323,11 @@
     <bottom>
         <HBox alignment="BOTTOM_LEFT" prefHeight="6.0" prefWidth="600.0" BorderPane.alignment="CENTER">
             <children>
-                <Label fx:id="status" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS" />
-            <Label fx:id="coords" textAlignment="RIGHT" />
+                <Label fx:id="status" maxWidth="1.7976931348623157E308" HBox.hgrow="ALWAYS"/>
+                <Label fx:id="coords" textAlignment="RIGHT"/>
             </children>
             <padding>
-                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
             </padding>
         </HBox>
     </bottom>

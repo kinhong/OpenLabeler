@@ -17,10 +17,11 @@
   ~ ==============================================================================
   -->
 
-<?import javafx.scene.control.DialogPane?>
+<?import com.easymobo.openlabeler.support.SupportInfoPane?>
 <?import javafx.scene.control.TextArea?>
-<fx:root type="DialogPane" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
-   <content>
-      <TextArea fx:id="text" editable="false" prefHeight="600.0" prefWidth="600.0" wrapText="true" />
-   </content>
+<fx:root type="com.easymobo.openlabeler.support.SupportInfoPane" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
+    <content>
+        <TextArea fx:id="text" editable="false" prefHeight="600.0" prefWidth="600.0" wrapText="true"/>
+    </content>
 </fx:root>

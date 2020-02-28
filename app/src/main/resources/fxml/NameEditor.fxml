@@ -17,12 +17,13 @@
   ~ ==============================================================================
   -->
 
+<?import com.easymobo.openlabeler.ui.NameEditor?>
 <?import javafx.scene.control.ListView?>
-<?import javafx.scene.layout.VBox?>
 <?import org.controlsfx.control.textfield.CustomTextField?>
-<fx:root type="VBox" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
-   <children>
-      <CustomTextField fx:id="text" promptText="%menu.label" text="" />
-      <ListView fx:id="list" prefHeight="200.0" prefWidth="200.0" />
-   </children>
+<fx:root type="com.easymobo.openlabeler.ui.NameEditor" xmlns="http://javafx.com/javafx"
+         xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
+    <children>
+        <CustomTextField fx:id="text" promptText="%menu.label" text=""/>
+        <ListView fx:id="list" prefHeight="200.0" prefWidth="200.0"/>
+    </children>
 </fx:root>

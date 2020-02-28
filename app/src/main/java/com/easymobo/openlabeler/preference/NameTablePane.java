@@ -49,11 +49,10 @@ public class NameTablePane extends BorderPane
 
     private static final Logger LOG = Logger.getLogger(NameTablePane.class.getCanonicalName());
 
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     public NameTablePane() {
-        bundle = ResourceBundle.getBundle("bundle");
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/NameTablePane.fxml"), bundle);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/preference/NameTablePane.fxml"), bundle);
         loader.setRoot(this);
         loader.setController(this);
 

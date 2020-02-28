@@ -54,15 +54,11 @@ public class ObjectDetector implements AutoCloseable
     private static final Logger LOG = Logger.getLogger(ObjectDetector.class.getCanonicalName());
 
     private SavedModelBundle model;
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     // Monitors TF saved model directory status
     private WatchService watcher;
     private WatchKey tfSavedModelWatchKey;
-
-    public ObjectDetector(ResourceBundle bundle) {
-        this.bundle = bundle;
-    }
 
     public void init() {
         synchronized (this) {

@@ -49,11 +49,10 @@ public class InferencePane extends VBox implements Category
     private static final Logger LOG = Logger.getLogger(InferencePane.class.getCanonicalName());
 
     private final BooleanProperty dirtyProperty =  new SimpleBooleanProperty(false);
-    private String name;
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
-    public InferencePane(String name, ResourceBundle bundle) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/InferencePane.fxml"), bundle);
+    public InferencePane() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/preference/InferencePane.fxml"), bundle);
         loader.setRoot(this);
         loader.setController(this);
 
@@ -66,8 +65,6 @@ public class InferencePane extends VBox implements Category
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
         }
-        this.name = name;
-        this.bundle = bundle;
 
         // Bind Properties
         BooleanBinding changes[] = {
@@ -92,7 +89,7 @@ public class InferencePane extends VBox implements Category
 
     @Override
     public String getName() {
-        return name;
+        return bundle.getString("menu.inference");
     }
 
     @Override

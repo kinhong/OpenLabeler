@@ -53,14 +53,13 @@ public class MediaPane extends BorderPane implements AutoCloseable
 
     private static final Logger LOG = Logger.getLogger(MediaPane.class.getCanonicalName());
 
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
     // Monitors stats on # of files annotated in a directory
     private WatchService watcher;
     private WatchKey imageDirWatchKey, annotationDirWatchKey;
 
     public MediaPane() {
-        bundle = ResourceBundle.getBundle("bundle");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MediaPane.fxml"), bundle);
         loader.setRoot(this);
         loader.setController(this);

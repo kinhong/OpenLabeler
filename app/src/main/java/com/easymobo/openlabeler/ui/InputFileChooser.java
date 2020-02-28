@@ -37,11 +37,11 @@ public class InputFileChooser extends HBox
 {
     private TextField txt = new TextField();
     private Button btn = new Button(null, FontIcon.of(MDI_FOLDER_OUTLINE, 18));
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
+    ;
     private boolean file;
 
     public InputFileChooser() {
-        bundle = ResourceBundle.getBundle("bundle");
         getChildren().addAll(txt, btn);
         setHgrow(txt, Priority.ALWAYS);
         btn.getStyleClass().add("flat");

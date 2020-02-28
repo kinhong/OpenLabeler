@@ -42,9 +42,9 @@ public class SupportInfoPane extends DialogPane
 
     private static final Logger LOG = Logger.getLogger(SupportInfoPane.class.getCanonicalName());
 
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
-    public SupportInfoPane(ResourceBundle bundle) {
+    public SupportInfoPane() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/SupportInfoPane.fxml"));
         loader.setRoot(this);
         loader.setController(this);
@@ -56,7 +56,6 @@ public class SupportInfoPane extends DialogPane
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
         }
 
-        this.bundle = bundle;
         ButtonType copyToClipboard = new ButtonType(bundle.getString("menu.copyToClipboard"), ButtonBar.ButtonData.APPLY);
         getButtonTypes().addAll(copyToClipboard, ButtonType.CLOSE);
 

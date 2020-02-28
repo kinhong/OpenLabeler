@@ -56,12 +56,11 @@ public class ObjectTableView extends TableView<ObjectTag>
 
     private static final Logger LOG = Logger.getLogger(ObjectTableView.class.getCanonicalName());
 
-    private ResourceBundle bundle;
+    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
     private ObservableValue<Long> visibleCount;
 
     public ObjectTableView() {
         super(null);
-        bundle = ResourceBundle.getBundle("bundle");
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/ObjectTableView.fxml"), bundle);
         loader.setRoot(this);
         loader.setController(this);
