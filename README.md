@@ -30,6 +30,8 @@ The **Label Map File** is the label map file in protobuf format (`.pbtxt`).
 
 The **Saved Model Location** is the *folder* where the `.pb` file is located. If it is at `/opt/model/saved_model/saved_model.pb`, then the location should be specified as `/opt/model/saved_model`. Also, the `.pb` file must be named `saved_model.pb`.
 
+OpenLabeler supports graphs with the `image_tensor` and `encoded_image_string_tensor` operations/input types.
+
 ## Training Support
 
 *Note: This is currently an experimental feature.*
