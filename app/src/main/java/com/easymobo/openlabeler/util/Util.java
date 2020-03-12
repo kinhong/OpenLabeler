@@ -29,6 +29,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.util.Duration;
 import javafx.util.StringConverter;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -76,7 +77,21 @@ public class Util
         @Override
         protected void updateItem(T item, boolean empty) {
             super.updateItem(item, empty);
-            imageView.setImage(Image.class.cast(item));
+
+            var image = Image.class.cast(item);
+            imageView.setImage(image);
+
+            if (image != null) {
+                var popupImageView = new ImageView(image);
+                popupImageView.setFitHeight(250);
+                popupImageView.setFitWidth(250);
+                popupImageView.setPreserveRatio(true);
+                Tooltip tooltip = new Tooltip("");
+                tooltip.getStyleClass().add("imageTooltip");
+                tooltip.setShowDelay(Duration.millis(250));
+                tooltip.setGraphic(popupImageView);
+                Tooltip.install(this, tooltip);
+            }
         }
     }
 
