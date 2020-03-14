@@ -20,6 +20,7 @@ package com.easymobo.openlabeler.ui;
 import com.easymobo.openlabeler.model.ObjectModel;
 import com.easymobo.openlabeler.preference.NameColor;
 import com.easymobo.openlabeler.preference.Settings;
+import com.easymobo.openlabeler.util.AppUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -72,7 +73,7 @@ public class ObjectTag extends TagBase
 
         fillColorProperty.bind(Bindings.createObjectBinding(() -> {
             NameColor item = Settings.recentNamesProperty.getByPrefix(getModel().getName());
-            return item == null ? Settings.getObjectFillColor() :  new Color(item.getColor().getRed(), item.getColor().getGreen(), item.getColor().getBlue(), 0.3);
+            return item == null ? Settings.getObjectFillColor() : AppUtils.applyAlpha(item.getColor(), 0.3);
         },  Settings.recentNamesProperty));
     }
 

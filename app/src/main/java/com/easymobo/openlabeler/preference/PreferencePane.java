@@ -17,7 +17,7 @@
 
 package com.easymobo.openlabeler.preference;
 
-import com.easymobo.openlabeler.util.Util;
+import com.easymobo.openlabeler.util.AppUtils;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -71,7 +71,7 @@ public class PreferencePane extends DialogPane
             ActionEvent.ACTION,
             event -> {
                 if (!lookupButton(ButtonType.APPLY).isDisabled()) {
-                    var res = Util.showConfirmation(bundle.getString("menu.alert"), bundle.getString("msg.confirmClose"));
+                    var res = AppUtils.showConfirmation(bundle.getString("menu.alert"), bundle.getString("msg.confirmClose"));
                     if (res.get() != ButtonType.OK) {
                         event.consume();
                     }

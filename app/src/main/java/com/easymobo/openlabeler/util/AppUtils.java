@@ -18,6 +18,10 @@
 package com.easymobo.openlabeler.util;
 
 import com.easymobo.openlabeler.preference.Settings;
+import javafx.animation.Interpolator;
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Pos;
@@ -29,6 +33,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Shape;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 import org.apache.commons.io.FilenameUtils;
@@ -43,7 +48,7 @@ import java.util.function.Function;
 
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
-public class Util
+public class AppUtils
 {
     public static void fireKeyPressedEvent(Node target, KeyCode code) {
         KeyEvent event = new KeyEvent(KeyEvent.KEY_PRESSED, KeyEvent.CHAR_UNDEFINED, "", code, false, false, false, false);
@@ -313,5 +318,31 @@ public class Util
     public static <T> T getTransform(Node node, Class<T> clz) {
         return node.getTransforms().stream()
                 .filter(transform -> transform.getClass().equals(clz)).map(clz::cast).findFirst().get();
+    }
+
+    public static Color applyAlpha(Color base, double alpha) {
+        return new Color(base.getRed(), base.getGreen(), base.getBlue(), alpha);
+    }
+
+    public static void addOutlineAnimation(Shape shape) {
+        var timeline = (Timeline)shape.getProperties().get("TIMELINE");
+        if (timeline != null) {
+            return;
+        }
+        shape.getStrokeDashArray().addAll(30d, 30d);
+        final double maxOffset = shape.getStrokeDashArray().stream().reduce(0d, (a, b) -> a + b);
+
+        timeline = new Timeline(
+              new KeyFrame(Duration.ZERO, new KeyValue(shape.strokeDashOffsetProperty(), 0, Interpolator.LINEAR)),
+              new KeyFrame(Duration.seconds(1), new KeyValue(shape.strokeDashOffsetProperty(), maxOffset, Interpolator.LINEAR))
+        );
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+        shape.getProperties().put("TIMELINE", timeline);
+    }
+
+    public static void removeOutlineAnimation(Shape shape) {
+        shape.getProperties().remove("TIMELINE");
+        shape.getStrokeDashArray().clear();
     }
 }

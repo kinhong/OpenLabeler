@@ -20,7 +20,7 @@ package com.easymobo.openlabeler.tensorflow;
 
 import com.easymobo.openlabeler.preference.LabelMapItem;
 import com.easymobo.openlabeler.preference.Settings;
-import com.easymobo.openlabeler.util.Util;
+import com.easymobo.openlabeler.util.AppUtils;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.Bind;
@@ -153,7 +153,7 @@ public class TFTrainer implements AutoCloseable
             }
             update(null);
             tfTrainDirWatchKey = trainPath.register(watcher, ENTRY_CREATE);
-            Util.watchAndUpdate(watcher, "TF Train Directory Watcher", this::update);
+            AppUtils.watchAndUpdate(watcher, "TF Train Directory Watcher", this::update);
         }
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to watch", ex);

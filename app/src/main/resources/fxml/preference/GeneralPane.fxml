@@ -47,10 +47,12 @@
                 <Label text="%menu.defaultLabelColor" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
                 <ColorPicker fx:id="pickerObjectStrokeColor" editable="true" GridPane.columnIndex="1"
                              GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
-                <Label text="%menu.labels" GridPane.rowIndex="2" GridPane.halignment="RIGHT"
+                <Label text="%menu.animateOutline" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+                <CheckBox fx:id="chkAnimateOutline" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                <Label text="%menu.labels" GridPane.rowIndex="3" GridPane.halignment="RIGHT"
                        GridPane.valignment="TOP"/>
                 <NameTablePane fx:id="nameTablePane" prefHeight="250.0" prefWidth="350.0" GridPane.columnIndex="1"
-                               GridPane.rowIndex="2"/>
+                               GridPane.rowIndex="3"/>
             </children>
         </GridPane>
     </children>

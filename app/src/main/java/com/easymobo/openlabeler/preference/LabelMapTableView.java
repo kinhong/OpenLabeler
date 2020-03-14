@@ -17,7 +17,7 @@
 
 package com.easymobo.openlabeler.preference;
 
-import com.easymobo.openlabeler.util.Util.EditableTableCell;
+import com.easymobo.openlabeler.util.AppUtils.EditableTableCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

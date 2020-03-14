@@ -19,7 +19,7 @@ package com.easymobo.openlabeler.ui;
 
 import com.easymobo.openlabeler.preference.Settings;
 import com.easymobo.openlabeler.ui.MediaTableView.MediaFile;
-import com.easymobo.openlabeler.util.Util;
+import com.easymobo.openlabeler.util.AppUtils;
 import javafx.application.Platform;
 import javafx.beans.property.*;
 import javafx.event.ActionEvent;
@@ -115,7 +115,7 @@ public class MediaPane extends BorderPane implements AutoCloseable
             });
             Arrays.sort(files);
             if (files.length <= 0) {
-                Util.showInformation(bundle.getString("menu.alert"), bundle.getString("msg.noMediaFiles"));
+                AppUtils.showInformation(bundle.getString("menu.alert"), bundle.getString("msg.noMediaFiles"));
                 return;
             }
         }
@@ -129,12 +129,12 @@ public class MediaPane extends BorderPane implements AutoCloseable
 
     public void onPrevMediaFile(ActionEvent actionEvent) {
         // JavaFX bug - TableView#selectionModel#select does not scroll into view
-        Util.fireKeyPressedEvent(tvMedia, KeyCode.UP);
+        AppUtils.fireKeyPressedEvent(tvMedia, KeyCode.UP);
     }
 
     public void onNextMediaFile(ActionEvent actionEvent) {
         // JavaFX bug - TableView#selectionModel#select does not scroll into view
-        Util.fireKeyPressedEvent(tvMedia, KeyCode.DOWN);
+        AppUtils.fireKeyPressedEvent(tvMedia, KeyCode.DOWN);
     }
 
     public void onGoToUnlabeledMediaFile(ActionEvent actionEvent) {

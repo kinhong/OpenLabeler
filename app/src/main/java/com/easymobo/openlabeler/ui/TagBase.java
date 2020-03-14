@@ -18,7 +18,8 @@
 package com.easymobo.openlabeler.ui;
 
 import com.easymobo.openlabeler.model.ObjectModel;
-import com.easymobo.openlabeler.util.Util;
+import com.easymobo.openlabeler.preference.Settings;
+import com.easymobo.openlabeler.util.AppUtils;
 import javafx.beans.binding.DoubleBinding;
 import javafx.beans.property.*;
 import javafx.fxml.FXML;
@@ -93,7 +94,7 @@ public abstract class TagBase extends Group
         this.getTransforms().add(rotate);
         name.getTransforms().add(new Rotate(-rotate.getAngle(), 0, 0));
         rotate.addEventFilter(TransformChangedEvent.TRANSFORM_CHANGED, event -> {
-            Util.getTransform(name, Rotate.class).setAngle(-rotate.getAngle());
+            AppUtils.getTransform(name, Rotate.class).setAngle(-rotate.getAngle());
             name.translateXProperty().bind(getNameTranslateXProperty(rotate));
             name.translateYProperty().bind(getNameTranslateYProperty(rotate));
         });
@@ -106,6 +107,7 @@ public abstract class TagBase extends Group
         rect.setHeight(getModel().getBoundBox().getYMax() - getModel().getBoundBox().getYMin());
         rect.getTransforms().addAll(translate, scale);
         rect.setFill(Color.TRANSPARENT);
+
         rect.setStrokeWidth(2 / scale.getX());
         rect.strokeProperty().bind(strokeColorProperty());
         scale.addEventHandler(TransformChangedEvent.TRANSFORM_CHANGED, event -> {
@@ -198,6 +200,12 @@ public abstract class TagBase extends Group
 
     public void setSelected(boolean value) {
         selectionProperty().set(value);
+        if (value) {
+            setAnimateOutline(Settings.isAnimateOutline());
+        }
+        else {
+            setAnimateOutline(false);
+        }
     }
 
     private BooleanProperty selectionProperty;
@@ -267,7 +275,7 @@ public abstract class TagBase extends Group
     }
 
     public void move(HorizontalDirection horizontal, VerticalDirection vertical, double deltaX, double deltaY) {
-        Rotate rotate = Util.getTransform(this, Rotate.class);
+        Rotate rotate = AppUtils.getTransform(this, Rotate.class);
         double x = horizontal == null ? 0 : (horizontal == HorizontalDirection.LEFT ? -deltaX : deltaX);
         double y = vertical == null ? 0 : (vertical == VerticalDirection.UP ? -deltaY : deltaY);
         final double x1 = horizontal == null ? 0 : (horizontal == HorizontalDirection.LEFT ? deltaX : -deltaX);
@@ -430,5 +438,14 @@ public abstract class TagBase extends Group
 
     private Bounds getRectBounds() {
         return new BoundingBox(rect.getX(), rect.getY(), rect.getWidth(), rect.getHeight());
+    }
+
+    public void setAnimateOutline(boolean animate) {
+        if (animate) {
+            AppUtils.addOutlineAnimation(rect);
+        }
+        else {
+            AppUtils.removeOutlineAnimation(rect);
+        }
     }
 }

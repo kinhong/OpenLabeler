@@ -17,8 +17,8 @@
 
 package com.easymobo.openlabeler.ui;
 
-import com.easymobo.openlabeler.util.Util;
-import com.easymobo.openlabeler.util.Util.ImageTableCell;
+import com.easymobo.openlabeler.util.AppUtils;
+import com.easymobo.openlabeler.util.AppUtils.ImageTableCell;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -120,7 +120,7 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
                 menu.getItems().add(item);
                 if (file.isAnnotated()) {
                     item = new MenuItem(annotation);
-                    item.setOnAction(ev -> Desktop.getDesktop().browseFileDirectory(Util.getAnnotationFile(file)));
+                    item.setOnAction(ev -> Desktop.getDesktop().browseFileDirectory(AppUtils.getAnnotationFile(file)));
                     menu.getItems().add(item);
                 }
             });
@@ -209,7 +209,7 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
             return isAnnotatedProperty.get();
         }
         public MediaFile refresh() {
-            isAnnotatedProperty.set(Util.getAnnotationFile(this).exists());
+            isAnnotatedProperty.set(AppUtils.getAnnotationFile(this).exists());
             return this;
         }
 

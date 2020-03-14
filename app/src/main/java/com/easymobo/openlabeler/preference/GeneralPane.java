@@ -17,7 +17,7 @@
 
 package com.easymobo.openlabeler.preference;
 
-import com.easymobo.openlabeler.util.Util;
+import com.easymobo.openlabeler.util.AppUtils;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
@@ -40,92 +40,96 @@ import java.util.logging.Logger;
 
 public class GeneralPane extends VBox implements Category
 {
-    @FXML
-    private GridPane gpApplication, gpOutput, gpAnnotation;
-    @FXML
-    private CheckBox chkOpenLastMedia, chkSaveEveryChange, chkAutoSetName;
-    @FXML
-    private TextField textAnnotationsDir;
-    @FXML
-    private ColorPicker pickerObjectStrokeColor;
-    @FXML
-    private NameTablePane nameTablePane;
+   @FXML
+   private GridPane gpApplication, gpOutput, gpAnnotation;
+   @FXML
+   private CheckBox chkOpenLastMedia, chkSaveEveryChange, chkAutoSetName, chkAnimateOutline;
+   @FXML
+   private TextField textAnnotationsDir;
+   @FXML
+   private ColorPicker pickerObjectStrokeColor;
+   @FXML
+   private NameTablePane nameTablePane;
 
-    private static final Logger LOG = Logger.getLogger(GeneralPane.class.getCanonicalName());
+   private static final Logger LOG = Logger.getLogger(GeneralPane.class.getCanonicalName());
 
-    private final BooleanProperty dirtyProperty =  new SimpleBooleanProperty(false);
-    private ResourceBundle bundle =  ResourceBundle.getBundle("bundle");
+   private final BooleanProperty dirtyProperty = new SimpleBooleanProperty(false);
+   private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 
-    public GeneralPane() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/preference/GeneralPane.fxml"), bundle);
-        loader.setRoot(this);
-        loader.setController(this);
+   public GeneralPane() {
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/preference/GeneralPane.fxml"), bundle);
+      loader.setRoot(this);
+      loader.setController(this);
 
-        try {
-            loader.load();
-            getChildren().addAll(
-                    Borders.wrap(gpApplication).lineBorder().title(bundle.getString("menu.application")).buildAll(),
-                    Borders.wrap(gpOutput).lineBorder().title(bundle.getString("menu.output")).buildAll(),
-                    Borders.wrap(gpAnnotation).lineBorder().title(bundle.getString("menu.annotation")).buildAll());
-        }
-        catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Unable to load FXML", ex);
-        }
+      try {
+         loader.load();
+         getChildren().addAll(
+               Borders.wrap(gpApplication).lineBorder().title(bundle.getString("menu.application")).buildAll(),
+               Borders.wrap(gpOutput).lineBorder().title(bundle.getString("menu.output")).buildAll(),
+               Borders.wrap(gpAnnotation).lineBorder().title(bundle.getString("menu.annotation")).buildAll());
+      }
+      catch (Exception ex) {
+         LOG.log(Level.SEVERE, "Unable to load FXML", ex);
+      }
 
-        // Bind Properties
-        BooleanBinding changes[] = {
-                chkOpenLastMedia.selectedProperty().isNotEqualTo(Settings.openLastMediaProperty),
-                chkSaveEveryChange.selectedProperty().isNotEqualTo(Settings.saveEveryChangeProperty),
-                textAnnotationsDir.textProperty().isNotEqualTo(Settings.annotationDirProperty),
-                pickerObjectStrokeColor.valueProperty().isNotEqualTo(Settings.objectStrokeColorProperty),
-                chkAutoSetName.selectedProperty().isNotEqualTo(Settings.autoSetNameProperty),
-                new SimpleListProperty(nameTablePane.getItems()).isNotEqualTo(Settings.recentNamesProperty),
-        };
-        dirtyProperty.bind(EasyBind.combine(
-                FXCollections.observableArrayList(changes), stream -> stream.reduce((a, b) -> a | b).orElse(false)));
+      // Bind Properties
+      BooleanBinding changes[] = {
+            chkOpenLastMedia.selectedProperty().isNotEqualTo(Settings.openLastMediaProperty),
+            chkSaveEveryChange.selectedProperty().isNotEqualTo(Settings.saveEveryChangeProperty),
+            textAnnotationsDir.textProperty().isNotEqualTo(Settings.annotationDirProperty),
+            pickerObjectStrokeColor.valueProperty().isNotEqualTo(Settings.objectStrokeColorProperty),
+            chkAutoSetName.selectedProperty().isNotEqualTo(Settings.autoSetNameProperty),
+            chkAnimateOutline.selectedProperty().isNotEqualTo(Settings.animateOutlineProperty),
+            new SimpleListProperty(nameTablePane.getItems()).isNotEqualTo(Settings.recentNamesProperty),
+      };
+      dirtyProperty.bind(EasyBind.combine(
+            FXCollections.observableArrayList(changes), stream -> stream.reduce((a, b) -> a | b).orElse(false)));
 
-        load();
-    }
+      load();
+   }
 
-    public void onClearUsedNames(ActionEvent actionEvent) {
-        Settings.recentNamesProperty.clear();
-        Util.showInformation(bundle.getString("menu.alert"), bundle.getString("msg.usedNamesCleared"));
-    }
+   public void onClearUsedNames(ActionEvent actionEvent) {
+      Settings.recentNamesProperty.clear();
+      AppUtils.showInformation(bundle.getString("menu.alert"), bundle.getString("msg.usedNamesCleared"));
+   }
 
-    @Override
-    public BooleanProperty dirtyProperty() {
-        return dirtyProperty;
-    }
-    public boolean isDirty() {
-        return dirtyProperty.get();
-    }
+   @Override
+   public BooleanProperty dirtyProperty() {
+      return dirtyProperty;
+   }
 
-    @Override
-    public String getName() {
-        return bundle.getString("menu.general");
-    }
+   public boolean isDirty() {
+      return dirtyProperty.get();
+   }
 
-    @Override
-    public void load() {
-        chkOpenLastMedia.setSelected(Settings.isOpenLastMedia());
-        chkSaveEveryChange.setSelected(Settings.isSaveEveryChange());
-        textAnnotationsDir.setText(Settings.getAnnotationDir());
-        pickerObjectStrokeColor.setValue(Settings.getObjectStrokeColor());
-        chkAutoSetName.setSelected(Settings.getAutoSetName());
-        nameTablePane.setItems(Settings.recentNamesProperty.clone());
-    }
+   @Override
+   public String getName() {
+      return bundle.getString("menu.general");
+   }
 
-    @Override
-    public void save() {
-        if (!isDirty()) {
-            return;
-        }
-        Settings.setOpenLastMedia(chkOpenLastMedia.isSelected());
-        Settings.setSaveEveryChange(chkSaveEveryChange.isSelected());
-        Settings.setAnnotationDir(textAnnotationsDir.getText());
-        Settings.setObjectStrokeColor(pickerObjectStrokeColor.getValue());
-        Settings.setAutoSetName(chkAutoSetName.isSelected());
-        Settings.recentNamesProperty.clear();
-        Settings.recentNamesProperty.addAll(nameTablePane.getItems());
-    }
+   @Override
+   public void load() {
+      chkOpenLastMedia.setSelected(Settings.isOpenLastMedia());
+      chkSaveEveryChange.setSelected(Settings.isSaveEveryChange());
+      textAnnotationsDir.setText(Settings.getAnnotationDir());
+      pickerObjectStrokeColor.setValue(Settings.getObjectStrokeColor());
+      chkAutoSetName.setSelected(Settings.isAutoSetName());
+      chkAnimateOutline.setSelected(Settings.isAnimateOutline());
+      nameTablePane.setItems(Settings.recentNamesProperty.clone());
+   }
+
+   @Override
+   public void save() {
+      if (!isDirty()) {
+         return;
+      }
+      Settings.setOpenLastMedia(chkOpenLastMedia.isSelected());
+      Settings.setSaveEveryChange(chkSaveEveryChange.isSelected());
+      Settings.setAnnotationDir(textAnnotationsDir.getText());
+      Settings.setObjectStrokeColor(pickerObjectStrokeColor.getValue());
+      Settings.setAutoSetName(chkAutoSetName.isSelected());
+      Settings.setAnimateOutline(chkAnimateOutline.isSelected());
+      Settings.recentNamesProperty.clear();
+      Settings.recentNamesProperty.addAll(nameTablePane.getItems());
+   }
 }

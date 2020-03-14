@@ -20,6 +20,7 @@ package com.easymobo.openlabeler.preference;
 import com.easymobo.openlabeler.preference.PreferenceUtil.BooleanPrefProperty;
 import com.easymobo.openlabeler.preference.PreferenceUtil.ColorPrefProperty;
 import com.easymobo.openlabeler.preference.PreferenceUtil.StringPrefProperty;
+import com.easymobo.openlabeler.util.AppUtils;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.scene.paint.Color;
@@ -36,6 +37,7 @@ public class Settings
     private static final String ANNOTATION_DIR = "annotationDir";
     private static final String AUTO_SET_NAME = "autoSetName";
     private static final String OBJ_STROKE_COLOR = "objectStrokeColor";
+    private static final String ANIMATE_OUTLINE = "animateOutline";
     // Training
     private static final String TF_IMAGE_DIR = "tfImageDir";
     private static final String TF_ANNOTATION_DIR = "tfAnnotationDir";
@@ -82,30 +84,39 @@ public class Settings
 
     // Auto fill name
     public static final BooleanProperty autoSetNameProperty = new BooleanPrefProperty(pref, AUTO_SET_NAME, true);
-    public static boolean getAutoSetName() {
+    public static boolean isAutoSetName() {
         return autoSetNameProperty.get();
     }
     public static void setAutoSetName(boolean use) {
         autoSetNameProperty.set(use);
     }
 
-    // Object bounding box color
     public static final ObjectProperty<Color> objectStrokeColorProperty = new ColorPrefProperty(pref, OBJ_STROKE_COLOR, Color.LIMEGREEN);
     public static Color getObjectStrokeColor() {
         return objectStrokeColorProperty.get();
     }
+
+    // Object bounding box color
     public static void setObjectStrokeColor(Color color) {
         objectStrokeColorProperty.set(color);
     }
     public static ReadOnlyObjectProperty<Color> objectFillColorProperty = new SimpleObjectProperty() {
         @Override
         public Color get() {
-            Color base = getObjectStrokeColor();
-            return new Color(base.getRed(), base.getGreen(), base.getBlue(), 0.3);
+            return AppUtils.applyAlpha(getObjectStrokeColor(), 0.3);
         }
     };
     public static Color getObjectFillColor() {
         return objectFillColorProperty.get();
+    }
+
+    // Animate Shape Outline
+    public static final BooleanProperty animateOutlineProperty = new BooleanPrefProperty(pref, ANIMATE_OUTLINE, true);
+    public static boolean isAnimateOutline() {
+        return animateOutlineProperty.get();
+    }
+    public static void setAnimateOutline(boolean animate) {
+        animateOutlineProperty.set(animate);
     }
 
     // TensorFlow Image directory
@@ -191,8 +202,7 @@ public class Settings
     public static ReadOnlyObjectProperty<Color> hintFillColorProperty = new SimpleObjectProperty() {
         @Override
         public Color get() {
-            Color base = getHintStrokeColor();
-            return new Color(base.getRed(), base.getGreen(), base.getBlue(), 0.3);
+            return AppUtils.applyAlpha(getHintStrokeColor(), 0.3);
         }
     };
     public static Color getHintFillColor() {

@@ -151,6 +151,13 @@ public class TagBoard extends Group implements AutoCloseable
             }
         });
 
+        // Selected tag animation outline
+        Settings.animateOutlineProperty.addListener((observableValue, oldValue, newValue) -> {
+            if (selectedObjectProperty.get() != null) {
+                selectedObjectProperty.get().setAnimateOutline(Settings.isAnimateOutline());
+            }
+        });
+
         // show/clear HintTag
         hintsProperty().addListener((ListChangeListener<HintTag>) c -> {
             if (!c.next()) {
@@ -286,7 +293,7 @@ public class TagBoard extends Group implements AutoCloseable
         if (w > ObjectTag.MIN_SIZE && h > ObjectTag.MIN_SIZE) {
             String lastLabel = NameEditor.getLastLabel(bundle);
             ObjectTag objectTag = addObjectTag(lastLabel, x, y, x + w, y + h);
-            if (!Settings.getAutoSetName() || Settings.recentNamesProperty.size() <= 0) {
+            if (!Settings.isAutoSetName() || Settings.recentNamesProperty.size() <= 0) {
                 NameEditor editor = new NameEditor(lastLabel);
                 lastLabel = editor.showPopup(me.getScreenX(), me.getScreenY(), getScene().getWindow());
                 objectTag.nameProperty().set(lastLabel);
@@ -307,13 +314,18 @@ public class TagBoard extends Group implements AutoCloseable
 
     private void updateDragBox(Point2D me) {
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.setFill(Settings.getObjectFillColor());
         final double maxX = imageView.getImage().getWidth();
         final double maxY = imageView.getImage().getHeight();
         double x = me.getX() < maxX ? (me.getX() < 0 ? 0 : me.getX()) : maxX;
         double y = me.getY() < maxY ? (me.getY() < 0 ? 0 : me.getY()) : maxY;;
         double w = x - anchor.getX();
         double h = y - anchor.getY();
+
+        gc.clearRect(dragBox.getMinX(), dragBox.getMinY(), dragBox.getWidth(), dragBox.getHeight());
+
+        gc.setStroke(Settings.getObjectStrokeColor());
+        gc.setLineWidth(5);
+        gc.strokeLine(anchor.getX(), anchor.getY(), x, y);
 
         if (w < 0) {
             w = anchor.getX() - x;
@@ -329,7 +341,7 @@ public class TagBoard extends Group implements AutoCloseable
             y = anchor.getY();
         }
 
-        gc.clearRect(dragBox.getMinX(), dragBox.getMinY(), dragBox.getWidth(), dragBox.getHeight());
+        gc.setFill(Settings.getObjectFillColor());
         gc.fillRect(x, y, w, h);
         dragBox = new BoundingBox(x, y, w, h);
     }
@@ -465,7 +477,7 @@ public class TagBoard extends Group implements AutoCloseable
                     .map (c -> (TagBase) c)
                     .filter(ov -> ov != source).forEach(ov -> ov.setSelected(false));
             if (source instanceof ObjectTag) {
-                selectedObjectProperty.set((ObjectTag)source);
+                source.setAnimateOutline(Settings.isAnimateOutline());
             }
             tagCoordsProperty.set(getCoordinates(source.coordsProperty().get()));
             source.coordsProperty().addListener((observable, oldValue, newValue) -> tagCoordsProperty.set(getCoordinates(newValue)));
@@ -474,7 +486,7 @@ public class TagBoard extends Group implements AutoCloseable
             if (objectsProperty.stream().filter(ov -> ov.isSelected()).count() > 0) {
                 return;
             }
-            selectedObjectProperty.set(null);
+            source.setAnimateOutline(false);
             tagCoordsProperty.set("");
         }
     }

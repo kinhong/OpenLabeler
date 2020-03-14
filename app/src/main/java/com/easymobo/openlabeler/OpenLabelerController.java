@@ -32,7 +32,7 @@ import com.easymobo.openlabeler.undo.BoundsChange;
 import com.easymobo.openlabeler.undo.ChangeBase;
 import com.easymobo.openlabeler.undo.ListChange;
 import com.easymobo.openlabeler.undo.NameChange;
-import com.easymobo.openlabeler.util.Util;
+import com.easymobo.openlabeler.util.AppUtils;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -369,7 +369,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.setProperty(Marshaller.JAXB_FRAGMENT, Boolean.TRUE);
 
-            File xmlFile = Util.getAnnotationFile(model.getFile());
+            File xmlFile = AppUtils.getAnnotationFile(model.getFile());
             if (xmlFile.getParentFile() != null) {
                 xmlFile.getParentFile().mkdirs();
             }
@@ -393,7 +393,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
             return true;
         }
         ButtonType saveAndClose = new ButtonType(bundle.getString("menu.saveAndClose"), ButtonData.OTHER);
-        Alert alert = Util.createAlert(CONFIRMATION, bundle.getString("menu.alert"), bundle.getString("msg.confirmClose"));
+        Alert alert = AppUtils.createAlert(CONFIRMATION, bundle.getString("menu.alert"), bundle.getString("msg.confirmClose"));
         alert.getButtonTypes().clear();
         alert.getButtonTypes().addAll(saveAndClose, ButtonType.OK, ButtonType.CANCEL);
         Optional<ButtonType> result = alert.showAndWait();
@@ -421,7 +421,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
                 return;
             }
 
-            File xmlFile = Util.getAnnotationFile(newFile);
+            File xmlFile = AppUtils.getAnnotationFile(newFile);
             Annotation annotation = null;
             try {
                 Image image = new Image(newFile.toURI().toURL().toExternalForm());

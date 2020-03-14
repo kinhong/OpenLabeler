@@ -19,7 +19,7 @@ package com.easymobo.openlabeler.preference;
 
 import com.easymobo.openlabeler.tensorflow.TFTrainer;
 import com.easymobo.openlabeler.ui.InputFileChooser;
-import com.easymobo.openlabeler.util.Util;
+import com.easymobo.openlabeler.util.AppUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -156,14 +156,14 @@ public class TrainingPane extends VBox implements Category
         Settings.setTFDataDir(txtTFDataDir.getText());
         File dataDir = new File(Settings.getTFDataDir());
         if (dataDir.isDirectory() && dataDir.exists()) {
-            var res = Util.showConfirmation(bundle.getString("menu.alert"), bundle.getString("msg.confirmCreateTrainData"));
+            var res = AppUtils.showConfirmation(bundle.getString("menu.alert"), bundle.getString("msg.confirmCreateTrainData"));
             if (res.get() != ButtonType.OK) {
                 return;
             }
         }
         btnCreateTrainData.setDisable(true);
         TFTrainer.createTrainData(labelMapPane.getItems());
-        Util.showInformation(bundle.getString("menu.alert"), bundle.getString("msg.trainDataCreated"));
+        AppUtils.showInformation(bundle.getString("menu.alert"), bundle.getString("msg.trainDataCreated"));
         btnCreateTrainData.setDisable(false);
     }
 
@@ -253,14 +253,14 @@ public class TrainingPane extends VBox implements Category
     private void exportGraph(Button source, int checkpoint) {
         save();
         TFTrainer.exportGraph(checkpoint);
-        Util.showInformation(bundle.getString("menu.alert"), MessageFormat.format(bundle.getString("msg.exportGraph"), checkpoint));
+        AppUtils.showInformation(bundle.getString("menu.alert"), MessageFormat.format(bundle.getString("msg.exportGraph"), checkpoint));
         source.setDisable(true);
     }
 
     private void train(boolean start, boolean restart) {
         save();
         TFTrainer.train(start, restart);
-        Util.showInformation(bundle.getString("menu.alert"),
+        AppUtils.showInformation(bundle.getString("menu.alert"),
                 bundle.getString(start ? (restart ? "msg.startTrain" : "msg.continueTrain") : "msg.stopTrain"));
         updateTraining();
     }

@@ -19,7 +19,7 @@ package com.easymobo.openlabeler.ui;
 
 import com.easymobo.openlabeler.preference.NameColor;
 import com.easymobo.openlabeler.preference.Settings;
-import com.easymobo.openlabeler.util.Util.ImageTableCell;
+import com.easymobo.openlabeler.util.AppUtils.ImageTableCell;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

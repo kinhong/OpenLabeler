@@ -20,7 +20,7 @@ package com.easymobo.openlabeler.tensorflow;
 import com.easymobo.openlabeler.model.HintModel;
 import com.easymobo.openlabeler.preference.LabelMapItem;
 import com.easymobo.openlabeler.preference.Settings;
-import com.easymobo.openlabeler.util.Util;
+import com.easymobo.openlabeler.util.AppUtils;
 import javafx.application.Platform;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -110,7 +110,7 @@ public class ObjectDetector implements AutoCloseable
             }
             update(null);
             tfSavedModelWatchKey = savedModelParent.register(watcher, ENTRY_CREATE, ENTRY_MODIFY);
-            Util.watchAndUpdate(watcher, "TF Saved Model Watcher", this::update);
+            AppUtils.watchAndUpdate(watcher, "TF Saved Model Watcher", this::update);
         }
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to watch", ex);
