@@ -48,6 +48,10 @@
                 <Button fx:id="btnCreateTrainData" text="%menu.createTrainData" onAction="#onCreateTrainData"
                         GridPane.columnIndex="1" GridPane.rowIndex="5"/>
             </children>
+            <columnConstraints>
+                <ColumnConstraints />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
         </GridPane>
         <GridPane fx:id="gpModel" hgap="10.0" vgap="10">
             <children>
@@ -60,6 +64,10 @@
                 <Label text="%menu.trainCkpt" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
                 <Label fx:id="labelTrainCkpt" text="" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
             </children>
+            <columnConstraints>
+                <ColumnConstraints />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
         </GridPane>
         <GridPane fx:id="gpDocker" hgap="10.0" vgap="10">
             <children>

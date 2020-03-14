@@ -36,6 +36,8 @@ import java.util.logging.Logger;
 public class PreferencePane extends DialogPane
 {
     @FXML
+    private SplitPane splitPane;
+    @FXML
     private ListView<String> categoryList;
     @FXML
     private ScrollPane scroller;
@@ -103,5 +105,13 @@ public class PreferencePane extends DialogPane
         lookupButton(ButtonType.APPLY).disableProperty().bind(EasyBind.combine(dirties, stream -> stream.allMatch(a -> !a)));
 
         categoryList.getSelectionModel().select(0);
+
+        // Split Pane Divider
+        splitPane.sceneProperty().addListener(((observable, oldValue, newValue) -> {
+            if (newValue != null) {
+                var positions = splitPane.getDividerPositions();
+                splitPane.getScene().widthProperty().addListener((obs, oldItem, newItem) -> splitPane.setDividerPositions(positions));
+            }
+        }));
     }
 }

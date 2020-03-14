@@ -20,6 +20,7 @@ package com.easymobo.openlabeler.preference;
 import com.easymobo.openlabeler.tensorflow.TFTrainer;
 import com.easymobo.openlabeler.ui.InputFileChooser;
 import com.easymobo.openlabeler.util.AppUtils;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
 import javafx.beans.property.BooleanProperty;
@@ -125,8 +126,6 @@ public class TrainingPane extends VBox implements Category
         txtDockerImage.setText(Settings.getDockerImage());
         txtContainerHostName.setText(Settings.getContainerHostName());
         txtContainerName.setText(Settings.getContainerName());
-
-        updateTraining();
     }
 
     @Override
@@ -209,45 +208,52 @@ public class TrainingPane extends VBox implements Category
     }
 
     private void updateTraining() {
-        // Training controls
-        String baseModelDir = txtTFBaseModelDir.getText();
+    new Thread(() -> {
+            // Training controls
+            String baseModelDir = txtTFBaseModelDir.getText();
 
-        config = new TFTrainer.PipelineConfig(baseModelDir);
-        labelModelType.setText(config.getType() == null ? bundle.getString("msg.notFound") : config.getType());
+            config = new TFTrainer.PipelineConfig(baseModelDir);
+            var modelType = config.getType() == null ? bundle.getString("msg.notFound") : config.getType();
 
-        List<Button> buttons = new ArrayList();
+            List<Button> buttons = new ArrayList();
 
-        int checkpoint = TFTrainer.getTrainCkpt(baseModelDir);
-        labelTrainCkpt.setText(checkpoint < 0 ? bundle.getString("msg.notFound") : String.valueOf(checkpoint));
-        if (checkpoint > 0) {
-            Button btn = new Button(bundle.getString("menu.exportGraph"));
-            btn.setOnAction(event -> exportGraph(btn, checkpoint));
-            buttons.add(btn);
-        }
-
-        boolean canTrain = TFTrainer.canTrain(txtTFDataDir.getText(), txtTFBaseModelDir.getText());
-        if (canTrain) {
-            if (TFTrainer.isTraining()) {
-                Button btn = new Button(bundle.getString("menu.stopTrain"));
-                btn.setOnAction(event -> train(false, false));
+            int checkpoint = TFTrainer.getTrainCkpt(baseModelDir);
+            var trainCkpt = checkpoint < 0 ? bundle.getString("msg.notFound") : String.valueOf(checkpoint);
+            if (checkpoint > 0) {
+                Button btn = new Button(bundle.getString("menu.exportGraph"));
+                btn.setOnAction(event -> exportGraph(btn, checkpoint));
                 buttons.add(btn);
             }
-            else {
-                Button btn1 = new Button(bundle.getString("menu.continueTrain"));
-                btn1.setOnAction(event -> train(true, false));
-                Button btn2 = new Button(bundle.getString("menu.restartTrain"));
-                btn2.setOnAction(event -> train(true, true));
-                buttons.addAll(Arrays.asList(btn1, btn2));
+
+            boolean canTrain = TFTrainer.canTrain(txtTFDataDir.getText(), txtTFBaseModelDir.getText());
+            if (canTrain) {
+                if (TFTrainer.isTraining()) {
+                    Button btn = new Button(bundle.getString("menu.stopTrain"));
+                    btn.setOnAction(event -> train(false, false));
+                    buttons.add(btn);
+                }
+                else {
+                    Button btn1 = new Button(bundle.getString("menu.continueTrain"));
+                    btn1.setOnAction(event -> train(true, false));
+                    Button btn2 = new Button(bundle.getString("menu.restartTrain"));
+                    btn2.setOnAction(event -> train(true, true));
+                    buttons.addAll(Arrays.asList(btn1, btn2));
+                }
             }
-        }
-        else {
-            Button btn = new Button(bundle.getString("menu.startTrain"));
-            btn.setOnAction(event -> train(true, true));
-            btn.disableProperty().bind(Bindings.or(txtTFDataDir.textProperty().isEmpty(), Bindings.or(txtTFImageDir.textProperty().isEmpty(), txtTFAnnotationDir.textProperty().isEmpty())));
-            buttons.add(btn);
-        }
-        boxTrain.getChildren().clear();
-        boxTrain.getChildren().addAll(buttons);
+            else {
+                Button btn = new Button(bundle.getString("menu.startTrain"));
+                btn.setOnAction(event -> train(true, true));
+                btn.disableProperty().bind(Bindings.or(txtTFDataDir.textProperty().isEmpty(), Bindings.or(txtTFImageDir.textProperty().isEmpty(), txtTFAnnotationDir.textProperty().isEmpty())));
+                buttons.add(btn);
+            }
+
+            Platform.runLater(() -> {
+                labelModelType.setText(modelType);
+                labelTrainCkpt.setText(trainCkpt);
+                boxTrain.getChildren().clear();
+                boxTrain.getChildren().addAll(buttons);
+            });
+        }, "Training Updater").start();
     }
 
     private void exportGraph(Button source, int checkpoint) {

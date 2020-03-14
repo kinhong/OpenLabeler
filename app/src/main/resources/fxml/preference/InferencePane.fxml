@@ -36,8 +36,12 @@
                 <InputFileChooser fx:id="txtTFLabelMapFile" file="true" minWidth="400" GridPane.columnIndex="1"
                                   GridPane.rowIndex="2"/>
                 <Label text="%menu.tfSavedModelDir" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
-                <InputFileChooser fx:id="txtTFSavedModelDir" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                <InputFileChooser fx:id="txtTFSavedModelDir" minWidth="400" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
             </children>
+            <columnConstraints>
+                <ColumnConstraints />
+                <ColumnConstraints hgrow="ALWAYS" />
+            </columnConstraints>
         </GridPane>
     </children>
 </fx:root>
