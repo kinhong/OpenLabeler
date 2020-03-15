@@ -42,6 +42,7 @@ import org.fxmisc.easybind.EasyBind;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -68,7 +69,7 @@ public class TrainingPane extends VBox implements Category
     @FXML
     private HBox boxTrain;
 
-    private static final Logger LOG = Logger.getLogger(TrainingPane.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     private final BooleanProperty dirtyProperty =  new SimpleBooleanProperty(false);
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");

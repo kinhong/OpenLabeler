@@ -28,6 +28,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import org.fxmisc.easybind.EasyBind;
 
+import java.lang.invoke.MethodHandles;
 import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -42,7 +43,7 @@ public class PreferencePane extends DialogPane
     @FXML
     private ScrollPane scroller;
 
-    private static final Logger LOG = Logger.getLogger(PreferencePane.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
     private ObservableList<Category> categories = FXCollections.observableArrayList();

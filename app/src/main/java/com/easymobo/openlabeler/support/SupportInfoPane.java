@@ -27,6 +27,7 @@ import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import org.apache.commons.lang3.StringUtils;
 
+import java.lang.invoke.MethodHandles;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.*;
@@ -40,7 +41,7 @@ public class SupportInfoPane extends DialogPane
     @FXML
     private ButtonType copyToClipboard;
 
-    private static final Logger LOG = Logger.getLogger(SupportInfoPane.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 

@@ -71,6 +71,7 @@ import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.lang.invoke.MethodHandles;
 import java.net.URL;
 import java.text.MessageFormat;
 import java.util.*;
@@ -94,17 +95,21 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     @FXML
     private Menu menuOpenRecent;
     @FXML
-    private MenuItem miClose, miSave, msPreference, miPreference, msExit, miExit, miUndo, miRedo, miCut, miCopy, miPaste, miDelete, miZoomIn, miZoomOut, miZoomFit, miPrevMediaFile, miNextMediaFile, miGoToUnlabeledMediaFile, miRotateLeft, miRotateRight, miShowHint, miClearHint, msAbout, miAbout, miInspectLabels;
+    private MenuItem miClose, miSave, msPreference, miPreference, msExit, miExit,
+          miUndo, miRedo, miCut, miCopy, miPaste, miDelete, miPrevMediaFile, miNextMediaFile, miGoToUnlabeledMediaFile,
+          miZoomIn, miZoomOut, miZoomFit, miRotateLeft, miRotateRight, miShowHint, miClearHint,
+          msAbout, miAbout, miInspectLabels;
     @FXML
     private ToolBar toolBar;
     @FXML
-    private Button btnPrevMedia, btnNextMedia, btnSave, btnUndo, btnRedo, btnDelete, btnZoomIn, btnZoomOut, btnZoomFit, btnRotateLeft, btnRotateRight, btnShowHint, btnClearHint;
+    private Button btnPrevMedia, btnNextMedia, btnSave, btnUndo, btnRedo, btnDelete, btnZoomIn, btnZoomOut, btnZoomFit,
+          btnRotateLeft, btnRotateRight, btnShowHint, btnClearHint;
     @FXML
     private MediaPane mediaPane;
     @FXML
     private ObjectTableView objectTable;
 
-    private static final Logger LOG = Logger.getLogger(OpenLabelerController.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
     private static final DataFormat DATA_FORMAT_JAXB = new DataFormat("application/openlabeler-jaxb");
 
     private ResourceBundle bundle;

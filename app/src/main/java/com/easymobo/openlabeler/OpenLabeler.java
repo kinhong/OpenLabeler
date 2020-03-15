@@ -44,6 +44,7 @@ import org.apache.commons.lang3.SystemUtils;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.invoke.MethodHandles;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Locale;
@@ -59,7 +60,7 @@ public class OpenLabeler extends Application
 {
     private static final String APP_HOME = ".openlabeler";
 
-    private static final Logger LOG = Logger.getLogger(OpenLabeler.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     @Override
     public void init() throws Exception {

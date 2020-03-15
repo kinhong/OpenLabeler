@@ -38,6 +38,7 @@ import org.apache.commons.collections4.IteratorUtils;
 import org.controlsfx.control.textfield.CustomTextField;
 import org.controlsfx.control.textfield.TextFields;
 
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -51,7 +52,7 @@ public class NameEditor extends VBox
     @FXML
     private ListView<String> list;
 
-    private static final Logger LOG = Logger.getLogger(NameEditor.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 

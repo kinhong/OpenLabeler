@@ -41,6 +41,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.io.File;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.file.*;
@@ -54,7 +55,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_MODIFY;
 
 public class ObjectDetector implements AutoCloseable
 {
-    private static final Logger LOG = Logger.getLogger(ObjectDetector.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     private SavedModelBundle model;
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");

@@ -33,6 +33,7 @@ import org.apache.commons.io.IOUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.nio.file.*;
 import java.text.MessageFormat;
 import java.util.Arrays;
@@ -51,7 +52,7 @@ public class MediaPane extends BorderPane implements AutoCloseable
     @FXML
     private Label fileStats;
 
-    private static final Logger LOG = Logger.getLogger(MediaPane.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 

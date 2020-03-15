@@ -28,6 +28,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.converter.DefaultStringConverter;
 import javafx.util.converter.IntegerStringConverter;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -41,7 +42,7 @@ public class LabelMapTableView extends TableView<LabelMapItem>
     @FXML
     private TableColumn<LabelMapItem, String> colDisplayName;
 
-    private static final Logger LOG = Logger.getLogger(LabelMapTableView.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 

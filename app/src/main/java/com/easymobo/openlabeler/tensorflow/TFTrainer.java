@@ -45,6 +45,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
@@ -62,7 +63,7 @@ import static java.nio.file.StandardWatchEventKinds.ENTRY_CREATE;
 
 public class TFTrainer implements AutoCloseable
 {
-    private static final Logger LOG = Logger.getLogger(TFTrainer.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
     private static final String EXPORTER = "OpenLabeler-Exporter";
 
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");

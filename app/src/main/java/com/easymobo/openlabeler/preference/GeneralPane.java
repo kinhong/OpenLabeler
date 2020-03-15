@@ -34,6 +34,7 @@ import javafx.scene.layout.VBox;
 import org.controlsfx.tools.Borders;
 import org.fxmisc.easybind.EasyBind;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -51,7 +52,7 @@ public class GeneralPane extends VBox implements Category
    @FXML
    private NameTablePane nameTablePane;
 
-   private static final Logger LOG = Logger.getLogger(GeneralPane.class.getCanonicalName());
+   private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
    private final BooleanProperty dirtyProperty = new SimpleBooleanProperty(false);
    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");

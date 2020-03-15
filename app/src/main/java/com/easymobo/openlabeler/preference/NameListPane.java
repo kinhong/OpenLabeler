@@ -28,6 +28,7 @@ import javafx.scene.control.SelectionMode;
 import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.BorderPane;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -39,7 +40,7 @@ public class NameListPane extends BorderPane
     @FXML
     private Button btnAddRow, btnRemoveRow;
 
-    private static final Logger LOG = Logger.getLogger(NameListPane.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
 

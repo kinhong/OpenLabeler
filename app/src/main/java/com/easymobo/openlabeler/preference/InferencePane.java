@@ -31,6 +31,7 @@ import javafx.scene.layout.VBox;
 import org.controlsfx.tools.Borders;
 import org.fxmisc.easybind.EasyBind;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,7 +47,7 @@ public class InferencePane extends VBox implements Category
     @FXML
     private InputFileChooser txtTFLabelMapFile, txtTFSavedModelDir;
 
-    private static final Logger LOG = Logger.getLogger(InferencePane.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     private final BooleanProperty dirtyProperty =  new SimpleBooleanProperty(false);
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");

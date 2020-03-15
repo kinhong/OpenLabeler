@@ -48,6 +48,7 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.TransformChangedEvent;
 import javafx.scene.transform.Translate;
 
+import java.lang.invoke.MethodHandles;
 import java.text.MessageFormat;
 import java.util.Iterator;
 import java.util.List;
@@ -68,7 +69,7 @@ public class TagBoard extends Group implements AutoCloseable
     @FXML
     private Canvas canvas;
 
-    private static final Logger LOG = Logger.getLogger(TagBoard.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
     private static final int PADDING = 10;
 
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");;

@@ -36,6 +36,7 @@ import javafx.scene.image.Image;
 import org.apache.commons.collections4.IteratorUtils;
 import org.fxmisc.easybind.EasyBind;
 
+import java.lang.invoke.MethodHandles;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -54,7 +55,7 @@ public class ObjectTableView extends TableView<ObjectTag>
     @FXML
     private CheckBox showAllCheckBox;
 
-    private static final Logger LOG = Logger.getLogger(ObjectTableView.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
     private ObservableValue<Long> visibleCount;

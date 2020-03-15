@@ -38,6 +38,7 @@ import org.apache.commons.lang3.SystemUtils;
 
 import java.awt.*;
 import java.io.File;
+import java.lang.invoke.MethodHandles;
 import java.net.MalformedURLException;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -54,7 +55,7 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
     @FXML
     private CheckBox chkShowAll;
 
-    private static final Logger LOG = Logger.getLogger(MediaTableView.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
     ;

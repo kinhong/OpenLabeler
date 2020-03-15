@@ -38,6 +38,7 @@ import javafx.scene.transform.Scale;
 import javafx.scene.transform.TransformChangedEvent;
 import javafx.scene.transform.Translate;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -64,7 +65,7 @@ public abstract class TagBase extends Group
     private static final Cursor cursorSE = Cursor.CROSSHAIR;//createImageCursor("resize_se.png");
     private static final Cursor cursorSW = Cursor.CROSSHAIR;//createImageCursor("resize_sw.png");
 
-    private static final Logger LOG = Logger.getLogger(TagBase.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     protected ResourceBundle bundle = ResourceBundle.getBundle("bundle");
     protected Dimension2D imageDim;

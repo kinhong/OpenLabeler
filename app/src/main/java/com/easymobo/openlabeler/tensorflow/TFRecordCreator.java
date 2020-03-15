@@ -32,6 +32,7 @@ import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.lang.invoke.MethodHandles;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.security.MessageDigest;
@@ -45,7 +46,7 @@ import java.util.stream.Collectors;
 
 public class TFRecordCreator
 {
-    private static final Logger LOG = Logger.getLogger(TFRecordCreator.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     private final Path imagePath, annotationPath, dataPath;
 

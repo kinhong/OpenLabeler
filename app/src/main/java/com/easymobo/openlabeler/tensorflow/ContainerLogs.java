@@ -22,6 +22,7 @@ import com.github.dockerjava.api.command.LogContainerCmd;
 import com.github.dockerjava.api.model.Frame;
 import com.github.dockerjava.core.command.LogContainerResultCallback;
 
+import java.lang.invoke.MethodHandles;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
@@ -32,7 +33,7 @@ public class ContainerLogs
     private String containerId;
     private int lastLogTime;
 
-    private static final  Logger LOG = Logger.getLogger(ContainerLogs.class.getCanonicalName());
+    private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
     public ContainerLogs(DockerClient dockerClient, String containerId) {
         this.dockerClient = dockerClient;
