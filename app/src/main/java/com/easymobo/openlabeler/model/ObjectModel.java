@@ -19,15 +19,19 @@ package com.easymobo.openlabeler.model;
 
 import com.easymobo.openlabeler.model.ModelUtil.BooleanAdapter;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
+import java.util.List;
 
 @XmlRootElement(name = "object")
-@XmlType(propOrder = {"name", "pose", "truncated", "difficult", "boundBox"})
+@XmlType(propOrder = {"name", "pose", "truncated", "difficult", "boundBox", "polygon"})
 public class ObjectModel implements Cloneable
 {
     private String name;
     private BoundBox boundBox;
+    private List<Double> polygon;
     private String pose = "Unspecified";
     private Boolean truncated = false;
     private Boolean difficult =  false;
@@ -55,6 +59,16 @@ public class ObjectModel implements Cloneable
 
     public void setBoundBox(BoundBox boundBox) {
         this.boundBox = boundBox;
+    }
+
+    @XmlElement(name = "polygon")
+    @XmlJavaTypeAdapter(ModelUtil.OneBasedPointListAdapter.class)
+    public List<Double> getPolygon() {
+        return polygon;
+    }
+
+    public void setPolygon(List<Double> polygon) {
+        this.polygon = polygon;
     }
 
     @XmlElement(name = "pose")

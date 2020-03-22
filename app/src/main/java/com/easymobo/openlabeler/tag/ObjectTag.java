@@ -15,11 +15,12 @@
  * ==============================================================================
  */
 
-package com.easymobo.openlabeler.ui;
+package com.easymobo.openlabeler.tag;
 
 import com.easymobo.openlabeler.model.ObjectModel;
 import com.easymobo.openlabeler.preference.NameColor;
 import com.easymobo.openlabeler.preference.Settings;
+import com.easymobo.openlabeler.ui.NameEditor;
 import com.easymobo.openlabeler.util.AppUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
@@ -57,14 +58,14 @@ public class ObjectTag extends TagBase
 
         // object thumbnail
         thumbProperty.bind(Bindings.createObjectBinding(() -> {
-            Bounds bounds = boundsProperty().get();
+            Bounds bounds = getBounds();
             SnapshotParameters parameters = new SnapshotParameters();
             parameters.setFill(Color.TRANSPARENT);
             parameters.setViewport(new Rectangle2D(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));
 
             WritableImage wi = new WritableImage((int)bounds.getWidth(), (int)bounds.getHeight());
             return imageView.snapshot(parameters, wi);
-         }, boundsProperty()));
+         }, shapeItemProperty()));
 
         strokeColorProperty.bind(Bindings.createObjectBinding(() -> {
             NameColor item = Settings.recentNamesProperty.getByPrefix(getModel().getName());

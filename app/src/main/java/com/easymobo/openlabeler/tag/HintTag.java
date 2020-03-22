@@ -15,7 +15,7 @@
  * ==============================================================================
  */
 
-package com.easymobo.openlabeler.ui;
+package com.easymobo.openlabeler.tag;
 
 import com.easymobo.openlabeler.model.HintModel;
 import com.easymobo.openlabeler.preference.Settings;

@@ -20,6 +20,7 @@ package com.easymobo.openlabeler.preference;
 import com.easymobo.openlabeler.preference.PreferenceUtil.BooleanPrefProperty;
 import com.easymobo.openlabeler.preference.PreferenceUtil.ColorPrefProperty;
 import com.easymobo.openlabeler.preference.PreferenceUtil.StringPrefProperty;
+import com.easymobo.openlabeler.tag.ShapeItem.Type;
 import com.easymobo.openlabeler.util.AppUtils;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
@@ -27,6 +28,8 @@ import javafx.scene.paint.Color;
 
 import java.util.Collection;
 import java.util.prefs.Preferences;
+
+import static com.easymobo.openlabeler.tag.ShapeItem.Type.RECTANGLE;
 
 public class Settings
 {
@@ -52,6 +55,7 @@ public class Settings
     private static final String TF_SAVED_MODEL_DIR = "tfSavedModelDir";
     private static final String HINT_STROKE_COLOR = "hintBoxColor";
     // Other
+    private static final String EDIT_SHAPE = "editShape";
     private static final String RECENT_FILES = "recentFiles";
     private static final String RECENT_NAMES = "recentNames";
 
@@ -225,6 +229,14 @@ public class Settings
     }
     public static void setTFSavedModelDir(String dir) {
         tfSavedModelDirProperty.set(dir);
+    }
+
+    public static final StringProperty editShapeProperty = new StringPrefProperty(pref, EDIT_SHAPE, RECTANGLE.name());
+    public static Type getEditShape() {
+        return Type.valueOf(editShapeProperty.get());
+    }
+    public static void setEditShape(Type shape) {
+        editShapeProperty.set(shape.name());
     }
 
     // Recent files

@@ -17,14 +17,12 @@
   ~ ==============================================================================
   -->
 
-<?import com.easymobo.openlabeler.ui.TagBase?>
+<?import com.easymobo.openlabeler.tag.TagBase?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
-<?import javafx.scene.shape.Rectangle?>
-<fx:root type="com.easymobo.openlabeler.ui.TagBase" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+<fx:root type="com.easymobo.openlabeler.tag.TagBase" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
          stylesheets="@/css/OpenLabeler.css">
     <children>
-        <Rectangle fx:id="rect" height="409.0" strokeWidth="0.0" width="635.0"/>
         <Label fx:id="name" style="-fx-background-color: #00000064;" text="Label" textFill="WHITE"
                mouseTransparent="true">
             <padding>

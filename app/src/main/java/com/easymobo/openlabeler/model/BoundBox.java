@@ -17,8 +17,8 @@
 
 package com.easymobo.openlabeler.model;
 
-import com.easymobo.openlabeler.model.ModelUtil.CoordAdapter;
-import com.easymobo.openlabeler.model.ModelUtil.OneBasedCoordAdapter;
+import com.easymobo.openlabeler.model.ModelUtil.OneBasedPointAdapter;
+import com.easymobo.openlabeler.model.ModelUtil.PointAdapter;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -41,7 +41,7 @@ public class BoundBox implements Cloneable
     }
 
     @XmlElement(name = "xmin")
-    @XmlJavaTypeAdapter(OneBasedCoordAdapter.class)
+    @XmlJavaTypeAdapter(OneBasedPointAdapter.class)
     public Double getXMin() {
         return xmin;
     }
@@ -51,7 +51,7 @@ public class BoundBox implements Cloneable
     }
 
     @XmlElement(name = "ymin")
-    @XmlJavaTypeAdapter(OneBasedCoordAdapter.class)
+    @XmlJavaTypeAdapter(OneBasedPointAdapter.class)
     public Double getYMin() {
         return ymin;
     }
@@ -61,7 +61,7 @@ public class BoundBox implements Cloneable
     }
 
     @XmlElement(name = "xmax")
-    @XmlJavaTypeAdapter(CoordAdapter.class)
+    @XmlJavaTypeAdapter(PointAdapter.class)
     public Double getXMax() {
         return xmax;
     }
@@ -71,7 +71,7 @@ public class BoundBox implements Cloneable
     }
 
     @XmlElement(name = "ymax")
-    @XmlJavaTypeAdapter(CoordAdapter.class)
+    @XmlJavaTypeAdapter(PointAdapter.class)
     public Double getYMax() {
         return ymax;
     }

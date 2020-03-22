@@ -17,9 +17,9 @@
   ~ ==============================================================================
   -->
 
+<?import com.easymobo.openlabeler.tag.TagBoard?>
 <?import com.easymobo.openlabeler.ui.MediaPane?>
 <?import com.easymobo.openlabeler.ui.ObjectTableView?>
-<?import com.easymobo.openlabeler.ui.TagBoard?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.input.*?>
@@ -37,23 +37,20 @@
                             <items>
                                 <MenuItem onAction="#onFileOpenFile" text="%menu.openMediaFile">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="O" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <MenuItem onAction="#onFileOpenDir" text="%menu.openMediaDir">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
-                                <Menu fx:id="menuOpenRecent" text="%menu.openRecent"/>
+                                <Menu onShowing="#onFileMenu" text="%menu.openRecent" />
                                 <SeparatorMenuItem/>
                                 <MenuItem fx:id="miClose" onAction="#onClose" text="%menu.close"/>
                                 <MenuItem fx:id="miSave" onAction="#onSave" text="%menu.save">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="S" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <SeparatorMenuItem fx:id="msPreference"/>
@@ -66,62 +63,66 @@
                             <items>
                                 <MenuItem fx:id="miUndo" onAction="#onUndo" text="%menu.undo">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <MenuItem fx:id="miRedo" onAction="#onRedo" text="%menu.redo">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="DOWN"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="Z" control="UP" meta="UP" shift="DOWN" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <SeparatorMenuItem/>
                                 <MenuItem fx:id="miCut" onAction="#onCut" text="%menu.cut">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="X" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="X" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <MenuItem fx:id="miCopy" onAction="#onCopy" text="%menu.copy">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="C" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="C" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <MenuItem fx:id="miPaste" onAction="#onPaste" text="%menu.paste">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="V" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="V" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <MenuItem fx:id="miDelete" onAction="#onDelete" text="%menu.delete">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="UP" shift="UP"
-                                                            shortcut="UP"/>
+                                        <KeyCodeCombination alt="UP" code="BACK_SPACE" control="UP" meta="UP" shift="UP" shortcut="UP"/>
                                     </accelerator>
                                 </MenuItem>
+                                <SeparatorMenuItem/>
+                                <Menu onShowing="#onShapeMenu" text="%menu.shape">
+                                    <RadioMenuItem fx:id="miShapeRectangle" onAction="#onShapeRectangle" text="%menu.rectangle">
+                                    <toggleGroup>
+                                        <ToggleGroup fx:id="group" />
+                                    </toggleGroup>
+                                    </RadioMenuItem>
+                                    <RadioMenuItem fx:id="miShapePolygon" onAction="#onShapePolygon" text="%menu.polygon">
+                                    <toggleGroup>
+                                        <fx:reference source="group" />
+                                    </toggleGroup>
+                                    </RadioMenuItem>
+                                </Menu>
                                 <SeparatorMenuItem/>
                                 <MenuItem fx:id="miPrevMediaFile" onAction="#onPrevMedia"
                                           text="%menu.previousMediaFile">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="P" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <MenuItem fx:id="miNextMediaFile" onAction="#onNextMediaFile"
                                           text="%menu.nextMediaFile">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="N" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <SeparatorMenuItem/>
                                 <MenuItem fx:id="miGoToUnlabeledMediaFile" onAction="#onGoToUnlabeledMediaFile"
                                           text="%menu.goToUnlabeledMediaFile">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="G" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="G" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                             </items>
@@ -137,14 +138,12 @@
                                 <SeparatorMenuItem/>
                                 <MenuItem fx:id="miShowHint" onAction="#onShowHint" text="%menu.showHint">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="UP"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                                 <MenuItem fx:id="miClearHint" onAction="#onClearHint" text="%menu.clearHint">
                                     <accelerator>
-                                        <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="DOWN"
-                                                            shortcut="DOWN"/>
+                                        <KeyCodeCombination alt="UP" code="H" control="UP" meta="UP" shift="DOWN" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
                             </items>

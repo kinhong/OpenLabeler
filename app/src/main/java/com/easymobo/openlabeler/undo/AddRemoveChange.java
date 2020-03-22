@@ -17,7 +17,7 @@
 
 package com.easymobo.openlabeler.undo;
 
-import com.easymobo.openlabeler.ui.ObjectTag;
+import com.easymobo.openlabeler.tag.ObjectTag;
 import javafx.collections.ObservableList;
 
 import java.util.Objects;

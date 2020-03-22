@@ -17,12 +17,12 @@
   ~ ==============================================================================
   -->
 
-<?import com.easymobo.openlabeler.ui.TagBoard?>
+<?import com.easymobo.openlabeler.tag.TagBoard?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.StackPane?>
-<fx:root type="TagBoard" stylesheets="@/css/OpenLabeler.css"
+<fx:root type="com.easymobo.openlabeler.tag.TagBoard" stylesheets="@/css/OpenLabeler.css"
          xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <children>
         <StackPane fx:id="paddingPane">

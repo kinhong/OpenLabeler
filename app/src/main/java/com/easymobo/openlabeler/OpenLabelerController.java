@@ -22,16 +22,17 @@ import com.easymobo.openlabeler.model.ObjectModel;
 import com.easymobo.openlabeler.preference.PreferencePane;
 import com.easymobo.openlabeler.preference.Settings;
 import com.easymobo.openlabeler.support.SupportInfoPane;
+import com.easymobo.openlabeler.tag.ObjectTag;
+import com.easymobo.openlabeler.tag.ShapeItem;
+import com.easymobo.openlabeler.tag.TagBoard;
 import com.easymobo.openlabeler.tensorflow.TFTrainer;
 import com.easymobo.openlabeler.ui.MediaPane;
 import com.easymobo.openlabeler.ui.MediaTableView.MediaFile;
 import com.easymobo.openlabeler.ui.ObjectTableView;
-import com.easymobo.openlabeler.ui.ObjectTag;
-import com.easymobo.openlabeler.ui.TagBoard;
-import com.easymobo.openlabeler.undo.BoundsChange;
 import com.easymobo.openlabeler.undo.ChangeBase;
 import com.easymobo.openlabeler.undo.ListChange;
 import com.easymobo.openlabeler.undo.NameChange;
+import com.easymobo.openlabeler.undo.ShapeChange;
 import com.easymobo.openlabeler.util.AppUtils;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
@@ -78,6 +79,8 @@ import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.easymobo.openlabeler.tag.ShapeItem.Type.POLYGON;
+import static com.easymobo.openlabeler.tag.ShapeItem.Type.RECTANGLE;
 import static javafx.scene.control.Alert.AlertType.CONFIRMATION;
 import static org.reactfx.EventStreams.changesOf;
 import static org.reactfx.EventStreams.merge;
@@ -96,9 +99,12 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     private Menu menuOpenRecent;
     @FXML
     private MenuItem miClose, miSave, msPreference, miPreference, msExit, miExit,
-          miUndo, miRedo, miCut, miCopy, miPaste, miDelete, miPrevMediaFile, miNextMediaFile, miGoToUnlabeledMediaFile,
+          miUndo, miRedo, miCut, miCopy, miPaste, miDelete,
+          miPrevMediaFile, miNextMediaFile, miGoToUnlabeledMediaFile,
           miZoomIn, miZoomOut, miZoomFit, miRotateLeft, miRotateRight, miShowHint, miClearHint,
           msAbout, miAbout, miInspectLabels;
+    @FXML
+    private RadioMenuItem miShapeRectangle, miShapePolygon;
     @FXML
     private ToolBar toolBar;
     @FXML
@@ -177,7 +183,8 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         }
     }
 
-    public void onFileOpenFile(ActionEvent actionEvent) {
+    @FXML
+    private void onFileOpenFile(ActionEvent actionEvent) {
         ExtensionFilter imageFilter = new ExtensionFilter("Image Files (*.jpg, *.png, *.gif)", "*.JPG", "*.jpg",
                 "*.JPEG", "*.jpeg", "*.PNG", "*.png", "*.GIF", ".gif");
         FileChooser fileChooser = new FileChooser();
@@ -187,13 +194,15 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         openFileOrDir(file);
     }
 
-    public void onFileOpenDir(ActionEvent actionEvent) {
+    @FXML
+    private void onFileOpenDir(ActionEvent actionEvent) {
         DirectoryChooser dirChooser = new DirectoryChooser();
         dirChooser.setTitle(bundle.getString("menu.openMediaDir").replaceAll("_", ""));
         File dir = dirChooser.showDialog(tagBoard.getScene().getWindow());
         openFileOrDir(dir);
     }
 
+    @FXML
     private void openFileOrDir(File file) {
         if (file == null || !file.exists()) {
             return;
@@ -205,7 +214,8 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         mediaPane.openFileOrDir(file);
     }
 
-    public void onFileMenu(Event event) {
+    @FXML
+    private void onFileMenu(Event event) {
         menuOpenRecent.getItems().clear();
         for (Iterator<String> it = Settings.recentFilesProperty.iterator(); it.hasNext(); ) {
             File fileOrDir = new File(it.next());
@@ -223,7 +233,8 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         menuOpenRecent.setDisable(menuOpenRecent.getItems().size() <= 0);
     }
 
-    public void onClose(ActionEvent actionEvent) {
+    @FXML
+    private void onClose(ActionEvent actionEvent) {
         if (canClose()) {
             tagBoard.setModel(null);
             undoManager.forgetHistory();
@@ -231,77 +242,107 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         }
     }
 
-    public void onExit(ActionEvent actionEvent) {
+    @FXML
+    private void onExit(ActionEvent actionEvent) {
         if (canClose()) {
             close();
             Platform.exit();
         }
     }
 
-    public void onSave(ActionEvent actionEvent) {
+    @FXML
+    private void onSave(ActionEvent actionEvent) {
         save(true);
     }
 
-    public void onUndo(ActionEvent event) {
+    @FXML
+    private void onUndo(ActionEvent event) {
         undoManager.undo();
     }
 
-    public void onRedo(ActionEvent event) {
+    @FXML
+    private void onRedo(ActionEvent event) {
         undoManager.redo();
     }
 
-    public void onCut(ActionEvent event) {
+    @FXML
+    private void onShapeMenu() {
+        miShapeRectangle.setSelected(Settings.getEditShape() == RECTANGLE);
+        miShapePolygon.setSelected(Settings.getEditShape() == POLYGON);
+    }
+
+    @FXML
+    private void onShapeRectangle(ActionEvent event) {
+        Settings.setEditShape(RECTANGLE);
+    }
+
+    @FXML
+    private void onShapePolygon(ActionEvent event) {
+        Settings.setEditShape(ShapeItem.Type.POLYGON);
+    }
+
+    @FXML
+    private void onCut(ActionEvent event) {
         ObjectTag tag = tagBoard.selectedObjectProperty().get();
         toClipboard(tag.getModel());
         tagBoard.deleteSelected(bundle.getString("menu.cut"));
     }
 
-    public void onCopy(ActionEvent event) {
+    @FXML
+    private void onCopy(ActionEvent event) {
         ObjectTag tag = tagBoard.selectedObjectProperty().get();
         toClipboard((ObjectModel)tag.getModel().clone());
     }
 
-    public void onPaste(ActionEvent event) {
+    @FXML
+    private void onPaste(ActionEvent event) {
         ObjectModel model = fromClipboard();
         if (model != null) {
             tagBoard.addObjectTag((ObjectModel)model.clone(), bundle.getString("menu.paste"));
         }
     }
 
-    public void onDelete(ActionEvent event) {
+    @FXML
+    private void onDelete(ActionEvent event) {
         tagBoard.deleteSelected(bundle.getString("menu.delete"));
     }
 
-    public void onPrevMedia(ActionEvent actionEvent) {
+    @FXML
+    private void onPrevMedia(ActionEvent actionEvent) {
         mediaPane.onPrevMediaFile(actionEvent);
     }
 
-    public void onNextMediaFile(ActionEvent actionEvent) {
+    @FXML
+    private void onNextMediaFile(ActionEvent actionEvent) {
         mediaPane.onNextMediaFile(actionEvent);
     }
 
-    public void onGoToUnlabeledMediaFile(ActionEvent actionEvent) {
+    @FXML
+    private void onGoToUnlabeledMediaFile(ActionEvent actionEvent) {
         mediaPane.onGoToUnlabeledMediaFile(actionEvent);
     }
 
-    public void onZoomIn(ActionEvent actionEvent) {
+    @FXML
+    private void onZoomIn(ActionEvent actionEvent) {
         tagBoard.getScale().setX(tagBoard.getScale().getX() * 1.1);
         tagBoard.getScale().setY(tagBoard.getScale().getY() * 1.1);
     }
 
-    public void onZoomOut(ActionEvent actionEvent) {
+    @FXML
+    private void onZoomOut(ActionEvent actionEvent) {
         tagBoard.getScale().setX(tagBoard.getScale().getX() * 0.9);
         tagBoard.getScale().setY(tagBoard.getScale().getY() * 0.9);
     }
 
-    public void onZoomFit(ActionEvent actionEvent) {
+    @FXML
+    private void onZoomFit(ActionEvent actionEvent) {
         zoomFit();
     }
 
     /**
      * Sets the scale transform to roughly fit the scroll pane view port
      */
-    public void zoomFit() {
+    private void zoomFit() {
         if (tagBoard.getImageView().getImage() == null) {
             return;
         }
@@ -320,41 +361,50 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         tagBoard.getScale().setY(factor);
     }
 
-    public void onPreference(ActionEvent actionEvent) {
+    @FXML
+    private  void onPreference(ActionEvent actionEvent) {
         new PreferencePane().showAndWait();
     }
 
-    public void onRotateLeft(ActionEvent event) {
+    @FXML
+    private void onRotateLeft(ActionEvent event) {
         rotate(-90);
     }
 
-    public void onRotateRight(ActionEvent event) {
+    @FXML
+    private void onRotateRight(ActionEvent event) {
         rotate(90);
     }
 
+    @FXML
     private void rotate(int angle) {
         tagBoard.rotate(angle);
     }
 
-    public void onShowHint(ActionEvent event) {
+    @FXML
+    private void onShowHint(ActionEvent event) {
         tagBoard.showHints();
     }
 
-    public void onClearHint(ActionEvent event) {
+    @FXML
+    private void onClearHint(ActionEvent event) {
         tagBoard.clearHints();
     }
 
-    public void onInspectLabels(ActionEvent event) {
+    @FXML
+    private void onInspectLabels(ActionEvent event) {
 
     }
 
-    public void onAbout(ActionEvent actionEvent) {
+    @FXML
+    private void onAbout(ActionEvent actionEvent) {
         Stage aboutDialog = OpenLabeler.createAboutStage(bundle);
         aboutDialog.initOwner(tagBoard.getScene().getWindow());
         aboutDialog.showAndWait();
     }
 
-    public void onSupportInfo(ActionEvent actionEvent) {
+    @FXML
+    private void onSupportInfo(ActionEvent actionEvent) {
         new SupportInfoPane().showAndWait();
     }
 
@@ -491,9 +541,9 @@ public class OpenLabelerController implements Initializable, AutoCloseable
                     target.nameProperty().addListener((observable, oldValue, newValue) -> save(false));
                     changes.add(es);
 
-                    es = changesOf(target.boundsProperty()).map(c -> new BoundsChange(bundle.getString("menu.changeBndBox"), target.boundsProperty(), c));
+                    es = changesOf(target.shapeItemProperty()).map(c -> new ShapeChange(bundle.getString("menu.changeShape"), target.shapeItemProperty(), c));
                     target.getProperties().put("EventStreamBounds", es);
-                    target.boundsProperty().addListener((observable, oldValue, newValue) -> save(false));
+                    target.shapeItemProperty().addListener((observable, oldValue, newValue) -> save(false));
                     changes.add(es);
                 });
             }

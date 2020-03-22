@@ -17,19 +17,19 @@
 
 package com.easymobo.openlabeler.undo;
 
+import com.easymobo.openlabeler.tag.ShapeItem;
 import javafx.beans.property.Property;
-import javafx.geometry.Bounds;
 import org.reactfx.Change;
 
 import java.util.Objects;
 
-public class BoundsChange extends PropertyChange<Bounds>
+public class ShapeChange extends PropertyChange<ShapeItem>
 {
-   public BoundsChange(String name, Property<Bounds> property, Bounds oldValue, Bounds newValue) {
+   public ShapeChange(String name, Property<ShapeItem> property, ShapeItem oldValue, ShapeItem newValue) {
       super(name, property, oldValue, newValue);
    }
 
-   public BoundsChange(String name, Property<Bounds> property, Change<Bounds> c) {
+   public ShapeChange(String name, Property<ShapeItem> property, Change<ShapeItem> c) {
       super(name, property, c.getOldValue(), c.getNewValue());
    }
 
@@ -39,14 +39,14 @@ public class BoundsChange extends PropertyChange<Bounds>
    }
 
    @Override
-   public BoundsChange invert() {
-      return new BoundsChange(name, property, newValue, oldValue);
+   public ShapeChange invert() {
+      return new ShapeChange(name, property, newValue, oldValue);
    }
 
    @Override
    public boolean equals(Object other) {
-      if (other instanceof BoundsChange) {
-         BoundsChange that = (BoundsChange) other;
+      if (other instanceof ShapeChange) {
+         ShapeChange that = (ShapeChange) other;
          return Objects.equals(this.name, that.name)
                  && Objects.equals(this.property, that.property)
                  && Objects.equals(this.oldValue, that.oldValue)
