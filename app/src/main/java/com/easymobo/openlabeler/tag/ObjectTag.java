@@ -21,7 +21,7 @@ import com.easymobo.openlabeler.model.ObjectModel;
 import com.easymobo.openlabeler.preference.NameColor;
 import com.easymobo.openlabeler.preference.Settings;
 import com.easymobo.openlabeler.ui.NameEditor;
-import com.easymobo.openlabeler.util.AppUtils;
+import com.easymobo.openlabeler.util.Colors;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
@@ -74,7 +74,7 @@ public class ObjectTag extends TagBase
 
         fillColorProperty.bind(Bindings.createObjectBinding(() -> {
             NameColor item = Settings.recentNamesProperty.getByPrefix(getModel().getName());
-            return item == null ? Settings.getObjectFillColor() : AppUtils.applyAlpha(item.getColor(), 0.3);
+            return item == null ? Settings.getObjectFillColor() : Colors.applyAlpha(item.getColor(), 0.3);
         },  Settings.recentNamesProperty));
     }
 

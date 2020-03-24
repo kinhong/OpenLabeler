@@ -68,7 +68,7 @@ import static com.easymobo.openlabeler.tag.ShapeItem.Type.RECTANGLE;
 public class TagBoard extends Group implements AutoCloseable
 {
    @FXML
-   private StackPane paddingPane;
+   private StackPane board;
    @FXML
    private ImageView imageView;
    @FXML
@@ -131,32 +131,32 @@ public class TagBoard extends Group implements AutoCloseable
          LOG.log(Level.SEVERE, "Unable to load FXML", ex);
       }
 
-      paddingPane.setOnMousePressed(event -> onMousePressed(event));
-      paddingPane.setOnMouseMoved(event -> onMouseMoved(event));
-      paddingPane.setOnMouseClicked(event -> onMouseClicked(event));
-      paddingPane.setOnMouseDragged(event -> onMouseDragged(event));
-      paddingPane.setOnMouseReleased(event -> onMouseReleased(event));
+      board.setOnMousePressed(event -> onMousePressed(event));
+      board.setOnMouseMoved(event -> onMouseMoved(event));
+      board.setOnMouseClicked(event -> onMouseClicked(event));
+      board.setOnMouseDragged(event -> onMouseDragged(event));
+      board.setOnMouseReleased(event -> onMouseReleased(event));
 
       // context menu
       addEventFilter(ContextMenuEvent.CONTEXT_MENU_REQUESTED, event -> onContextMenuEvent(event));
 
       // add/remove ObjectTag
-      objectsProperty().addListener((ListChangeListener<ObjectTag>) c -> {
-         if (!c.next()) {
+      objectsProperty().addListener((ListChangeListener<ObjectTag>) change -> {
+         if (!change.next()) {
             return;
          }
          Annotation model = getModel();
-         if (c.wasAdded()) {
-            int offset = getChildren().indexOf(paddingPane) + 1;
-            c.getAddedSubList().forEach(objectTag -> {
-               getChildren().add(offset + c.getFrom(), objectTag);
+         if (change.wasAdded()) {
+            int offset = getChildren().indexOf(board) + 1;
+            change.getAddedSubList().forEach(objectTag -> {
+               getChildren().add(offset + change.getFrom(), objectTag);
                if (model != null && !model.getObjects().contains(objectTag.getModel())) {
                   model.getObjects().add(objectTag.getModel());
                }
             });
          }
-         else if (c.wasRemoved()) {
-            c.getRemoved().forEach(objectTag -> {
+         else if (change.wasRemoved()) {
+            change.getRemoved().forEach(objectTag -> {
                getChildren().remove(objectTag);
                if (model != null && model.getObjects().contains(objectTag.getModel())) {
                   model.getObjects().remove(objectTag.getModel());
@@ -227,12 +227,12 @@ public class TagBoard extends Group implements AutoCloseable
       scale = new Scale(1, 1);
       translate = new Translate(PADDING, PADDING);
       rotate = new Rotate();
-      paddingPane.getTransforms().clear();
-      paddingPane.getTransforms().addAll(scale, rotate);
+      board.getTransforms().clear();
+      board.getTransforms().addAll(scale, rotate);
 
       scale.addEventHandler(TransformChangedEvent.TRANSFORM_CHANGED, event -> {
          // Maintain constant padding at different zoom level
-         paddingPane.setPadding(new Insets(Math.max(PADDING / scale.getX(), PADDING / scale.getY())));
+         board.setPadding(new Insets(Math.max(PADDING / scale.getX(), PADDING / scale.getY())));
 
          canvas.setWidth(imageView.getBoundsInLocal().getWidth());
          canvas.setHeight(imageView.getBoundsInLocal().getHeight());
@@ -280,10 +280,7 @@ public class TagBoard extends Group implements AutoCloseable
 
       Point2D pt = imageView.parentToLocal(me.getX(), me.getY());
       if (Settings.getEditShape() == RECTANGLE) {
-         path = new Path();
-         path.getElements().add(new MoveTo(pt.getX(), pt.getY()));
-         points.add(pt);
-         lastPoint = pt;
+         beginShape(pt);
       }
       me.consume();
    }
@@ -309,24 +306,24 @@ public class TagBoard extends Group implements AutoCloseable
       }
       if (Settings.getEditShape() == POLYGON) {
          Point2D pt = imageView.parentToLocal(me.getX(), me.getY());
-         if (me.getClickCount() == 2 && path != null) {
-            closeShape(pt);
-            return;
-         }
          if (path == null) {
-            // Start a polygon shape with SHORTCUT + mouse click
-            if (!me.isShortcutDown()) {
+            // Start a polygon shape with double-click or SHORTCUT + mouse click
+            if (!me.isShortcutDown() && me.getClickCount() != 2) {
                me.consume();
                return;
             }
-            path = new Path();
-            path.getElements().add(new MoveTo(pt.getX(), pt.getY()));
+            beginShape(pt);
          }
          else {
+            // End a polygon shape with double-click (and space key)
+            if (me.getClickCount() == 2) {
+               endShape(pt);
+               return;
+            }
             path.getElements().add(new LineTo(pt.getX(), pt.getY()));
+            points.add(pt);
+            updatePath(pt);
          }
-         points.add(pt);
-         updatePath(pt);
       }
       me.consume();
    }
@@ -335,7 +332,7 @@ public class TagBoard extends Group implements AutoCloseable
       if (Settings.getEditShape() == RECTANGLE && path != null) {
          updateDragBox(imageView.parentToLocal(me.getX(), me.getY()));
          path.getElements().add(new LineTo(lastPoint.getX(), lastPoint.getY()));
-         closeShape(imageView.parentToLocal(me.getX(), me.getY()));
+         endShape(imageView.parentToLocal(me.getX(), me.getY()));
       }
       me.consume();
    }
@@ -407,12 +404,20 @@ public class TagBoard extends Group implements AutoCloseable
             updatePath(lastPoint);
          }
          else if (event.getCode() == KeyCode.SPACE) {
-            closeShape(lastPoint);
+            endShape(lastPoint);
          }
       }
    }
 
-   private void closeShape(Point2D mousePt) {
+   private void beginShape(Point2D mousePt) {
+      path = new Path();
+      path.getElements().add(new MoveTo(mousePt.getX(), mousePt.getY()));
+      points.add(mousePt);
+      objectsProperty.forEach(tag -> tag.setMouseTransparent(true));
+      hintsProperty.forEach(tag -> tag.setMouseTransparent(true));
+   }
+
+   private void endShape(Point2D mousePt) {
       if (mousePt != null && path != null) {
          ObjectTag objectTag = null;
          String lastLabel = NameEditor.getLastLabel(bundle);
@@ -438,6 +443,10 @@ public class TagBoard extends Group implements AutoCloseable
             }
          }
       }
+
+      objectsProperty.forEach(tag -> tag.setMouseTransparent(false));
+      hintsProperty.forEach(tag -> tag.setMouseTransparent(false));
+
       canvas.getGraphicsContext2D().clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
       points.clear();
       path = null;
@@ -491,7 +500,7 @@ public class TagBoard extends Group implements AutoCloseable
          deleteSelected(bundle.getString("menu.delete"));
       }
       else if (code == KeyCode.ESCAPE) {
-         closeShape(null);
+         endShape(null);
       }
       else if (selectedObjectProperty.get() != null && code.isArrowKey() && event.isShortcutDown()) {
          selectedObjectProperty.get().move(

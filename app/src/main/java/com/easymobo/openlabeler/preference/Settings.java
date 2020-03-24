@@ -21,7 +21,7 @@ import com.easymobo.openlabeler.preference.PreferenceUtil.BooleanPrefProperty;
 import com.easymobo.openlabeler.preference.PreferenceUtil.ColorPrefProperty;
 import com.easymobo.openlabeler.preference.PreferenceUtil.StringPrefProperty;
 import com.easymobo.openlabeler.tag.ShapeItem.Type;
-import com.easymobo.openlabeler.util.AppUtils;
+import com.easymobo.openlabeler.util.Colors;
 import javafx.beans.property.*;
 import javafx.collections.FXCollections;
 import javafx.scene.paint.Color;
@@ -107,7 +107,7 @@ public class Settings
     public static ReadOnlyObjectProperty<Color> objectFillColorProperty = new SimpleObjectProperty() {
         @Override
         public Color get() {
-            return AppUtils.applyAlpha(getObjectStrokeColor(), 0.3);
+            return Colors.applyAlpha(getObjectStrokeColor(), 0.3);
         }
     };
     public static Color getObjectFillColor() {
@@ -206,7 +206,7 @@ public class Settings
     public static ReadOnlyObjectProperty<Color> hintFillColorProperty = new SimpleObjectProperty() {
         @Override
         public Color get() {
-            return AppUtils.applyAlpha(getHintStrokeColor(), 0.3);
+            return Colors.applyAlpha(getHintStrokeColor(), 0.3);
         }
     };
     public static Color getHintFillColor() {

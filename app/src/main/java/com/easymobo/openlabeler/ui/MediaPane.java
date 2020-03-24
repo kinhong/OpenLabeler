@@ -235,7 +235,7 @@ public class MediaPane extends BorderPane implements AutoCloseable
         final long annotated[] = {0};
         MediaFile nextUnlabeled = null;
         for (MediaFile media : files) {
-            if (media.refresh().isAnnotated()) {
+            if (media.refresh().getObjectCount() > 0) {
                 annotated[0]++;
             }
             else if (nextUnlabeled == null) {

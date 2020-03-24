@@ -25,7 +25,7 @@
 <fx:root type="com.easymobo.openlabeler.tag.TagBoard" stylesheets="@/css/OpenLabeler.css"
          xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <children>
-        <StackPane fx:id="paddingPane">
+        <StackPane fx:id="board">
             <children>
                 <ImageView fx:id="imageView" pickOnBounds="true" preserveRatio="true"/>
                 <Canvas fx:id="canvas" pickOnBounds="true"/>

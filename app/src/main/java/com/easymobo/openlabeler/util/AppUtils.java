@@ -327,10 +327,6 @@ public class AppUtils
             .filter(transform -> transform.getClass().equals(clz)).map(clz::cast).findFirst().get();
    }
 
-   public static Color applyAlpha(Color base, double alpha) {
-      return new Color(base.getRed(), base.getGreen(), base.getBlue(), alpha);
-   }
-
    public static void addOutlineAnimation(Shape shape) {
       var timeline = (Timeline) shape.getProperties().get("TIMELINE");
       if (timeline != null) {

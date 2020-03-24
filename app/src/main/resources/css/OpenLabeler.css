@@ -36,6 +36,18 @@
     -fx-focus-color: transparent;
 }
 
+/* Split Pane */
+.split-pane > .split-pane-divider {
+    -fx-padding: 0 0.5em 0 0.5em;
+}
+
+.split-pane:horizontal > .split-pane-divider {
+    -fx-background-color: transparent;
+}
+.split-pane:vertical > .split-pane-divider {
+    -fx-background-color: transparent;
+}
+
 /* Tooltips */
 .tooltip {
     -fx-background-radius: 3 3 3 3;

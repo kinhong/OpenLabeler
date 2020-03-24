@@ -95,14 +95,20 @@
                                 <SeparatorMenuItem/>
                                 <Menu onShowing="#onShapeMenu" text="%menu.shape">
                                     <RadioMenuItem fx:id="miShapeRectangle" onAction="#onShapeRectangle" text="%menu.rectangle">
-                                    <toggleGroup>
-                                        <ToggleGroup fx:id="group" />
-                                    </toggleGroup>
+                                        <accelerator>
+                                        <KeyCodeCombination alt="UP" code="G" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
+                                        </accelerator>
+                                        <toggleGroup>
+                                            <ToggleGroup fx:id="group" />
+                                        </toggleGroup>
                                     </RadioMenuItem>
                                     <RadioMenuItem fx:id="miShapePolygon" onAction="#onShapePolygon" text="%menu.polygon">
-                                    <toggleGroup>
-                                        <fx:reference source="group" />
-                                    </toggleGroup>
+                                        <accelerator>
+                                            <KeyCodeCombination alt="UP" code="R" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
+                                        </accelerator>
+                                        <toggleGroup>
+                                            <fx:reference source="group" />
+                                        </toggleGroup>
                                     </RadioMenuItem>
                                 </Menu>
                                 <SeparatorMenuItem/>

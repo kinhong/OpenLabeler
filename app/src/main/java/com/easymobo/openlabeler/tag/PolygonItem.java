@@ -156,32 +156,8 @@ public class PolygonItem extends Polygon implements ShapeItem
          super(0, 0, TagBase.HANDLE_RADIUS);
          index = idx;
          points = pts;
-
-         centerXProperty().bindBidirectional(new SimpleDoubleProperty()
-         {
-            @Override
-            public double get() {
-               return points.get(idx * 2);
-            }
-
-            @Override
-            public void set(double newValue) {
-               points.set(idx * 2, newValue);
-            }
-         });
-
-         centerYProperty().bindBidirectional(new SimpleDoubleProperty()
-         {
-            @Override
-            public double get() {
-               return points.get(idx * 2 + 1);
-            }
-
-            @Override
-            public void set(double newValue) {
-               points.set(idx * 2 + 1, newValue);
-            }
-         });
+         setCenterX(points.get(idx * 2));
+         setCenterY(points.get(idx * 2 + 1));
 
          var changeListListener = new ListChangeListener<Double>()
          {
@@ -241,8 +217,8 @@ public class PolygonItem extends Polygon implements ShapeItem
          if (y > boundsDimension.getHeight()) {
             y = boundsDimension.getHeight();
          }
-         setCenterX(x);
-         setCenterY(y);
+         points.set(index * 2, x);
+         points.set(index * 2 + 1, y);
       }
 
       private void onMouseReleased(MouseEvent event) {

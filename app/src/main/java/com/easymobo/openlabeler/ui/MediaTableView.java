@@ -17,6 +17,7 @@
 
 package com.easymobo.openlabeler.ui;
 
+import com.easymobo.openlabeler.model.Annotation;
 import com.easymobo.openlabeler.util.AppUtils;
 import com.easymobo.openlabeler.util.AppUtils.ImageTableCell;
 import javafx.application.Platform;
@@ -29,13 +30,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Label;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import org.apache.commons.lang3.SystemUtils;
 
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Unmarshaller;
 import java.awt.*;
 import java.io.File;
 import java.lang.invoke.MethodHandles;
@@ -47,7 +49,7 @@ import java.util.logging.Logger;
 public class MediaTableView extends TableView<MediaTableView.MediaFile>
 {
     @FXML
-    private TableColumn<MediaFile, Boolean> colAnnotated;
+    private TableColumn<MediaFile, Integer> colAnnotated;
     @FXML
     private TableColumn<MediaFile, Image> colThumb;
     @FXML
@@ -56,9 +58,9 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
     private CheckBox chkShowAll;
 
     private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
+    private static JAXBContext jaxbContext;
 
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
-    ;
     private FilteredList<MediaFile> filtered;
 
     public MediaTableView() {
@@ -68,13 +70,14 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
 
         try {
             loader.load();
+            jaxbContext = JAXBContext.newInstance(Annotation.class);
         }
         catch (Exception ex) {
-            LOG.log(Level.SEVERE, "Unable to load FXML", ex);
+            LOG.log(Level.SEVERE, "Unable to initialize", ex);
         }
 
         colAnnotated.setCellFactory(param -> new AnnotatedTableCell());
-        colAnnotated.setCellValueFactory(cell -> cell.getValue().isAnnotatedProperty());
+        colAnnotated.setCellValueFactory(cell -> cell.getValue().objectCountProperty());
 
         colThumb.setCellFactory(param -> new ImageTableCell());
         colThumb.setCellValueFactory(cell -> cell.getValue().thumbProperty());
@@ -87,11 +90,11 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
 
         getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         getSelectionModel().selectedItemProperty().addListener((observable, oldFile, newFile) -> {
-            if (oldFile != null && oldFile.isAnnotated() && !chkShowAll.isSelected()) {
+            if (oldFile != null && oldFile.getObjectCount() > 0 && !chkShowAll.isSelected()) {
                 Platform.runLater(() -> {
                     // Force a refresh
                     filtered.setPredicate(null);
-                    filtered.setPredicate(mediaFile -> !mediaFile.isAnnotated());
+                    filtered.setPredicate(mediaFile -> mediaFile.getObjectCount() <= 0);
                 });
             }
         });
@@ -119,7 +122,7 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
                 MenuItem item = new MenuItem(media);
                 item.setOnAction(ev -> Desktop.getDesktop().browseFileDirectory(file));
                 menu.getItems().add(item);
-                if (file.isAnnotated()) {
+                if (file.getObjectCount() > 0) {
                     item = new MenuItem(annotation);
                     item.setOnAction(ev -> Desktop.getDesktop().browseFileDirectory(AppUtils.getAnnotationFile(file)));
                     menu.getItems().add(item);
@@ -143,36 +146,32 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
             filtered.setPredicate(null);
         }
         else {
-            filtered.setPredicate(mediaFile -> !mediaFile.isAnnotated());
+            filtered.setPredicate(mediaFile -> mediaFile.getObjectCount() <= 0);
         }
         int index = getSelectionModel().getSelectedIndex() < 0 ? 0 : getSelectionModel().getSelectedIndex();
         getSelectionModel().select(index);
         scrollTo(index);
     }
 
-    private class AnnotatedTableCell extends TableCell<MediaFile, Boolean>
+    private class AnnotatedTableCell extends TableCell<MediaFile, Integer>
     {
-        private Rectangle rect = new Rectangle();
+        private Label count = new Label();
 
         public AnnotatedTableCell() {
             setPadding(Insets.EMPTY);
             setAlignment(Pos.CENTER);
-            rect.setX(0);
-            rect.setY(0);
-            rect.setWidth(10);
-            rect.setHeight(10);
-            rect.setFill(Color.TRANSPARENT);
-            setGraphic(rect);
+            setGraphic(count);
         }
 
         @Override
-        protected void updateItem(Boolean annotated, boolean empty) {
-            super.updateItem(annotated, empty);
+        protected void updateItem(Integer objectCount, boolean empty) {
+            super.updateItem(objectCount, empty);
             if (empty) {
-                rect.setFill(Color.TRANSPARENT);
+                count.setVisible(false);
             }
             else {
-                rect.setFill(annotated ? Color.LIGHTGREEN : Color.TRANSPARENT);
+                count.setVisible(objectCount != null);
+                count.setText(String.valueOf(objectCount));
             }
         }
     };
@@ -202,15 +201,27 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
             super(file.getAbsolutePath());
         }
 
-        private BooleanProperty isAnnotatedProperty = new SimpleBooleanProperty(false);
-        public ReadOnlyBooleanProperty isAnnotatedProperty() {
-            return isAnnotatedProperty;
+        private SimpleObjectProperty<Integer> objectCountProperty = new SimpleObjectProperty<>(0);
+        public ReadOnlyObjectProperty<Integer> objectCountProperty() {
+            return objectCountProperty;
         }
-        public boolean isAnnotated() {
-            return isAnnotatedProperty.get();
+        public int getObjectCount() {
+            return objectCountProperty.get() == null ? 0 : objectCountProperty.get();
         }
         public MediaFile refresh() {
-            isAnnotatedProperty.set(AppUtils.getAnnotationFile(this).exists());
+            var file = AppUtils.getAnnotationFile(this);
+            if (file.exists()) {
+                try {
+                    Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+                    var annotation = (Annotation) unmarshaller.unmarshal(file);
+                    objectCountProperty.set(annotation.getObjects().size());
+                    return this;
+                }
+                catch (Exception ex) {
+                    LOG.log(Level.SEVERE, "Unable to load annotation", ex);
+                }
+            }
+            objectCountProperty.set(null);
             return this;
         }
 
