@@ -29,9 +29,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import org.controlsfx.tools.Borders;
 import org.fxmisc.easybind.EasyBind;
 
 import java.lang.invoke.MethodHandles;
@@ -41,8 +39,6 @@ import java.util.logging.Logger;
 
 public class GeneralPane extends VBox implements Category
 {
-   @FXML
-   private GridPane gpApplication, gpOutput, gpAnnotation;
    @FXML
    private CheckBox chkOpenLastMedia, chkSaveEveryChange, chkAutoSetName, chkAnimateOutline;
    @FXML
@@ -64,10 +60,6 @@ public class GeneralPane extends VBox implements Category
 
       try {
          loader.load();
-         getChildren().addAll(
-               Borders.wrap(gpApplication).lineBorder().title(bundle.getString("menu.application")).buildAll(),
-               Borders.wrap(gpOutput).lineBorder().title(bundle.getString("menu.output")).buildAll(),
-               Borders.wrap(gpAnnotation).lineBorder().title(bundle.getString("menu.annotation")).buildAll());
       }
       catch (Exception ex) {
          LOG.log(Level.SEVERE, "Unable to load FXML", ex);
@@ -91,7 +83,7 @@ public class GeneralPane extends VBox implements Category
 
    public void onClearUsedNames(ActionEvent actionEvent) {
       Settings.recentNamesProperty.clear();
-      AppUtils.showInformation(bundle.getString("menu.alert"), bundle.getString("msg.usedNamesCleared"));
+      AppUtils.showInformation(bundle.getString("label.alert"), bundle.getString("msg.usedNamesCleared"));
    }
 
    @Override
@@ -105,7 +97,7 @@ public class GeneralPane extends VBox implements Category
 
    @Override
    public String getName() {
-      return bundle.getString("menu.general");
+      return bundle.getString("label.general");
    }
 
    @Override

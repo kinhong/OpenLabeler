@@ -34,16 +34,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import org.controlsfx.tools.Borders;
 import org.fxmisc.easybind.EasyBind;
+import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
-import java.nio.file.Paths;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,15 +53,15 @@ import java.util.logging.Logger;
 public class TrainingPane extends VBox implements Category
 {
     @FXML
-    private GridPane gpTrainingData, gpModel, gpDocker;
-    @FXML
-    private InputFileChooser txtTFImageDir, txtTFAnnotationDir, txtTFDataDir, txtTFBaseModelDir;
+    private InputFileChooser dirTFImage, dirTFAnnotation, dirTFData, dirTFBaseModel;
     @FXML
     private TextField txtDockerImage, txtContainerHostName, txtContainerName;
     @FXML
     private LabelMapPane labelMapPane;
     @FXML
-    private Label labelNumSamples, labelModelType, labelTrainCkpt;
+    private Label labelNumSamples, labelModelType, labelTrainCkpt, labelDockerProcess;
+    @FXML
+    private FontIcon iconWarn;
     @FXML
     private Button btnCreateTrainData;
     @FXML
@@ -83,19 +81,12 @@ public class TrainingPane extends VBox implements Category
 
         try {
             loader.load();
-            getChildren().addAll(
-                    Borders.wrap(gpTrainingData).lineBorder().title(bundle.getString("menu.trainingData")).buildAll(),
-                    Borders.wrap(gpModel).lineBorder().title(bundle.getString("menu.model")).buildAll(),
-                    Borders.wrap(gpDocker).lineBorder().title(bundle.getString("menu.docker")).buildAll()
-            );
-
         }
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
         }
 
         bindProperties();
-
         load();
     }
 
@@ -104,10 +95,10 @@ public class TrainingPane extends VBox implements Category
         return dirtyProperty;
     }
     public boolean isDirty() {
-        if (!TFTrainer.getLabelMapPath(txtTFDataDir.getText()).toFile().exists()) {
+        if (!TFTrainer.getLabelMapPath(dirTFData.getText()).toFile().exists()) {
             return true;
         }
-        if (!TFTrainer.getModelConfigPath(txtTFBaseModelDir.getText()).toFile().exists()) {
+        if (!TFTrainer.getModelConfigPath(dirTFBaseModel.getText()).toFile().exists()) {
             return true;
         }
         return dirtyProperty.get();
@@ -115,15 +106,15 @@ public class TrainingPane extends VBox implements Category
 
     @Override
     public String getName() {
-        return bundle.getString("menu.train");
+        return bundle.getString("label.train");
     }
 
     @Override
     public void load() {
-        txtTFImageDir.setText(Settings.getTFImageDir());
-        txtTFAnnotationDir.setText(Settings.getTFAnnotationDir());
-        txtTFDataDir.setText(Settings.getTFDataDir());
-        txtTFBaseModelDir.setText(Settings.getTFBaseModelDir());
+        dirTFImage.setText(Settings.getTFImageDir());
+        dirTFAnnotation.setText(Settings.getTFAnnotationDir());
+        dirTFData.setText(Settings.getTFDataDir());
+        dirTFBaseModel.setText(Settings.getTFBaseModelDir());
         txtDockerImage.setText(Settings.getDockerImage());
         txtContainerHostName.setText(Settings.getContainerHostName());
         txtContainerName.setText(Settings.getContainerName());
@@ -134,15 +125,15 @@ public class TrainingPane extends VBox implements Category
         if (!isDirty()) {
             return;
         }
-        Settings.setTFImageDir(txtTFImageDir.getText());
-        Settings.setTFAnnotationDir(txtTFAnnotationDir.getText());
-        Settings.setTFDataDir(txtTFDataDir.getText());
-        Settings.setTFBaseModelDir(txtTFBaseModelDir.getText());
+        Settings.setTFImageDir(dirTFImage.getText());
+        Settings.setTFAnnotationDir(dirTFAnnotation.getText());
+        Settings.setTFDataDir(dirTFData.getText());
+        Settings.setTFBaseModelDir(dirTFBaseModel.getText());
         Settings.setDockerImage(txtDockerImage.getText());
         Settings.setContainerHostName(txtContainerHostName.getText());
         Settings.setContainerName(txtContainerName.getText());
         try {
-            TFTrainer.saveLabelMap(labelMapPane.getItems(), txtTFDataDir.getText());
+            TFTrainer.saveLabelMap(labelMapPane.getItems(), dirTFData.getText());
             config.save();
         }
         catch (IOException ex) {
@@ -151,36 +142,36 @@ public class TrainingPane extends VBox implements Category
     }
 
     public void onCreateTrainData(ActionEvent actionEvent) {
-        Settings.setTFImageDir(txtTFImageDir.getText());
-        Settings.setTFAnnotationDir(txtTFAnnotationDir.getText());
-        Settings.setTFDataDir(txtTFDataDir.getText());
+        Settings.setTFImageDir(dirTFImage.getText());
+        Settings.setTFAnnotationDir(dirTFAnnotation.getText());
+        Settings.setTFDataDir(dirTFData.getText());
         File dataDir = new File(Settings.getTFDataDir());
         if (dataDir.isDirectory() && dataDir.exists()) {
-            var res = AppUtils.showConfirmation(bundle.getString("menu.alert"), bundle.getString("msg.confirmCreateTrainData"));
+            var res = AppUtils.showConfirmation(bundle.getString("label.alert"), bundle.getString("msg.confirmCreateTrainData"));
             if (res.get() != ButtonType.OK) {
                 return;
             }
         }
         btnCreateTrainData.setDisable(true);
         TFTrainer.createTrainData(labelMapPane.getItems());
-        AppUtils.showInformation(bundle.getString("menu.alert"), bundle.getString("msg.trainDataCreated"));
+        AppUtils.showInformation(bundle.getString("label.alert"), bundle.getString("msg.trainDataCreated"));
         btnCreateTrainData.setDisable(false);
     }
 
     private void bindProperties() {
         // Update on any directory changes
-        txtTFImageDir.textProperty().addListener((observable, oldValue, newValue) -> updateNumSamples());
-        txtTFAnnotationDir.textProperty().addListener((observable, oldValue, newValue) -> updateNumSamples());
-        txtTFDataDir.textProperty().addListener((observable, oldValue, newValue) -> updateLabelMap());
-        txtTFBaseModelDir.textProperty().addListener((observable, oldValue, newValue) -> updateTraining());
+        dirTFImage.textProperty().addListener((observable, oldValue, newValue) -> updateNumSamples());
+        dirTFAnnotation.textProperty().addListener((observable, oldValue, newValue) -> updateNumSamples());
+        dirTFData.textProperty().addListener((observable, oldValue, newValue) -> updateLabelMap());
+        dirTFBaseModel.textProperty().addListener((observable, oldValue, newValue) -> updateTraining());
 
         BooleanBinding changes[] = {
-                txtTFImageDir.textProperty().isNotEqualTo(Settings.tfImageDirProperty),
-                txtTFAnnotationDir.textProperty().isNotEqualTo(Settings.tfAnnotationDirProperty),
-                txtTFDataDir.textProperty().isNotEqualTo(Settings.tfDataDirProperty),
+                dirTFImage.textProperty().isNotEqualTo(Settings.tfImageDirProperty),
+                dirTFAnnotation.textProperty().isNotEqualTo(Settings.tfAnnotationDirProperty),
+                dirTFData.textProperty().isNotEqualTo(Settings.tfDataDirProperty),
                 new SimpleListProperty(labelMapPane.getItems()).isNotEqualTo(
-                        FXCollections.observableList(TFTrainer.getLabelMapItems(txtTFDataDir.getText()))),
-                txtTFBaseModelDir.textProperty().isNotEqualTo(Settings.tfBaseModelDirProperty),
+                        FXCollections.observableList(TFTrainer.getLabelMapItems(dirTFData.getText()))),
+                dirTFBaseModel.textProperty().isNotEqualTo(Settings.tfBaseModelDirProperty),
                 txtDockerImage.textProperty().isNotEqualTo(Settings.dockerImageProperty),
                 txtContainerHostName.textProperty().isNotEqualTo(Settings.containerHostNameProperty),
                 txtContainerName.textProperty().isNotEqualTo(Settings.containerNameProperty),
@@ -192,9 +183,8 @@ public class TrainingPane extends VBox implements Category
 
     private void updateNumSamples() {
         int num = 0;
-        if (Paths.get(txtTFImageDir.getText()).toFile().exists()
-                && Paths.get(txtTFAnnotationDir.getText()).toFile().exists()) {
-            num = Paths.get(txtTFAnnotationDir.getText()).toFile().listFiles((dir, name) -> {
+        if (dirTFImage.toFile().exists() && dirTFAnnotation.toFile().exists()) {
+            num = dirTFAnnotation.toFile().listFiles((dir, name) -> {
                 name = name.toLowerCase();
                 return name.endsWith(".xml");
             }).length;
@@ -204,14 +194,16 @@ public class TrainingPane extends VBox implements Category
 
     private void updateLabelMap() {
         labelMapPane.getItems().clear();
-        labelMapPane.getItems().addAll(TFTrainer.getLabelMapItems(txtTFDataDir.getText()));
+        labelMapPane.getItems().addAll(TFTrainer.getLabelMapItems(dirTFData.getText()));
         bindProperties();
     }
 
     private void updateTraining() {
     new Thread(() -> {
             // Training controls
-            String baseModelDir = txtTFBaseModelDir.getText();
+            String baseModelDir = dirTFBaseModel.getText();
+
+            var info = TFTrainer.getInfo();
 
             config = new TFTrainer.PipelineConfig(baseModelDir);
             var modelType = config.getType() == null ? bundle.getString("msg.notFound") : config.getType();
@@ -221,34 +213,36 @@ public class TrainingPane extends VBox implements Category
             int checkpoint = TFTrainer.getTrainCkpt(baseModelDir);
             var trainCkpt = checkpoint < 0 ? bundle.getString("msg.notFound") : String.valueOf(checkpoint);
             if (checkpoint > 0) {
-                Button btn = new Button(bundle.getString("menu.exportGraph"));
+                Button btn = new Button(bundle.getString("label.exportGraph"));
                 btn.setOnAction(event -> exportGraph(btn, checkpoint));
                 buttons.add(btn);
             }
 
-            boolean canTrain = TFTrainer.canTrain(txtTFDataDir.getText(), txtTFBaseModelDir.getText());
+            boolean canTrain = TFTrainer.canTrain(dirTFData.getText(), dirTFBaseModel.getText());
             if (canTrain) {
                 if (TFTrainer.isTraining()) {
-                    Button btn = new Button(bundle.getString("menu.stopTrain"));
+                    Button btn = new Button(bundle.getString("label.stopTrain"));
                     btn.setOnAction(event -> train(false, false));
                     buttons.add(btn);
                 }
                 else {
-                    Button btn1 = new Button(bundle.getString("menu.continueTrain"));
+                    Button btn1 = new Button(bundle.getString("label.continueTrain"));
                     btn1.setOnAction(event -> train(true, false));
-                    Button btn2 = new Button(bundle.getString("menu.restartTrain"));
+                    Button btn2 = new Button(bundle.getString("label.restartTrain"));
                     btn2.setOnAction(event -> train(true, true));
                     buttons.addAll(Arrays.asList(btn1, btn2));
                 }
             }
             else {
-                Button btn = new Button(bundle.getString("menu.startTrain"));
+                Button btn = new Button(bundle.getString("label.startTrain"));
                 btn.setOnAction(event -> train(true, true));
-                btn.disableProperty().bind(Bindings.or(txtTFDataDir.textProperty().isEmpty(), Bindings.or(txtTFImageDir.textProperty().isEmpty(), txtTFAnnotationDir.textProperty().isEmpty())));
+                btn.disableProperty().bind(Bindings.or(dirTFData.textProperty().isEmpty(), Bindings.or(dirTFImage.textProperty().isEmpty(), dirTFAnnotation.textProperty().isEmpty())));
                 buttons.add(btn);
             }
 
             Platform.runLater(() -> {
+                iconWarn.setVisible(info == null);
+                labelDockerProcess.setText(info == null ? bundle.getString("msg.dockerProcessError") : String.format("%s, %s", info.getName(), info.getServerVersion()));
                 labelModelType.setText(modelType);
                 labelTrainCkpt.setText(trainCkpt);
                 boxTrain.getChildren().clear();
@@ -260,14 +254,14 @@ public class TrainingPane extends VBox implements Category
     private void exportGraph(Button source, int checkpoint) {
         save();
         TFTrainer.exportGraph(checkpoint);
-        AppUtils.showInformation(bundle.getString("menu.alert"), MessageFormat.format(bundle.getString("msg.exportGraph"), checkpoint));
+        AppUtils.showInformation(bundle.getString("label.alert"), MessageFormat.format(bundle.getString("msg.exportGraph"), checkpoint));
         source.setDisable(true);
     }
 
     private void train(boolean start, boolean restart) {
         save();
         TFTrainer.train(start, restart);
-        AppUtils.showInformation(bundle.getString("menu.alert"),
+        AppUtils.showInformation(bundle.getString("label.alert"),
                 bundle.getString(start ? (restart ? "msg.startTrain" : "msg.continueTrain") : "msg.stopTrain"));
         updateTraining();
     }

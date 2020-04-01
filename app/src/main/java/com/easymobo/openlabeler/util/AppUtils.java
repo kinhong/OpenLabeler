@@ -18,6 +18,9 @@
 package com.easymobo.openlabeler.util;
 
 import com.easymobo.openlabeler.preference.Settings;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import javafx.animation.Interpolator;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -46,9 +49,13 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.nio.file.*;
+import java.text.DecimalFormat;
+import java.text.MessageFormat;
+import java.text.ParsePosition;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
@@ -318,8 +325,16 @@ public class AppUtils
       createAlert(AlertType.INFORMATION, title, message).showAndWait();
    }
 
+   public static void showWarning(String title, String message) {
+      createAlert(AlertType.WARNING, title, message);
+   }
+
    public static Optional<ButtonType> showConfirmation(String title, String message) {
       return createAlert(AlertType.CONFIRMATION, title, message).showAndWait();
+   }
+
+   public static void showError(String title, String message) {
+      createAlert(AlertType.ERROR, title, message);
    }
 
    public static <T> T getTransform(Node node, Class<T> clz) {
@@ -401,5 +416,35 @@ public class AppUtils
             bounds.getMinY() + amount,
             bounds.getMaxX() - amount,
             bounds.getMaxY() - amount);
+   }
+
+   public static TextFormatter createNumberTextFormatter() {
+      DecimalFormat format = new DecimalFormat("#");
+      return new TextFormatter<>(c -> {
+         if (c.getControlNewText().isEmpty()) {
+            return c;
+         }
+         ParsePosition parsePosition = new ParsePosition(0);
+         Object object = format.parse(c.getControlNewText(), parsePosition);
+         return (object == null || parsePosition.getIndex() < c.getControlNewText().length()) ? null : c;
+      });
+   };
+
+   public static ObjectMapper createJSONMapper() {
+      ObjectMapper mapper = new ObjectMapper();
+
+      // SerializationFeature for changing how JSON is written
+      mapper.disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+      mapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+      // DeserializationFeature for changing how JSON is read as POJOs:
+      mapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+      mapper.enable(DeserializationFeature.ACCEPT_EMPTY_STRING_AS_NULL_OBJECT);
+      return mapper;
+   }
+
+   public static String format(ResourceBundle bundle, String key, Object... args) {
+      MessageFormat format = new MessageFormat(bundle.getString(key));
+      return format.format(args);
    }
 }

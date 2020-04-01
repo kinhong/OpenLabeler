@@ -23,7 +23,7 @@
 <fx:root type="com.easymobo.openlabeler.ui.NameEditor" xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
     <children>
-        <CustomTextField fx:id="text" promptText="%menu.label" text=""/>
+        <CustomTextField fx:id="text" promptText="%label.label" text=""/>
         <ListView fx:id="list" prefHeight="200.0" prefWidth="200.0"/>
     </children>
 </fx:root>

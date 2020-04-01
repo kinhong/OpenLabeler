@@ -54,7 +54,9 @@ public class Settings
     private static final String TF_LABEL_MAP_FILE = "tfLabelMapFile";
     private static final String TF_SAVED_MODEL_DIR = "tfSavedModelDir";
     private static final String HINT_STROKE_COLOR = "hintBoxColor";
-    // Other
+    // Tools
+    private static final String TOOL_COCO_JSON = "toolCOCOJson";
+    // Others
     private static final String EDIT_SHAPE = "editShape";
     private static final String RECENT_FILES = "recentFiles";
     private static final String RECENT_NAMES = "recentNames";
@@ -231,6 +233,16 @@ public class Settings
         tfSavedModelDirProperty.set(dir);
     }
 
+    // Tools
+    public static final StringProperty toolCOCOJson = new StringPrefProperty(pref, TOOL_COCO_JSON, "");
+    public static String getToolCOCOJson() {
+        return toolCOCOJson.get();
+    }
+    public static void setToolCOCOJson(String json) {
+        toolCOCOJson.set(json);
+    }
+
+    // Others
     public static final StringProperty editShapeProperty = new StringPrefProperty(pref, EDIT_SHAPE, RECTANGLE.name());
     public static Type getEditShape() {
         return Type.valueOf(editShapeProperty.get());

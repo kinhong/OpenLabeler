@@ -18,6 +18,7 @@
   -->
 
 <?import com.easymobo.openlabeler.preference.InferencePane?>
+<?import com.easymobo.openlabeler.ui.BorderedTitledPane?>
 <?import com.easymobo.openlabeler.ui.InputFileChooser?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
@@ -25,23 +26,27 @@
          minHeight="-Infinity" minWidth="-Infinity"
          stylesheets="@/css/OpenLabeler.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <children>
-        <GridPane fx:id="gpTensorFlow" hgap="10.0" vgap="10">
-            <children>
-                <Label text="%menu.useInference" GridPane.halignment="RIGHT"/>
-                <CheckBox fx:id="chkUseInference" mnemonicParsing="false" GridPane.columnIndex="1"/>
-                <Label text="%menu.defaultLabelColor" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
-                <ColorPicker fx:id="pickerHintStrokeColor" editable="true" GridPane.columnIndex="1"
-                             GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
-                <Label text="%menu.tfLabelMapFile" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
-                <InputFileChooser fx:id="txtTFLabelMapFile" file="true" minWidth="400" GridPane.columnIndex="1"
-                                  GridPane.rowIndex="2"/>
-                <Label text="%menu.tfSavedModelDir" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
-                <InputFileChooser fx:id="txtTFSavedModelDir" minWidth="400" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-            </children>
-            <columnConstraints>
-                <ColumnConstraints />
-                <ColumnConstraints hgrow="ALWAYS" />
-            </columnConstraints>
-        </GridPane>
+        <BorderedTitledPane title="%label.tensorFlow">
+            <content>
+                <GridPane hgap="10.0" vgap="10">
+                    <children>
+                        <Label text="%label.useInference" GridPane.halignment="RIGHT"/>
+                        <CheckBox fx:id="chkUseInference" mnemonicParsing="false" GridPane.columnIndex="1"/>
+                        <Label text="%label.defaultLabelColor" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                        <ColorPicker fx:id="pickerHintStrokeColor" editable="true" GridPane.columnIndex="1"
+                                     GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
+                        <Label text="%label.tfLabelMapFile" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+                        <InputFileChooser fx:id="fileTFLabelMap" file="true" minWidth="400" GridPane.columnIndex="1"
+                                          GridPane.rowIndex="2"/>
+                        <Label text="%label.tfSavedModelDir" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
+                        <InputFileChooser fx:id="dirTFSavedModel" minWidth="400" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                    </children>
+                    <columnConstraints>
+                        <ColumnConstraints />
+                        <ColumnConstraints hgrow="ALWAYS" />
+                    </columnConstraints>
+                </GridPane>
+            </content>
+        </BorderedTitledPane>
     </children>
 </fx:root>

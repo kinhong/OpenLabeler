@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.easymobo.openlabeler.ui.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<VBox prefHeight="600.0" prefWidth="600.0" spacing="10.0" stylesheets="@/css/OpenLabeler.css"
+      xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.easymobo.openlabeler.tool.ExportCOCOController">
+    <padding>
+        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+    </padding>
+    <children>
+        <BorderedTitledPane title="info">
+            <content>
+                <GridPane hgap="10.0" vgap="10">
+                    <children>
+                        <Label text="year" GridPane.halignment="RIGHT"/>
+                        <TextField fx:id="txtInfoYear" minWidth="300" GridPane.columnIndex="1"/>
+                        <Label text="version" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                        <TextField fx:id="txtInfoVersion" minWidth="300" GridPane.columnIndex="1"
+                                   GridPane.rowIndex="1"/>
+                        <Label text="description" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+                        <TextField fx:id="txtInfoDescription" minWidth="300" GridPane.columnIndex="1"
+                                   GridPane.rowIndex="2"/>
+                        <Label text="contributor" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
+                        <TextField fx:id="txtInfoContributor" minWidth="300" GridPane.columnIndex="1"
+                                   GridPane.rowIndex="3"/>
+                        <Label text="url" GridPane.halignment="RIGHT" GridPane.rowIndex="4"/>
+                        <TextField fx:id="txtInfoUrl" minWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                        <Label text="date_created" GridPane.halignment="RIGHT" GridPane.rowIndex="5"/>
+                        <DatePicker fx:id="datePicker" editable="false" minWidth="300" GridPane.columnIndex="1"
+                                    GridPane.rowIndex="5"/>
+                    </children>
+                </GridPane>
+            </content>
+        </BorderedTitledPane>
+        <BorderedTitledPane title="images">
+            <content>
+                <GridPane hgap="10.0" vgap="10">
+                    <children>
+                        <Label text="%label.location" GridPane.halignment="RIGHT"/>
+                        <HBox spacing="10" GridPane.columnIndex="1">
+                            <fx:define>
+                                <ToggleGroup fx:id="imageToggleGroup"/>
+                            </fx:define>
+                            <RadioButton fx:id="rbUsePathInXml" text="%label.usePathInXml"
+                                         toggleGroup="$imageToggleGroup"/>
+                            <RadioButton fx:id="useFilenameInXml" text="%label.useFilenameInXml"
+                                         toggleGroup="$imageToggleGroup"/>
+                        </HBox>
+                        <Label text="%label.mediaDir" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                        <InputFileChooser fx:id="dirMedia" minWidth="400" GridPane.rowIndex="1"
+                                          GridPane.columnIndex="1"/>
+                        <Label text="%label.ids" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+                        <HBox spacing="10" GridPane.rowIndex="2" GridPane.columnIndex="1">
+                            <fx:define>
+                                <ToggleGroup fx:id="idToggleGroup"/>
+                            </fx:define>
+                            <RadioButton fx:id="rbNameAsId" text="%label.nameAsId" toggleGroup="$idToggleGroup"/>
+                            <RadioButton fx:id="generateId" text="%label.generateId" toggleGroup="$idToggleGroup"/>
+                        </HBox>
+                    </children>
+                    <columnConstraints>
+                        <ColumnConstraints/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                </GridPane>
+            </content>
+        </BorderedTitledPane>
+        <BorderedTitledPane title="annotations">
+            <content>
+                <GridPane hgap="10.0" vgap="10">
+                    <children>
+                        <Label text="%label.annotationDir" GridPane.halignment="RIGHT"/>
+                        <InputFileChooser fx:id="dirAnnotation" minWidth="400" GridPane.columnIndex="1"/>
+                    </children>
+                    <columnConstraints>
+                        <ColumnConstraints/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                </GridPane>
+            </content>
+        </BorderedTitledPane>
+        <BorderedTitledPane title="license">
+            <content>
+                <GridPane hgap="10.0" vgap="10">
+                    <children>
+                        <Label text="id" GridPane.halignment="RIGHT"/>
+                        <TextField fx:id="txtLicenseId" minWidth="300" GridPane.columnIndex="1"/>
+                        <Label text="name" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                        <TextField fx:id="txtLicenseName" minWidth="300" GridPane.columnIndex="1"
+                                   GridPane.rowIndex="1"/>
+                        <Label text="url" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+                        <TextField fx:id="txtLicenseUrl" minWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    </children>
+                </GridPane>
+            </content>
+        </BorderedTitledPane>
+        <GridPane hgap="10.0" vgap="10">
+            <children>
+                <CheckBox fx:id="chkFormatJSON" text="%label.formatJSON" GridPane.columnIndex="1"/>
+                <Label text="%label.output" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                <InputFileChooser fx:id="fileOutput" file="true" minWidth="400" save="true" GridPane.rowIndex="1"
+                                  GridPane.columnIndex="1"/>
+            </children>
+            <columnConstraints>
+                <ColumnConstraints/>
+                <ColumnConstraints hgrow="ALWAYS"/>
+            </columnConstraints>
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+        </GridPane>
+    </children>
+</VBox>

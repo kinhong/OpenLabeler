@@ -24,7 +24,7 @@
 <fx:root stylesheets="@/css/OpenLabeler.css" type="com.easymobo.openlabeler.preference.PreferencePane"
          xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <content>
-        <SplitPane fx:id="splitPane" dividerPositions="0.2" prefHeight="750.0" prefWidth="950.0">
+        <SplitPane fx:id="splitPane" dividerPositions="0.2" prefHeight="900.0" prefWidth="950.0">
             <items>
                 <ListView fx:id="categoryList" prefHeight="200.0" styleClass="title"/>
                 <ScrollPane fx:id="scroller" pannable="true" fitToWidth="true"/>

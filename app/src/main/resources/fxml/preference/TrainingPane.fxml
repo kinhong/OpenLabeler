@@ -19,71 +19,89 @@
 
 <?import com.easymobo.openlabeler.preference.LabelMapPane?>
 <?import com.easymobo.openlabeler.preference.TrainingPane?>
-<?import com.easymobo.openlabeler.ui.InputFileChooser?>
+<?import com.easymobo.openlabeler.ui.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 <fx:root type="com.easymobo.openlabeler.preference.TrainingPane" maxHeight="Infinity" maxWidth="Infinity"
          minHeight="-Infinity" minWidth="-Infinity"
          stylesheets="@/css/OpenLabeler.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <children>
-        <GridPane fx:id="gpTrainingData" hgap="10.0" vgap="10">
-            <children>
-                <Label text="%menu.tfImageDir" GridPane.halignment="RIGHT"/>
-                <InputFileChooser fx:id="txtTFImageDir" minWidth="400" GridPane.columnIndex="1"/>
+        <BorderedTitledPane title="%label.trainingData">
+            <content>
+                <GridPane hgap="10.0" vgap="10">
+                    <children>
+                        <Label text="%label.tfImageDir" GridPane.halignment="RIGHT"/>
+                        <InputFileChooser fx:id="dirTFImage" minWidth="400" GridPane.columnIndex="1"/>
 
-                <Label text="%menu.tfAnnotationDir" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
-                <InputFileChooser fx:id="txtTFAnnotationDir" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <Label text="%label.tfAnnotationDir" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                        <InputFileChooser fx:id="dirTFAnnotation" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                <Label text="%menu.numSamples" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
-                <Label fx:id="labelNumSamples" text="" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                        <Label text="%label.numSamples" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+                        <Label fx:id="labelNumSamples" text="" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
 
-                <Label text="%menu.tfDataDir" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
-                <InputFileChooser fx:id="txtTFDataDir" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
+                        <Label text="%label.tfDataDir" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
+                        <InputFileChooser fx:id="dirTFData" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
 
-                <Label text="%menu.labelMap" GridPane.halignment="RIGHT" GridPane.valignment="TOP"
-                       GridPane.rowIndex="4"/>
-                <LabelMapPane fx:id="labelMapPane" prefHeight="250.0" prefWidth="285.0" GridPane.columnIndex="1"
-                              GridPane.rowIndex="4"/>
+                        <Label text="%label.labelMap" GridPane.halignment="RIGHT" GridPane.valignment="TOP"
+                               GridPane.rowIndex="4"/>
+                        <LabelMapPane fx:id="labelMapPane" prefHeight="250.0" prefWidth="285.0" GridPane.columnIndex="1"
+                                      GridPane.rowIndex="4"/>
 
-                <Button fx:id="btnCreateTrainData" text="%menu.createTrainData" onAction="#onCreateTrainData"
-                        GridPane.columnIndex="1" GridPane.rowIndex="5"/>
-            </children>
-            <columnConstraints>
-                <ColumnConstraints />
-                <ColumnConstraints hgrow="ALWAYS" />
-            </columnConstraints>
-        </GridPane>
-        <GridPane fx:id="gpModel" hgap="10.0" vgap="10">
-            <children>
-                <Label text="%menu.tfBaseModelDir" GridPane.halignment="RIGHT"/>
-                <InputFileChooser fx:id="txtTFBaseModelDir" minWidth="400" GridPane.columnIndex="1"/>
+                        <Button fx:id="btnCreateTrainData" text="%label.createTrainData" onAction="#onCreateTrainData"
+                                GridPane.columnIndex="1" GridPane.rowIndex="5"/>
+                    </children>
+                    <columnConstraints>
+                        <ColumnConstraints/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                </GridPane>
+            </content>
+        </BorderedTitledPane>
+        <BorderedTitledPane title="%label.model">
+            <content>
+                <GridPane hgap="10.0" vgap="10">
+                    <children>
+                        <Label text="%label.tfBaseModelDir" GridPane.halignment="RIGHT"/>
+                        <InputFileChooser fx:id="dirTFBaseModel" minWidth="400" GridPane.columnIndex="1"/>
 
-                <Label text="%menu.modelType" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
-                <Label fx:id="labelModelType" text="" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
+                        <Label text="%label.modelType" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                        <Label fx:id="labelModelType" text="" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                <Label text="%menu.trainCkpt" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
-                <Label fx:id="labelTrainCkpt" text="" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
-            </children>
-            <columnConstraints>
-                <ColumnConstraints />
-                <ColumnConstraints hgrow="ALWAYS" />
-            </columnConstraints>
-        </GridPane>
-        <GridPane fx:id="gpDocker" hgap="10.0" vgap="10">
-            <children>
-                <Label text="%menu.containerHostName" GridPane.halignment="RIGHT"/>
-                <TextField fx:id="txtContainerHostName" text="" minWidth="300" GridPane.columnIndex="1"/>
+                        <Label text="%label.trainCkpt" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+                        <Label fx:id="labelTrainCkpt" text="" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+                    </children>
+                    <columnConstraints>
+                        <ColumnConstraints/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                </GridPane>
+            </content>
+        </BorderedTitledPane>
+        <BorderedTitledPane title="%label.docker">
+            <content>
+                <GridPane hgap="10.0" vgap="10">
+                    <children>
+                        <Label text="%label.dockerProcess" GridPane.halignment="RIGHT"/>
+                        <HBox spacing="10" GridPane.columnIndex="1">
+                            <Label fx:id="labelDockerProcess" text=""/>
+                            <FontIcon fx:id="iconWarn" iconLiteral="mdi-exclamation" iconSize="18" visible="false"/>
+                        </HBox>
+                        <Label text="%label.containerHostName" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                        <TextField fx:id="txtContainerHostName" text="" minWidth="300" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
 
-                <Label text="%menu.image" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
-                <TextField fx:id="txtDockerImage" text="" minWidth="300" GridPane.columnIndex="1"
-                           GridPane.rowIndex="1"/>
+                        <Label text="%label.image" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+                        <TextField fx:id="txtDockerImage" text="" minWidth="300" GridPane.columnIndex="1"
+                                   GridPane.rowIndex="2"/>
 
-                <Label text="%menu.containerName" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
-                <TextField fx:id="txtContainerName" text="" minWidth="300" GridPane.columnIndex="1"
-                           GridPane.rowIndex="2"/>
+                        <Label text="%label.containerName" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
+                        <TextField fx:id="txtContainerName" text="" minWidth="300" GridPane.columnIndex="1"
+                                   GridPane.rowIndex="3"/>
 
-                <HBox fx:id="boxTrain" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
-            </children>
-        </GridPane>
+                        <HBox fx:id="boxTrain" spacing="10" GridPane.columnIndex="1" GridPane.rowIndex="4"/>
+                    </children>
+                </GridPane>
+            </content>
+        </BorderedTitledPane>
     </children>
 </fx:root>

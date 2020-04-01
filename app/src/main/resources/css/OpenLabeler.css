@@ -16,7 +16,6 @@
  */
 
 .root {
-    -fx-font-family: "SansSerif";
     -fx-base: #ececec;
     -fx-background: derive(-fx-base,26.4%);
     -fx-background-color: -fx-background;
@@ -56,4 +55,23 @@
 .tooltip .imageTooltip {
     -fx-padding: 0 0 0 0;
     -fx-background-radius: 3 3 3 3;
+}
+
+/* BorderedTitledPane */
+.bordered-titled-title {
+    -fx-translate-x:  8;
+    -fx-translate-y: -10;
+    -fx-padding: 0 0 0 4;
+    -fx-background-color: -fx-background;
+}
+
+.bordered-titled-border {
+    -fx-content-display: top;
+    -fx-border-insets: 10 10 10 10;
+    -fx-border-color: -fx-text-box-border;
+    -fx-border-width: 1;
+}
+
+.bordered-titled-content {
+    -fx-padding: 18 10 10 10;
 }

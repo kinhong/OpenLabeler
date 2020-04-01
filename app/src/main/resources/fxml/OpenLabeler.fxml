@@ -45,7 +45,7 @@
                                         <KeyCodeCombination alt="UP" code="D" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                     </accelerator>
                                 </MenuItem>
-                                <Menu onShowing="#onFileMenu" text="%menu.openRecent" />
+                                <Menu fx:id="menuOpenRecent" onShowing="#onFileMenu" text="%menu.openRecent" />
                                 <SeparatorMenuItem/>
                                 <MenuItem fx:id="miClose" onAction="#onClose" text="%menu.close"/>
                                 <MenuItem fx:id="miSave" onAction="#onSave" text="%menu.save">
@@ -94,21 +94,18 @@
                                 </MenuItem>
                                 <SeparatorMenuItem/>
                                 <Menu onShowing="#onShapeMenu" text="%menu.shape">
-                                    <RadioMenuItem fx:id="miShapeRectangle" onAction="#onShapeRectangle" text="%menu.rectangle">
+                                    <fx:define>
+                                        <ToggleGroup fx:id="toggleGroup"/>
+                                    </fx:define>
+                                    <RadioMenuItem fx:id="miShapeRectangle" onAction="#onShapeRectangle" text="%menu.rectangle" toggleGroup="$toggleGroup">
                                         <accelerator>
                                         <KeyCodeCombination alt="UP" code="G" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                         </accelerator>
-                                        <toggleGroup>
-                                            <ToggleGroup fx:id="group" />
-                                        </toggleGroup>
                                     </RadioMenuItem>
-                                    <RadioMenuItem fx:id="miShapePolygon" onAction="#onShapePolygon" text="%menu.polygon">
+                                    <RadioMenuItem fx:id="miShapePolygon" onAction="#onShapePolygon" text="%menu.polygon" toggleGroup="$toggleGroup">
                                         <accelerator>
                                             <KeyCodeCombination alt="UP" code="R" control="UP" meta="UP" shift="UP" shortcut="DOWN"/>
                                         </accelerator>
-                                        <toggleGroup>
-                                            <fx:reference source="group" />
-                                        </toggleGroup>
                                     </RadioMenuItem>
                                 </Menu>
                                 <SeparatorMenuItem/>
@@ -133,7 +130,7 @@
                                 </MenuItem>
                             </items>
                         </Menu>
-                        <Menu text="%menu.view">
+                        <Menu text="%menu.view" visible="">
                             <items>
                                 <MenuItem fx:id="miZoomOut" onAction="#onZoomOut" text="%menu.zoomOut"/>
                                 <MenuItem fx:id="miZoomIn" onAction="#onZoomIn" text="%menu.zoomIn"/>
@@ -154,13 +151,11 @@
                                 </MenuItem>
                             </items>
                         </Menu>
-                        <!--
                         <Menu text="%menu.tools">
                         <items>
-                        <MenuItem fx:id="miInspectLabels" onAction="#onInspectLabels" text="%menu.inspectLabels" />
+                        <MenuItem fx:id="miExportCOCO" onAction="#onExportCOCO" text="%menu.exportCOCO" />
                         </items>
                         </Menu>
-                        -->
                         <Menu text="%menu.help">
                             <items>
                                 <MenuItem onAction="#onSupportInfo" text="%menu.supportInfo"/>
@@ -172,7 +167,7 @@
                 </MenuBar>
                 <ToolBar fx:id="toolBar" prefHeight="14.0" prefWidth="600.0">
                     <items>
-                        <Button fx:id="btnOpenMediaFile" onAction="#onFileOpenFile">
+                        <Button onAction="#onFileOpenFile">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-file-image" iconSize="18"/>
                             </graphic>
@@ -180,7 +175,7 @@
                                 <Tooltip text="%menu.openMediaFile"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnOpenMediaDir" onAction="#onFileOpenDir">
+                        <Button onAction="#onFileOpenDir">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-folder-multiple-image" iconSize="18"/>
                             </graphic>
@@ -189,7 +184,7 @@
                             </tooltip>
                         </Button>
                         <Separator prefHeight="27.0" prefWidth="10.0"/>
-                        <Button fx:id="btnSave" onAction="#onSave">
+                        <Button disable="${miSave.disable}" onAction="#onSave">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-content-save" iconSize="18"/>
                             </graphic>
@@ -198,7 +193,7 @@
                             </tooltip>
                         </Button>
                         <Separator prefHeight="27.0" prefWidth="10.0"/>
-                        <Button fx:id="btnPrevMedia" onAction="#onPrevMedia">
+                        <Button disable="${miPrevMediaFile.disable}" onAction="#onPrevMedia">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-arrow-left" iconSize="18"/>
                             </graphic>
@@ -206,7 +201,7 @@
                                 <Tooltip text="%menu.previousMediaFile"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnNextMedia" onAction="#onNextMediaFile">
+                        <Button disable="${miNextMediaFile.disable}"  onAction="#onNextMediaFile">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-arrow-right" iconSize="18"/>
                             </graphic>
@@ -215,7 +210,7 @@
                             </tooltip>
                         </Button>
                         <Separator prefHeight="27.0" prefWidth="10.0"/>
-                        <Button fx:id="btnUndo" onAction="#onUndo">
+                        <Button fx:id="btnUndo" disable="${miUndo.disable}" onAction="#onUndo">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-undo" iconSize="18"/>
                             </graphic>
@@ -223,7 +218,7 @@
                                 <Tooltip text="%menu.undo"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnRedo" onAction="#onRedo">
+                        <Button fx:id="btnRedo" disable="${miRedo.disable}" onAction="#onRedo">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-redo" iconSize="18"/>
                             </graphic>
@@ -231,7 +226,7 @@
                                 <Tooltip text="%menu.redo"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnDelete" onAction="#onDelete">
+                        <Button disable="${miDelete.disable}" onAction="#onDelete">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-delete" iconSize="18"/>
                             </graphic>
@@ -240,7 +235,7 @@
                             </tooltip>
                         </Button>
                         <Separator prefHeight="27.0" prefWidth="10.0"/>
-                        <Button fx:id="btnZoomOut" onAction="#onZoomOut">
+                        <Button disable="${miZoomOut.disable}" onAction="#onZoomOut">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-magnify-minus" iconSize="18"/>
                             </graphic>
@@ -248,7 +243,7 @@
                                 <Tooltip text="%menu.zoomOut"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnZoomIn" onAction="#onZoomIn">
+                        <Button disable="${miZoomIn.disable}" onAction="#onZoomIn">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-magnify-plus" iconSize="18"/>
                             </graphic>
@@ -256,7 +251,7 @@
                                 <Tooltip text="%menu.zoomIn"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnZoomFit" onAction="#onZoomFit">
+                        <Button disable="${miZoomFit.disable}" onAction="#onZoomFit">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-magnify" iconSize="18"/>
                             </graphic>
@@ -265,7 +260,7 @@
                             </tooltip>
                         </Button>
                         <Separator prefHeight="27.0" prefWidth="10.0"/>
-                        <Button fx:id="btnRotateLeft" onAction="#onRotateLeft">
+                        <Button disable="${miRotateLeft.disable}" onAction="#onRotateLeft">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-rotate-left" iconSize="18"/>
                             </graphic>
@@ -273,7 +268,7 @@
                                 <Tooltip text="%menu.rotateLeft"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnRotateRight" onAction="#onRotateRight">
+                        <Button disable="${miRotateRight.disable}" onAction="#onRotateRight">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-rotate-right" iconSize="18"/>
                             </graphic>
@@ -282,7 +277,7 @@
                             </tooltip>
                         </Button>
                         <Separator prefHeight="27.0" prefWidth="10.0"/>
-                        <Button fx:id="btnShowHint" onAction="#onShowHint">
+                        <Button disable="${miShowHint.disable}" onAction="#onShowHint">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-eye" iconSize="18"/>
                             </graphic>
@@ -290,7 +285,7 @@
                                 <Tooltip text="%menu.showHint"/>
                             </tooltip>
                         </Button>
-                        <Button fx:id="btnClearHint" onAction="#onClearHint">
+                        <Button disable="${miClearHint.disable}" onAction="#onClearHint">
                             <graphic>
                                 <FontIcon iconLiteral="mdi-eye-off" iconSize="18"/>
                             </graphic>

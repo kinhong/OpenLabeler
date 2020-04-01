@@ -116,7 +116,7 @@ public class MediaPane extends BorderPane implements AutoCloseable
             });
             Arrays.sort(files);
             if (files.length <= 0) {
-                AppUtils.showInformation(bundle.getString("menu.alert"), bundle.getString("msg.noMediaFiles"));
+                AppUtils.showInformation(bundle.getString("label.alert"), bundle.getString("msg.noMediaFiles"));
                 return;
             }
         }

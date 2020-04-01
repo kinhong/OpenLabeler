@@ -100,6 +100,26 @@ public class ObjectModel implements Cloneable
         this.difficult = difficult;
     }
 
+    public double area() {
+        if (polygon != null) {
+            double sum = 0;
+            for (int i = 0; i < polygon.size() / 2 ; i++) {
+                if (i == 0) {
+                    sum += polygon.get(i * 2) * (polygon.get((i + 1) * 2 + 1) - polygon.get((polygon.size() - 1)));
+                }
+                else if (i == (polygon.size() / 2) - 1) {
+                    sum += polygon.get(i * 2) * (polygon.get(1) - polygon.get((i - 1) * 2 + 1));
+                }
+                else {
+                    sum += polygon.get(i * 2) * (polygon.get((i + 1) * 2 + 1) - polygon.get((i - 1) * 2 + 1));
+                }
+            }
+            return 0.5 * Math.abs(sum);
+        }
+        // Just the area of bounding box
+        return boundBox.area();
+    }
+
     @Override
     public Object clone() {
         ObjectModel model = new ObjectModel();

@@ -26,6 +26,7 @@ import com.easymobo.openlabeler.tag.ObjectTag;
 import com.easymobo.openlabeler.tag.ShapeItem;
 import com.easymobo.openlabeler.tag.TagBoard;
 import com.easymobo.openlabeler.tensorflow.TFTrainer;
+import com.easymobo.openlabeler.tool.ExportCOCOController;
 import com.easymobo.openlabeler.ui.MediaPane;
 import com.easymobo.openlabeler.ui.MediaTableView.MediaFile;
 import com.easymobo.openlabeler.ui.ObjectTableView;
@@ -45,6 +46,7 @@ import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
@@ -70,6 +72,7 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.invoke.MethodHandles;
@@ -102,14 +105,14 @@ public class OpenLabelerController implements Initializable, AutoCloseable
           miUndo, miRedo, miCut, miCopy, miPaste, miDelete,
           miPrevMediaFile, miNextMediaFile, miGoToUnlabeledMediaFile,
           miZoomIn, miZoomOut, miZoomFit, miRotateLeft, miRotateRight, miShowHint, miClearHint,
-          msAbout, miAbout, miInspectLabels;
+          miInspectLabels, miExportCOCO,
+          msAbout, miAbout;
     @FXML
     private RadioMenuItem miShapeRectangle, miShapePolygon;
     @FXML
     private ToolBar toolBar;
     @FXML
-    private Button btnPrevMedia, btnNextMedia, btnSave, btnUndo, btnRedo, btnDelete, btnZoomIn, btnZoomOut, btnZoomFit,
-          btnRotateLeft, btnRotateRight, btnShowHint, btnClearHint;
+    private Button btnUndo, btnRedo;
     @FXML
     private MediaPane mediaPane;
     @FXML
@@ -202,7 +205,6 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         openFileOrDir(dir);
     }
 
-    @FXML
     private void openFileOrDir(File file) {
         if (file == null || !file.exists()) {
             return;
@@ -397,6 +399,19 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     }
 
     @FXML
+    private void onExportCOCO(ActionEvent event) {
+        try {
+            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/tool/ExportCOCO.fxml"), bundle);
+            Node content = fxmlLoader.load();
+            ExportCOCOController controller = fxmlLoader.getController();
+            controller.showDialog(content, tagBoard.getModel());
+        }
+        catch (IOException ex) {
+            LOG.log(Level.SEVERE, "Unable to load FXML: ", ex);
+        }
+    }
+
+    @FXML
     private void onAbout(ActionEvent actionEvent) {
         Stage aboutDialog = OpenLabeler.createAboutStage(bundle);
         aboutDialog.initOwner(tagBoard.getScene().getWindow());
@@ -444,19 +459,19 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     }
 
     public boolean canClose() {
-        if (btnSave.isDisabled()) {
+        if (miSave.isDisable()) {
             return true;
         }
-        ButtonType saveAndClose = new ButtonType(bundle.getString("menu.saveAndClose"), ButtonData.OTHER);
-        Alert alert = AppUtils.createAlert(CONFIRMATION, bundle.getString("menu.alert"), bundle.getString("msg.confirmClose"));
+        ButtonType saveAndClose = new ButtonType(bundle.getString("label.saveAndClose"), ButtonData.OTHER);
+        Alert alert = AppUtils.createAlert(CONFIRMATION, bundle.getString("label.alert"), bundle.getString("msg.confirmClose"));
         alert.getButtonTypes().clear();
-        alert.getButtonTypes().addAll(saveAndClose, ButtonType.OK, ButtonType.CANCEL);
+        alert.getButtonTypes().addAll(saveAndClose, ButtonType.YES, ButtonType.NO);
         Optional<ButtonType> result = alert.showAndWait();
         if (result.get() == saveAndClose) {
             save(true);
         }
 
-        return result.get() != ButtonType.CANCEL;
+        return result.get() != ButtonType.NO;
     }
 
     private void bindProperties() {
@@ -508,18 +523,15 @@ public class OpenLabelerController implements Initializable, AutoCloseable
 
         BooleanBinding hasPrev = mediaPane.sizeProperty().greaterThan(1).and(mediaPane.getSelectionModel().selectedIndexProperty().greaterThan(0));
         miPrevMediaFile.disableProperty().bind(hasPrev.not());
-        btnPrevMedia.disableProperty().bind(miPrevMediaFile.disableProperty());
 
         BooleanBinding hasNext = mediaPane.sizeProperty().greaterThan(1).and(mediaPane.getSelectionModel().selectedIndexProperty().lessThan(mediaPane.sizeProperty().subtract(1)));
         miNextMediaFile.disableProperty().bind(hasNext.not());
-        btnNextMedia.disableProperty().bind(miNextMediaFile.disableProperty());
 
         // File -> Close
         miClose.disableProperty().bind(tagBoard.modelProperty().isNull());
 
         // File -> Save
         miSave.disableProperty().bind(Settings.saveEveryChangeProperty.or(miUndo.disableProperty()));
-        btnSave.disableProperty().bind(miSave.disableProperty());
 
         // Edit -> Undo/Redo
         undoManager = UndoManagerFactory.unlimitedHistorySingleChangeUM(
@@ -559,10 +571,8 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         });
 
         miUndo.disableProperty().bind(undoManager.undoAvailableProperty().map(x -> !x));
-        btnUndo.disableProperty().bind(miUndo.disableProperty());
 
         miRedo.disableProperty().bind(undoManager.redoAvailableProperty().map(x -> !x));
-        btnRedo.disableProperty().bind(miRedo.disableProperty());
 
         // update Undo/Redo menu item and tooltip text
         undoManager.nextUndoProperty().addListener((observable, oldValue, newValue) -> {
@@ -586,7 +596,6 @@ public class OpenLabelerController implements Initializable, AutoCloseable
 
         // Edit -> Delete
         miDelete.disableProperty().bind(tagBoard.selectedObjectProperty().isNull());
-        btnDelete.disableProperty().bind(miDelete.disableProperty());
 
         miGoToUnlabeledMediaFile.disableProperty().bind(mediaPane.nextUnlabeledMediaProperty().isNull());
 
@@ -603,17 +612,12 @@ public class OpenLabelerController implements Initializable, AutoCloseable
 
         // View -> Zoom
         miZoomIn.disableProperty().bind(tagBoard.modelProperty().isNull());
-        btnZoomIn.disableProperty().bind(miZoomIn.disableProperty());
         miZoomOut.disableProperty().bind(tagBoard.modelProperty().isNull());
-        btnZoomOut.disableProperty().bind(miZoomOut.disableProperty());
         miZoomFit.disableProperty().bind(tagBoard.modelProperty().isNull());
-        btnZoomFit.disableProperty().bind(miZoomFit.disableProperty());
 
         // View -> Rotate
         miRotateLeft.disableProperty().bind(tagBoard.modelProperty().isNull());
-        btnRotateLeft.disableProperty().bind(miRotateLeft.disableProperty());
         miRotateRight.disableProperty().bind(tagBoard.modelProperty().isNull());
-        btnRotateRight.disableProperty().bind(miRotateRight.disableProperty());
 
         // View -> Show/Clear Hints
         ObservableValue<Long> visibleHints = EasyBind.combine(
@@ -622,11 +626,9 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         LongBinding vhBinding = Bindings.createLongBinding(() -> ((MonadicBinding<Long>)visibleHints).get(), visibleHints);
         BooleanBinding canShowHint = tagBoard.hintsProperty().sizeProperty().greaterThan(0).and(vhBinding.lessThan(tagBoard.hintsProperty().sizeProperty()));
         miShowHint.disableProperty().bind(canShowHint.not());
-        btnShowHint.disableProperty().bind(canShowHint.not());
 
         BooleanBinding canClearHint = vhBinding.greaterThan(0);
         miClearHint.disableProperty().bind(canClearHint.not());
-        btnClearHint.disableProperty().bind(canClearHint.not());
 
         // Status bar
         tagBoard.statusProperty().addListener((observable, oldValue, newValue) -> status.setText(newValue));

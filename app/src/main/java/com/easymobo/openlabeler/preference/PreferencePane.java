@@ -67,14 +67,14 @@ public class PreferencePane extends DialogPane
     public void showAndWait() {
         Dialog dialog = new Dialog();
         dialog.setDialogPane(this);
-        dialog.setTitle(bundle.getString("menu.titlePrefs"));
+        dialog.setTitle(bundle.getString("label.preferences"));
         dialog.setResizable(true);
 
         lookupButton(ButtonType.CLOSE).addEventFilter(
             ActionEvent.ACTION,
             event -> {
                 if (!lookupButton(ButtonType.APPLY).isDisabled()) {
-                    var res = AppUtils.showConfirmation(bundle.getString("menu.alert"), bundle.getString("msg.confirmClose"));
+                    var res = AppUtils.showConfirmation(bundle.getString("label.alert"), bundle.getString("msg.confirmClose"));
                     if (res.get() != ButtonType.OK) {
                         event.consume();
                     }

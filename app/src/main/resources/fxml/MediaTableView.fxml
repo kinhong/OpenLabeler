@@ -23,7 +23,7 @@
 <fx:root type="com.easymobo.openlabeler.ui.MediaTableView" editable="false" xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
     <placeholder>
-        <Label text="%menu.noMedia"/>
+        <Label text="%label.noMedia"/>
     </placeholder>
     <columns>
         <TableColumn fx:id="colAnnotated" minWidth="25.0" prefWidth="25.0" resizable="false">
@@ -38,6 +38,6 @@
                 <FontIcon iconLiteral="mdi-file-image" iconSize="18"/>
             </graphic>
         </TableColumn>
-        <TableColumn fx:id="colName" prefWidth="240.0" text="%menu.fileName"/>
+        <TableColumn fx:id="colName" prefWidth="240.0" text="%label.fileName"/>
     </columns>
 </fx:root>

@@ -23,7 +23,7 @@
                   <Font name="System Bold" size="14.0" />
                </font></Label>
             <Label text="%app.version" textAlignment="CENTER" />
-            <Label text="%menu.copyright" textAlignment="CENTER" />
+            <Label text="%label.copyright" textAlignment="CENTER" />
          </children></VBox>
     </children>
    <padding>

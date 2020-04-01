@@ -26,8 +26,8 @@
         <Label/>
     </placeholder>
     <columns>
-        <TableColumn fx:id="colId" prefWidth="40.0" text="%menu.id"/>
-        <TableColumn fx:id="colName" prefWidth="100.0" text="%menu.name"/>
-        <TableColumn fx:id="colDisplayName" prefWidth="150.0" text="%menu.displayName"/>
+        <TableColumn fx:id="colId" prefWidth="40.0" text="%label.id"/>
+        <TableColumn fx:id="colName" prefWidth="100.0" text="%label.name"/>
+        <TableColumn fx:id="colDisplayName" prefWidth="150.0" text="%label.displayName"/>
     </columns>
 </fx:root>

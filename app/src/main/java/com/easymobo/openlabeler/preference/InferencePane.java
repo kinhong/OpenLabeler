@@ -26,9 +26,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ColorPicker;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
-import org.controlsfx.tools.Borders;
 import org.fxmisc.easybind.EasyBind;
 
 import java.lang.invoke.MethodHandles;
@@ -39,13 +37,11 @@ import java.util.logging.Logger;
 public class InferencePane extends VBox implements Category
 {
     @FXML
-    private GridPane gpTensorFlow;
-    @FXML
     private CheckBox chkUseInference;
     @FXML
     private ColorPicker pickerHintStrokeColor;
     @FXML
-    private InputFileChooser txtTFLabelMapFile, txtTFSavedModelDir;
+    private InputFileChooser fileTFLabelMap, dirTFSavedModel;
 
     private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
@@ -59,9 +55,6 @@ public class InferencePane extends VBox implements Category
 
         try {
             loader.load();
-            getChildren().addAll(
-                    Borders.wrap(gpTensorFlow).lineBorder().title(bundle.getString("menu.tensorFlow")).buildAll()
-            );
         }
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
@@ -71,8 +64,8 @@ public class InferencePane extends VBox implements Category
         BooleanBinding changes[] = {
                 chkUseInference.selectedProperty().isNotEqualTo(Settings.useInferenceProperty),
                 pickerHintStrokeColor.valueProperty().isNotEqualTo(Settings.hintStrokeColorProperty),
-                txtTFLabelMapFile.textProperty().isNotEqualTo(Settings.tfLabelMapFileProperty),
-                txtTFSavedModelDir.textProperty().isNotEqualTo(Settings.tfSavedModelDirProperty),
+                fileTFLabelMap.textProperty().isNotEqualTo(Settings.tfLabelMapFileProperty),
+                dirTFSavedModel.textProperty().isNotEqualTo(Settings.tfSavedModelDirProperty),
         };
         dirtyProperty.bind(EasyBind.combine(
                 FXCollections.observableArrayList(changes), stream -> stream.reduce((a, b) -> a | b).orElse(false)));
@@ -90,15 +83,15 @@ public class InferencePane extends VBox implements Category
 
     @Override
     public String getName() {
-        return bundle.getString("menu.inference");
+        return bundle.getString("label.inference");
     }
 
     @Override
     public void load() {
         chkUseInference.setSelected(Settings.isUseInference());
         pickerHintStrokeColor.setValue(Settings.getHintStrokeColor());
-        txtTFLabelMapFile.setText(Settings.getTFLabelMapFile());
-        txtTFSavedModelDir.setText(Settings.getTFSavedModelDir());
+        fileTFLabelMap.setText(Settings.getTFLabelMapFile());
+        dirTFSavedModel.setText(Settings.getTFSavedModelDir());
     }
 
     @Override
@@ -108,7 +101,7 @@ public class InferencePane extends VBox implements Category
         }
         Settings.setUseInference(chkUseInference.isSelected());
         Settings.setHintStrokeColor(pickerHintStrokeColor.getValue());
-        Settings.setTFLabelMapFile(txtTFLabelMapFile.getText());
-        Settings.setTFSavedModelDir(txtTFSavedModelDir.getText());
+        Settings.setTFLabelMapFile(fileTFLabelMap.getText());
+        Settings.setTFSavedModelDir(dirTFSavedModel.getText());
     }
 }

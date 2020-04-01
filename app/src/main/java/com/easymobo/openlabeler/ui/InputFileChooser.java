@@ -26,9 +26,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
+import org.apache.commons.lang.StringUtils;
 import org.kordamp.ikonli.javafx.FontIcon;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.ResourceBundle;
 
 import static org.kordamp.ikonli.materialdesign.MaterialDesign.MDI_FOLDER_OUTLINE;
@@ -38,8 +41,9 @@ public class InputFileChooser extends HBox
     private TextField txt = new TextField();
     private Button btn = new Button(null, FontIcon.of(MDI_FOLDER_OUTLINE, 18));
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
-    ;
     private boolean file;
+    private boolean save;
+    private ExtensionFilter[] filters;
 
     public InputFileChooser() {
         getChildren().addAll(txt, btn);
@@ -56,17 +60,49 @@ public class InputFileChooser extends HBox
         this.file = file;
     }
 
-    private void onOpen(ActionEvent event) {
+    public boolean isSave() {
+        return save;
+    }
+
+    public void setSave(boolean save) {
+        this.save = save;
+    }
+
+    public ExtensionFilter[] getFilters() {
+        return filters;
+    }
+
+    public void setFilters(ExtensionFilter... filters) {
+        this.filters = filters;
+    }
+
+    public void onOpen(ActionEvent event) {
         File fileOrDir;
+        var window = ((Node) event.getSource()).getScene().getWindow();
         if (file) {
             FileChooser chooser = new FileChooser();
-            chooser.setTitle(bundle.getString("menu.chooseDir"));
-            fileOrDir = chooser.showOpenDialog(((Node) event.getSource()).getScene().getWindow());
+            chooser.setTitle(bundle.getString("label.chooseFile"));
+            if (StringUtils.isNotBlank(txt.getText())) {
+                var dir = new File(txt.getText()).getParentFile();
+                if (dir.exists()) {
+                    chooser.setInitialDirectory(dir);
+                }
+            }
+            if (filters != null) {
+                chooser.getExtensionFilters().addAll(filters);
+            }
+            fileOrDir = save ? chooser.showSaveDialog(window) : chooser.showOpenDialog(window);
         }
         else {
             DirectoryChooser chooser = new DirectoryChooser();
-            chooser.setTitle(bundle.getString("menu.chooseDir"));
-            fileOrDir = chooser.showDialog(((Node) event.getSource()).getScene().getWindow());
+            chooser.setTitle(bundle.getString("label.chooseDir"));
+            if (StringUtils.isNotBlank(txt.getText())) {
+                var dir = new File(txt.getText());
+                if (dir.exists()) {
+                    chooser.setInitialDirectory(dir);
+                }
+            }
+            fileOrDir = chooser.showDialog(window);
         }
         if (fileOrDir != null) {
             setText(fileOrDir.getAbsolutePath());
@@ -83,5 +119,9 @@ public class InputFileChooser extends HBox
 
     public String getText() {
         return txt.getText();
+    }
+
+    public File toFile() {
+        return Paths.get(txt.getText()).toFile();
     }
 }

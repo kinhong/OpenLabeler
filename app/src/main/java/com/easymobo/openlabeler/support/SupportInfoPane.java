@@ -57,7 +57,7 @@ public class SupportInfoPane extends DialogPane
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
         }
 
-        ButtonType copyToClipboard = new ButtonType(bundle.getString("menu.copyToClipboard"), ButtonBar.ButtonData.APPLY);
+        ButtonType copyToClipboard = new ButtonType(bundle.getString("label.copyToClipboard"), ButtonBar.ButtonData.APPLY);
         getButtonTypes().addAll(copyToClipboard, ButtonType.CLOSE);
 
         final Button btn = (Button) lookupButton(copyToClipboard);

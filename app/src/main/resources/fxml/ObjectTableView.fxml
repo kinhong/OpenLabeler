@@ -23,7 +23,7 @@
 <fx:root editable="true" type="com.easymobo.openlabeler.ui.ObjectTableView" xmlns="http://javafx.com/javafx"
          xmlns:fx="http://javafx.com/fxml" stylesheets="@/css/OpenLabeler.css">
     <placeholder>
-        <Label text="%menu.noObject"/>
+        <Label text="%label.noObject"/>
     </placeholder>
     <columns>
         <TableColumn fx:id="visibleColumn" minWidth="25.0" prefWidth="25.0" resizable="false">
@@ -38,6 +38,6 @@
                 <FontIcon iconLiteral="mdi-image-area" iconSize="18"/>
             </graphic>
         </TableColumn>
-        <TableColumn fx:id="nameColumn" prefWidth="240.0" text="%menu.name"/>
+        <TableColumn fx:id="nameColumn" prefWidth="240.0" text="%label.name"/>
     </columns>
 </fx:root>

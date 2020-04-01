@@ -30,11 +30,11 @@
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
             </columnResizePolicy>
             <placeholder>
-                <Label text="%menu.noName"/>
+                <Label text="%label.noName"/>
             </placeholder>
             <columns>
-                <TableColumn fx:id="colName" prefWidth="240.0" text="%menu.name"/>
-                <TableColumn fx:id="colColor" prefWidth="100.0" text="%menu.color"/>
+                <TableColumn fx:id="colName" prefWidth="240.0" text="%label.name"/>
+                <TableColumn fx:id="colColor" prefWidth="100.0" text="%label.color"/>
             </columns>
         </TableView>
     </center>

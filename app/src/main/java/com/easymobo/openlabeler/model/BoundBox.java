@@ -80,6 +80,23 @@ public class BoundBox implements Cloneable
         this.ymax = ymax;
     }
 
+    public double area() {
+        return (xmax - xmin) * (ymax - ymin);
+    }
+
+    public double getX() {
+        return xmin;
+    }
+    public double getY() {
+        return ymin;
+    }
+    public double getWidth() {
+        return xmax - xmin;
+    }
+    public double getHeight() {
+        return ymax - ymin;
+    }
+
     @Override
     public Object clone() {
         return new BoundBox(xmin, ymin, xmax, ymax);

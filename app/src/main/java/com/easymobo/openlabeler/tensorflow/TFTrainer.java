@@ -23,10 +23,7 @@ import com.easymobo.openlabeler.preference.Settings;
 import com.easymobo.openlabeler.util.AppUtils;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
-import com.github.dockerjava.api.model.Bind;
-import com.github.dockerjava.api.model.Container;
-import com.github.dockerjava.api.model.HostConfig;
-import com.github.dockerjava.api.model.Volume;
+import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.google.protobuf.TextFormat;
 import javafx.application.Platform;
@@ -187,6 +184,15 @@ public class TFTrainer implements AutoCloseable
             LOG.log(Level.SEVERE, "Unable to parse label map", ex);
         }
         return Collections.emptyList();
+    }
+
+    public static Info getInfo() {
+        try {
+            return dockerClient.infoCmd().exec();
+        }
+        catch (Exception ex) {
+            return null;
+        }
     }
 
     public static boolean isTraining() {

@@ -30,6 +30,7 @@ import java.util.List;
 @XmlType(propOrder = {"folder", "filename", "path", "source", "size", "segmented", "objects"})
 public class Annotation
 {
+    private int id;
     private File file;
     private String filename, path, folder;
     private List<ObjectModel> objects = new ArrayList();
@@ -41,6 +42,15 @@ public class Annotation
     public Annotation(File file, Image image) {
         setFile(file);
         setSize(new Size(image));
+    }
+
+    @XmlTransient
+    public int getId() {
+        return this.id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     @XmlTransient

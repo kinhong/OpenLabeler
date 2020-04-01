@@ -109,15 +109,15 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
                 menu.getItems().clear();
 
                 MediaFile file = tableView.getSelectionModel().getSelectedItem();
-                String media = bundle.getString("menu.showMediaInFileBrowser");
-                String annotation = bundle.getString("menu.showAnnotationInFileBrowser");
+                String media = bundle.getString("label.showMediaInFileBrowser");
+                String annotation = bundle.getString("label.showAnnotationInFileBrowser");
                 if (SystemUtils.IS_OS_MAC) {
-                    media = bundle.getString("menu.revealMediaInFinder");
-                    annotation = bundle.getString("menu.revealAnnotationInFinder");
+                    media = bundle.getString("label.revealMediaInFinder");
+                    annotation = bundle.getString("label.revealAnnotationInFinder");
                 }
                 else if (SystemUtils.IS_OS_WINDOWS) {
-                    media = bundle.getString("menu.showMediaInExplorer");
-                    annotation = bundle.getString("menu.showAnnotationInExplorer");
+                    media = bundle.getString("label.showMediaInExplorer");
+                    annotation = bundle.getString("label.showAnnotationInExplorer");
                 }
                 MenuItem item = new MenuItem(media);
                 item.setOnAction(ev -> Desktop.getDesktop().browseFileDirectory(file));

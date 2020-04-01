@@ -19,41 +19,54 @@
 
 <?import com.easymobo.openlabeler.preference.GeneralPane?>
 <?import com.easymobo.openlabeler.preference.NameTablePane?>
+<?import com.easymobo.openlabeler.ui.BorderedTitledPane?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <fx:root type="com.easymobo.openlabeler.preference.GeneralPane" maxHeight="Infinity" maxWidth="Infinity"
          minHeight="-Infinity" minWidth="-Infinity"
          stylesheets="@/css/OpenLabeler.css" xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <children>
-        <GridPane fx:id="gpApplication" hgap="10.0" vgap="10">
+        <BorderedTitledPane title="%label.application">
+        <content>
+        <GridPane hgap="10.0" vgap="10">
             <children>
-                <Label text="%menu.openLastMedia" GridPane.halignment="RIGHT"/>
+                <Label text="%label.openLastMedia" GridPane.halignment="RIGHT"/>
                 <CheckBox fx:id="chkOpenLastMedia" mnemonicParsing="false" GridPane.columnIndex="1"/>
             </children>
         </GridPane>
-        <GridPane fx:id="gpOutput" hgap="10.0" vgap="10">
+        </content>
+        </BorderedTitledPane>
+        <BorderedTitledPane title="%label.output">
+            <content>
+            <GridPane hgap="10.0" vgap="10">
             <children>
-                <Label text="%menu.saveEveryChange" GridPane.halignment="RIGHT"/>
+                <Label text="%label.saveEveryChange" GridPane.halignment="RIGHT"/>
                 <CheckBox fx:id="chkSaveEveryChange" mnemonicParsing="false" GridPane.columnIndex="1"/>
-                <Label text="%menu.annotationDir" GridPane.halignment="RIGHT" GridPane.rowIndex="1"
+                <Label text="%label.relativeAnnotationDir" GridPane.halignment="RIGHT" GridPane.rowIndex="1"
                        GridPane.valignment="CENTER"/>
                 <TextField fx:id="textAnnotationsDir" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             </children>
         </GridPane>
-        <GridPane fx:id="gpAnnotation" hgap="10.0" vgap="10">
+    </content>
+</BorderedTitledPane>
+        <BorderedTitledPane title="%label.annotation">
+            <content>
+            <GridPane hgap="10.0" vgap="10">
             <children>
-                <Label text="%menu.autoSetName" GridPane.halignment="RIGHT"/>
+                <Label text="%label.autoSetName" GridPane.halignment="RIGHT"/>
                 <CheckBox fx:id="chkAutoSetName" mnemonicParsing="false" GridPane.columnIndex="1"/>
-                <Label text="%menu.defaultLabelColor" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                <Label text="%label.defaultLabelColor" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
                 <ColorPicker fx:id="pickerObjectStrokeColor" editable="true" GridPane.columnIndex="1"
                              GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
-                <Label text="%menu.animateOutline" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+                <Label text="%label.animateOutline" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
                 <CheckBox fx:id="chkAnimateOutline" mnemonicParsing="false" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                <Label text="%menu.labels" GridPane.rowIndex="3" GridPane.halignment="RIGHT"
+                <Label text="%label.labels" GridPane.rowIndex="3" GridPane.halignment="RIGHT"
                        GridPane.valignment="TOP"/>
                 <NameTablePane fx:id="nameTablePane" prefHeight="250.0" prefWidth="350.0" GridPane.columnIndex="1"
                                GridPane.rowIndex="3"/>
             </children>
         </GridPane>
+        </content>
+        </BorderedTitledPane>
     </children>
 </fx:root>

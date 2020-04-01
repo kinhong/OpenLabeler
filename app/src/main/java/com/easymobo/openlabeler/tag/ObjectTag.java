@@ -55,6 +55,7 @@ public class ObjectTag extends TagBase
             model.setName(newValue);
             Settings.recentNamesProperty.addName(newValue);
         });
+        name.setOnMouseClicked(this::onMouseClicked);
 
         // object thumbnail
         thumbProperty.bind(Bindings.createObjectBinding(() -> {
@@ -83,6 +84,7 @@ public class ObjectTag extends TagBase
         if (me.getClickCount() != 2 || !name.localToScreen(name.getBoundsInLocal()).contains(me.getScreenX(), me.getScreenY())) {
             return;
         }
+        setSelected(true);
         NameEditor editor = new NameEditor(nameProperty().get());
         String label = editor.showPopup(me.getScreenX(), me.getScreenY(), getScene().getWindow());
         nameProperty().set(label);
