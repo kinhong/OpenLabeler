@@ -48,6 +48,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Path;
+import javafx.scene.shape.StrokeLineCap;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.TransformChangedEvent;
@@ -64,6 +65,8 @@ import java.util.logging.Logger;
 
 import static com.easymobo.openlabeler.tag.ShapeItem.Type.POLYGON;
 import static com.easymobo.openlabeler.tag.ShapeItem.Type.RECTANGLE;
+import static java.lang.Math.max;
+import static java.lang.Math.min;
 
 public class TagBoard extends Group implements AutoCloseable
 {
@@ -227,12 +230,11 @@ public class TagBoard extends Group implements AutoCloseable
       scale = new Scale(1, 1);
       translate = new Translate(PADDING, PADDING);
       rotate = new Rotate();
-      board.getTransforms().clear();
-      board.getTransforms().addAll(scale, rotate);
+      board.getTransforms().setAll(scale, rotate);
 
       scale.addEventHandler(TransformChangedEvent.TRANSFORM_CHANGED, event -> {
          // Maintain constant padding at different zoom level
-         board.setPadding(new Insets(Math.max(PADDING / scale.getX(), PADDING / scale.getY())));
+         board.setPadding(new Insets(max(PADDING / scale.getX(), PADDING / scale.getY())));
 
          canvas.setWidth(imageView.getBoundsInLocal().getWidth());
          canvas.setHeight(imageView.getBoundsInLocal().getHeight());
@@ -355,7 +357,8 @@ public class TagBoard extends Group implements AutoCloseable
       double[] yPts = AppUtils.getYPoints(pts);
 
       gc.setStroke(Settings.getObjectStrokeColor());
-      gc.setLineWidth(5);
+      gc.setLineWidth(min(4d, 4d / scale.getX()));
+      gc.setLineCap(StrokeLineCap.ROUND);
       gc.strokePolyline(xPts, yPts, pts.size());
 
       gc.setFill(Settings.getObjectFillColor());
@@ -376,7 +379,8 @@ public class TagBoard extends Group implements AutoCloseable
       clearLastDrawing(gc, points, lastPoint);
 
       gc.setStroke(Settings.getObjectStrokeColor());
-      gc.setLineWidth(5);
+      gc.setLineWidth(min(4d, 4d / scale.getX()));
+      gc.setLineCap(StrokeLineCap.ROUND);
       gc.strokeLine(anchor.getX(), anchor.getY(), x, y);
 
       gc.setFill(Settings.getObjectFillColor());

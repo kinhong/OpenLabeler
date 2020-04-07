@@ -310,7 +310,8 @@ public class AppUtils
       if (timeline != null) {
          return;
       }
-      shape.getStrokeDashArray().addAll(30d, 30d);
+      var dash = 10 * shape.getStrokeWidth();
+      shape.getStrokeDashArray().addAll(dash, dash);
       final double maxOffset = shape.getStrokeDashArray().stream().reduce(0d, (a, b) -> a + b);
 
       timeline = new Timeline(
