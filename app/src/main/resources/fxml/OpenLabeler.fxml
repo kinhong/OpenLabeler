@@ -130,7 +130,7 @@
                                 </MenuItem>
                             </items>
                         </Menu>
-                        <Menu text="%menu.view" visible="">
+                        <Menu text="%menu.view">
                             <items>
                                 <MenuItem fx:id="miZoomOut" onAction="#onZoomOut" text="%menu.zoomOut"/>
                                 <MenuItem fx:id="miZoomIn" onAction="#onZoomIn" text="%menu.zoomIn"/>

@@ -49,6 +49,7 @@ public abstract class TagBase extends Group
     @FXML
     protected Label name;
 
+    private ObjectModel model;
     protected ShapeItem shapeItem;
 
     static final double HANDLE_SIZE = 8;
@@ -76,10 +77,11 @@ public abstract class TagBase extends Group
         }
     }
 
-    public void init(Image image, Translate translate, Scale scale, Rotate rotate) {
+    public void init(Image image, Translate translate, Scale scale, Rotate rotate, ObjectModel model) {
         this.imageDim = new Dimension2D(image.getWidth(), image.getHeight());
         this.translate = translate;
         this.scale = scale;
+        this.model = model;
 
         shapeItem = createShapeItem();
         var shape = shapeItem.toShape();
@@ -143,7 +145,10 @@ public abstract class TagBase extends Group
         return translate.yProperty().add(anchor.multiply(scale.yProperty()));
     }
 
-    public abstract ObjectModel getModel();
+    public ObjectModel getModel() {
+        return model;
+    }
+
     public abstract ReadOnlyObjectProperty<Color> strokeColorProperty();
     public abstract ReadOnlyObjectProperty<Color> fillColorProperty();
 

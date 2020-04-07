@@ -43,7 +43,6 @@ import java.util.List;
 
 public class ObjectTag extends TagBase
 {
-    private ObjectModel model;
     private String action;
 
     private ReadOnlyObjectWrapper<Image> thumbProperty = new ReadOnlyObjectWrapper();
@@ -51,9 +50,7 @@ public class ObjectTag extends TagBase
     private ReadOnlyObjectWrapper<Color> fillColorProperty = new ReadOnlyObjectWrapper();
 
     public ObjectTag(ImageView imageView, Translate translate, Scale scale, Rotate rotate, ObjectModel model) {
-        this.model = model;
-        init(imageView.getImage(), translate, scale, rotate);
-
+        init(imageView.getImage(), translate, scale, rotate, model);
         name.setText(model.getName());
         name.textProperty().addListener((observable, oldValue, newValue) -> {
             model.setName(newValue);
@@ -95,11 +92,6 @@ public class ObjectTag extends TagBase
         String label = editor.showPopup(me.getScreenX(), me.getScreenY(), getScene().getWindow());
         nameProperty().set(label);
         Settings.recentNamesProperty.addName(label);
-    }
-
-    @Override
-    public ObjectModel getModel() {
-        return model;
     }
 
     public String getAction() {

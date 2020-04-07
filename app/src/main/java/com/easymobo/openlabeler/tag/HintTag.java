@@ -33,19 +33,10 @@ import javafx.scene.transform.Translate;
 
 public class HintTag extends TagBase
 {
-    private HintModel model;
-
     public HintTag(ImageView imageView, Translate translate, Scale scale, Rotate rotate, HintModel model) {
-        this.model = model;
-        init(imageView.getImage(), translate, scale, rotate);
-
+        init(imageView.getImage(), translate, scale, rotate, model);
         name.setText(String.format("%s (%.2f)", model.getName(), model.getScore()));
         name.setMouseTransparent(true);
-    }
-
-    @Override
-    public HintModel getModel() {
-        return model;
     }
 
     @Override

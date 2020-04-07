@@ -24,6 +24,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @XmlRootElement(name = "object")
 @XmlType(propOrder = {"name", "pose", "truncated", "difficult", "boundBox", "polygon"})
@@ -125,6 +126,9 @@ public class ObjectModel implements Cloneable
         ObjectModel model = new ObjectModel();
         model.setName(name);
         model.setBoundBox((BoundBox)boundBox.clone());
+        if (polygon != null) {
+            model.setPolygon(polygon.stream().collect(Collectors.toList()));
+        }
         return model;
     }
 }
