@@ -22,20 +22,24 @@ import com.easymobo.openlabeler.preference.NameColor;
 import com.easymobo.openlabeler.preference.Settings;
 import com.easymobo.openlabeler.ui.NameEditor;
 import com.easymobo.openlabeler.util.Colors;
+import com.easymobo.openlabeler.util.OpenCVUtils;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ReadOnlyObjectProperty;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.geometry.Bounds;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.SnapshotParameters;
+import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Polygon;
 import javafx.scene.transform.Rotate;
 import javafx.scene.transform.Scale;
 import javafx.scene.transform.Translate;
+
+import java.util.List;
 
 public class ObjectTag extends TagBase
 {
@@ -59,13 +63,15 @@ public class ObjectTag extends TagBase
 
         // object thumbnail
         thumbProperty.bind(Bindings.createObjectBinding(() -> {
-            Bounds bounds = getBounds();
-            SnapshotParameters parameters = new SnapshotParameters();
-            parameters.setFill(Color.TRANSPARENT);
-            parameters.setViewport(new Rectangle2D(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight()));
+            Bounds roi = getBounds();
+            PixelReader reader = imageView.getImage().getPixelReader();
+            WritableImage wi = new WritableImage(reader, (int)roi.getMinX(), (int)roi.getMinY(), (int)roi.getWidth(), (int)roi.getHeight());
 
-            WritableImage wi = new WritableImage((int)bounds.getWidth(), (int)bounds.getHeight());
-            return imageView.snapshot(parameters, wi);
+            if (shapeItem instanceof PolygonItem) {
+                List<Double> points = ((Polygon)shapeItem.createCopy().moveTo(0, 0)).getPoints();
+                return OpenCVUtils.createMasked(wi, points);
+            }
+            return wi;
          }, shapeItemProperty()));
 
         strokeColorProperty.bind(Bindings.createObjectBinding(() -> {
@@ -116,5 +122,13 @@ public class ObjectTag extends TagBase
 
     public ReadOnlyObjectProperty<Image> thumbProperty() {
         return thumbProperty.getReadOnlyProperty();
+    }
+
+    public Node getThumbClip() {
+        var clip = shapeItem.createCopy().toShape();
+        Bounds bounds = getBounds();
+        //clip.setTranslateX(-bounds.getMinX());
+        //clip.setTranslateY(-bounds.getMinY());
+        return clip;
     }
 }

@@ -30,12 +30,9 @@ import javafx.beans.value.ChangeListener;
 import javafx.geometry.BoundingBox;
 import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
@@ -77,40 +74,6 @@ public class AppUtils
       }
       String path = parent + File.separator + FilenameUtils.getBaseName(media.getName()) + ".xml";
       return new File(path);
-   }
-
-   public static class ImageTableCell<S, T> extends TableCell<S, T>
-   {
-      private ImageView imageView;
-
-      public ImageTableCell() {
-         setAlignment(Pos.CENTER);
-         imageView = new ImageView();
-         imageView.setFitHeight(40);
-         imageView.setFitWidth(40);
-         imageView.setPreserveRatio(true);
-         setGraphic(imageView);
-      }
-
-      @Override
-      protected void updateItem(T item, boolean empty) {
-         super.updateItem(item, empty);
-
-         var image = Image.class.cast(item);
-         imageView.setImage(image);
-
-         if (image != null) {
-            var popupImageView = new ImageView(image);
-            popupImageView.setFitHeight(250);
-            popupImageView.setFitWidth(250);
-            popupImageView.setPreserveRatio(true);
-            Tooltip tooltip = new Tooltip("");
-            tooltip.getStyleClass().add("imageTooltip");
-            tooltip.setShowDelay(Duration.millis(250));
-            tooltip.setGraphic(popupImageView);
-            Tooltip.install(this, tooltip);
-         }
-      }
    }
 
    public static void watchAndUpdate(WatchService watcher, String name, Function<Path, Void> update) {

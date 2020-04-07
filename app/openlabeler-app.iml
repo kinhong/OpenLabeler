@@ -11,6 +11,10 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:14" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:mac:14" level="project" />
+    <orderEntry type="library" name="Maven: org.openpnp:opencv:3.4.2-2" level="project" />
+    <orderEntry type="library" name="Maven: one.util:streamex:0.7.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:14" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:14" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:14" level="project" />
@@ -21,11 +25,11 @@
     <orderEntry type="library" name="Maven: org.openjfx:javafx-media:mac:14" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-web:14" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-web:mac:14" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:14" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:mac:14" level="project" />
     <orderEntry type="library" name="Maven: org.controlsfx:controlsfx:11.0.1" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-base:11.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-base:mac:11.0.2" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: org.openjfx:javafx-swing:11.0.2" level="project" />
-    <orderEntry type="library" scope="RUNTIME" name="Maven: org.openjfx:javafx-swing:mac:11.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.tensorflow:tensorflow:1.15.0" level="project" />
     <orderEntry type="library" name="Maven: org.tensorflow:libtensorflow:1.15.0" level="project" />
     <orderEntry type="library" name="Maven: org.tensorflow:libtensorflow_jni:1.15.0" level="project" />
@@ -101,6 +105,8 @@
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.10.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.10.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.10.3" level="project" />
+    <orderEntry type="library" name="Maven: org.openpnp:opencv:3.4.2-2" level="project" />
+    <orderEntry type="library" name="Maven: one.util:streamex:0.7.1" level="project" />
     <orderEntry type="module" module-name="openlabeler-preloader" />
   </component>
 </module>

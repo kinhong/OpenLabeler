@@ -20,7 +20,6 @@ package com.easymobo.openlabeler.ui;
 import com.easymobo.openlabeler.preference.NameColor;
 import com.easymobo.openlabeler.preference.Settings;
 import com.easymobo.openlabeler.tag.ObjectTag;
-import com.easymobo.openlabeler.util.AppUtils.ImageTableCell;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -81,7 +80,7 @@ public class ObjectTableView extends TableView<ObjectTag>
         visibleColumn.setCellFactory(CheckBoxTableCell.forTableColumn(visibleColumn));
         visibleColumn.setCellValueFactory(cell -> cell.getValue().visibleProperty());
 
-        thumbColumn.setCellFactory(param -> new ImageTableCell());
+        thumbColumn.setCellFactory(param -> new ImageViewTableCell<>());
         thumbColumn.setCellValueFactory(cell -> cell.getValue().thumbProperty());
 
         List<String> names = IteratorUtils.toList(Settings.recentNamesProperty.stream().map(NameColor::getName).iterator());

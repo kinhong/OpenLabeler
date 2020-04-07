@@ -3,6 +3,8 @@ package com.easymobo.openlabeler.tag;
 import com.easymobo.openlabeler.model.ObjectModel;
 import javafx.beans.property.ReadOnlyDoubleProperty;
 import javafx.beans.property.ReadOnlyObjectProperty;
+import javafx.geometry.BoundingBox;
+import javafx.geometry.Bounds;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Scale;
@@ -37,9 +39,14 @@ public interface ShapeItem extends Cloneable
       return getMaxYProperty().get() - getMinYProperty().get();
    }
 
+   default Bounds getBounds() {
+      return new BoundingBox(getX(), getY(), getWidth(), getHeight());
+   }
+
+   Shape toShape();
    void copyFrom(Object src);
-   ShapeItem makeCopy();
+   ShapeItem createCopy();
    List<? extends Shape> getHandles(Translate translate, Scale scale, ReadOnlyObjectProperty<Color> colorProperty);
-   void moveTo(double x, double y);
+   ShapeItem moveTo(double x, double y);
    void save(ObjectModel model);
 }

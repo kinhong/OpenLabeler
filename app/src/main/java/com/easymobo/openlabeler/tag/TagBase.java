@@ -82,7 +82,7 @@ public abstract class TagBase extends Group
         this.scale = scale;
 
         shapeItem = createShapeItem();
-        var shape = getShape();
+        var shape = shapeItem.toShape();
         shape.getTransforms().addAll(translate, scale);
         shape.setFill(Color.TRANSPARENT);
 
@@ -97,7 +97,7 @@ public abstract class TagBase extends Group
         shape.setOnMouseDragged(this::onMouseDragged);
         addEventFilter(MouseEvent.MOUSE_RELEASED, this::onMouseReleased);
 
-        shapeItemProperty().set(shapeItem.makeCopy());
+        shapeItemProperty().set(shapeItem.createCopy());
         getChildren().add(0, shape);
 
         // Prevent name from rotating so it is always upright
@@ -198,7 +198,7 @@ public abstract class TagBase extends Group
                     if (value && !get()) {
                         handles.addAll(shapeItem.getHandles(translate, scale, strokeColorProperty()));
                         getChildren().addAll(handles);
-                        getShape().fillProperty().bind(fillColorProperty());
+                        shapeItem.toShape().fillProperty().bind(fillColorProperty());
                         toFront();
                     }
                     else if (!value && get()) {
@@ -206,7 +206,7 @@ public abstract class TagBase extends Group
                             getChildren().remove(handle);
                         }
                         handles.clear();
-                        getShape().fillProperty().bind(new SimpleObjectProperty<>(Color.TRANSPARENT));
+                        shapeItem.toShape().fillProperty().bind(new SimpleObjectProperty<>(Color.TRANSPARENT));
                     }
                     super.set(value);
                 }
@@ -269,17 +269,13 @@ public abstract class TagBase extends Group
                 break;
         }
         setLocation(shapeItem.getX() + x, shapeItem.getY() + y);
-        shapeProperty.set(shapeItem.makeCopy());
+        shapeProperty.set(shapeItem.createCopy());
     }
 
     protected void onMouseReleased(MouseEvent me) {
         setCursor(Cursor.DEFAULT);
         offset = null;
-        shapeProperty.set(shapeItem.makeCopy());
-    }
-
-    private Shape getShape() {
-        return Shape.class.cast(shapeItem);
+        shapeProperty.set(shapeItem.createCopy());
     }
 
     private ShapeItem createShapeItem() {
@@ -290,15 +286,15 @@ public abstract class TagBase extends Group
     }
 
     public Bounds getBounds() {
-        return new BoundingBox(shapeItem.getX(), shapeItem.getY(), shapeItem.getWidth(), shapeItem.getHeight());
+        return shapeItem.getBounds();
     }
 
     public void setAnimateOutline(boolean animate) {
         if (animate) {
-            AppUtils.addOutlineAnimation(getShape());
+            AppUtils.addOutlineAnimation(shapeItem.toShape());
         }
         else {
-            AppUtils.removeOutlineAnimation(getShape());
+            AppUtils.removeOutlineAnimation(shapeItem.toShape());
         }
     }
 }

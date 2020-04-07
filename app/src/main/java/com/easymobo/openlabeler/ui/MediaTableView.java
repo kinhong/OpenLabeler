@@ -19,7 +19,6 @@ package com.easymobo.openlabeler.ui;
 
 import com.easymobo.openlabeler.model.Annotation;
 import com.easymobo.openlabeler.util.AppUtils;
-import com.easymobo.openlabeler.util.AppUtils.ImageTableCell;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -79,7 +78,7 @@ public class MediaTableView extends TableView<MediaTableView.MediaFile>
         colAnnotated.setCellFactory(param -> new AnnotatedTableCell());
         colAnnotated.setCellValueFactory(cell -> cell.getValue().objectCountProperty());
 
-        colThumb.setCellFactory(param -> new ImageTableCell());
+        colThumb.setCellFactory(param -> new ImageViewTableCell());
         colThumb.setCellValueFactory(cell -> cell.getValue().thumbProperty());
 
         colName.setCellFactory(param -> new NameTableCell());

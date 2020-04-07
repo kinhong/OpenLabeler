@@ -50,6 +50,11 @@ public class RectangleItem extends Rectangle implements ShapeItem
    }
 
    @Override
+   public Shape toShape() {
+      return this;
+   }
+
+   @Override
    public void copyFrom(Object src) {
       if (!(src instanceof RectangleItem)) {
          return;
@@ -61,7 +66,7 @@ public class RectangleItem extends Rectangle implements ShapeItem
    }
 
    @Override
-   public ShapeItem makeCopy() {
+   public ShapeItem createCopy() {
       var item = new RectangleItem();
       item.copyFrom(this);
       return item;
@@ -111,9 +116,10 @@ public class RectangleItem extends Rectangle implements ShapeItem
    }
 
    @Override
-   public void moveTo(double x, double y) {
+   public ShapeItem moveTo(double x, double y) {
       setX(x);
       setY(y);
+      return this;
    }
 
    @Override

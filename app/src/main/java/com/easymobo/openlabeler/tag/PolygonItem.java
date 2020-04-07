@@ -83,6 +83,11 @@ public class PolygonItem extends Polygon implements ShapeItem
    }
 
    @Override
+   public Shape toShape() {
+      return this;
+   }
+
+   @Override
    public void copyFrom(Object src) {
       if (!(src instanceof PolygonItem)) {
          return;
@@ -91,7 +96,7 @@ public class PolygonItem extends Polygon implements ShapeItem
    }
 
    @Override
-   public ShapeItem makeCopy() {
+   public ShapeItem createCopy() {
       var item = new PolygonItem();
       item.copyFrom(this);
       return item;
@@ -118,7 +123,7 @@ public class PolygonItem extends Polygon implements ShapeItem
    }
 
    @Override
-   public void moveTo(double x, double y) {
+   public ShapeItem moveTo(double x, double y) {
       double deltaX = x - getX();
       IntStream.range(0, getPoints().size() / 2).forEach(idx -> {
          getPoints().set(idx * 2, getPoints().get(idx * 2) + deltaX);
@@ -127,6 +132,7 @@ public class PolygonItem extends Polygon implements ShapeItem
       IntStream.range(0, getPoints().size() / 2).forEach(idx -> {
          getPoints().set(idx * 2 + 1, getPoints().get(idx * 2 + 1) + deltaY);
       });
+      return this;
    }
 
    @Override
