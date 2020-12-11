@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,8 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
- *
  */
 
 package com.easymobo.openlabeler.tensorflow;
@@ -24,15 +22,16 @@ import com.easymobo.openlabeler.util.AppUtils;
 import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.*;
+import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
+import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.jaxrs.JerseyDockerHttpClient;
+import com.github.dockerjava.transport.DockerHttpClient;
 import com.google.protobuf.TextFormat;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
-import object_detection.protos.InputReaderOuterClass;
-import object_detection.protos.Model;
-import object_detection.protos.Pipeline;
-import object_detection.protos.StringIntLabelMapOuterClass;
+import object_detection.protos.*;
 import object_detection.protos.StringIntLabelMapOuterClass.StringIntLabelMap;
 import object_detection.protos.StringIntLabelMapOuterClass.StringIntLabelMapItem;
 import org.apache.commons.io.FileUtils;
@@ -70,7 +69,9 @@ public class TFTrainer implements AutoCloseable
     private WatchKey tfTrainDirWatchKey;
 
     // Docker
-    private static DockerClient dockerClient = DockerClientBuilder.getInstance().build();
+    private static DockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
+    private static DockerHttpClient dockerHttpClient = new JerseyDockerHttpClient.Builder().dockerHost(dockerClientConfig.getDockerHost()).build();
+    private static DockerClient dockerClient = DockerClientBuilder.getInstance().withDockerHttpClient(dockerHttpClient).build();
 
     private SimpleIntegerProperty checkpointProperty = new SimpleIntegerProperty(-1);
     public IntegerProperty checkpointProperty() {
@@ -85,7 +86,7 @@ public class TFTrainer implements AutoCloseable
             LOG.log(Level.SEVERE, "Unable to initialize trainer", ex);
         }
 
-        watch(getTrainPath(Settings.getTFDataDir()));
+        watch(getModelDirPath(Settings.getTFDataDir()));
         Settings.tfDataDirProperty.addListener((observable, oldValue, newValue) -> {
             watch(Paths.get(newValue));
         });
@@ -121,8 +122,8 @@ public class TFTrainer implements AutoCloseable
         return Paths.get(baseModelDir, "pipeline.config");
     }
 
-    public static Path getTrainPath(String baseModelDir) {
-        return Paths.get(baseModelDir, "train");
+    public static Path getModelDirPath(String baseModelDir) {
+        return Paths.get(baseModelDir, "temp");
     }
 
     public static Path getSavedModelPath(String baseModelDir) {
@@ -245,11 +246,10 @@ public class TFTrainer implements AutoCloseable
                     .withName(EXPORTER)
                     .withWorkingDir("/root")
                     .withHostName(Settings.getContainerHostName())
-                    .withCmd("python3", "/root/object_detection/export_inference_graph.py",
-                            "--input_type=image_tensor",
-                            "--trained_checkpoint_prefix=" + getDockerModelTrainPath() + "/model.ckpt-" + checkpoint,
-                            "--pipeline_config_path=" + getDockerModelConfigPath(),
-                            "--output_directory=" + getDockerModelTrainPath())
+                    .withCmd("python3", "/root/object_detection/exporter_main_v2.py",
+                          "--trained_checkpoint_dir=" + getDockerModelDirPath() ,
+                          "--pipeline_config_path=" + getDockerModelConfigPath(),
+                          "--output_directory=" + getDockerExportGraphPath())
                     .withHostConfig(new HostConfig().withAutoRemove(true).withBinds(getDockerBinds())).exec();
 
             dockerClient.startContainerCmd(container.getId()).exec();
@@ -277,12 +277,12 @@ public class TFTrainer implements AutoCloseable
     }
 
     public static int getTrainCkpt(String baseModelDir) {
-        File trainDir = getTrainPath(baseModelDir).toFile();
+        File trainDir = getModelDirPath(baseModelDir).toFile();
         if (!trainDir.exists()) {
             return -1;
         }
         // Find the latest checkpoint
-        Pattern pattern = Pattern.compile("model.ckpt-([0-9]+).meta");
+        Pattern pattern = Pattern.compile("ckpt-([0-9]+).index");
         int ckpt = 0;
         for (File file : trainDir.listFiles()) {
             Matcher matcher = pattern.matcher(file.getName());
@@ -312,7 +312,7 @@ public class TFTrainer implements AutoCloseable
                     List<LabelMapItem> items = getLabelMapItems(Settings.getTFDataDir());
                     createTrainData(items);
 
-                    FileUtils.deleteDirectory(getTrainPath(baseModelDir).toFile());
+                    FileUtils.deleteDirectory(getModelDirPath(baseModelDir).toFile());
                     FileUtils.deleteDirectory(getSavedModelPath(baseModelDir).toFile());
                     LOG.info("Finished cleaning up train directory");
 
@@ -331,10 +331,10 @@ public class TFTrainer implements AutoCloseable
                     CreateContainerResponse container = dockerClient.createContainerCmd(Settings.getDockerImage())
                             .withName(containerName)
                             .withWorkingDir("/root")
-                            .withCmd("python3", "/root/object_detection/model_main.py",
+                            .withCmd("python3", "/root/object_detection/model_main_tf2.py",
                                     "--alsologtostderr",
                                     "--pipeline_config_path=" + getDockerModelConfigPath(),
-                                    "--model_dir=" + getDockerModelTrainPath(),
+                                    "--model_dir=" + getDockerModelDirPath(),
                                     "--num_train_steps=" + config.getNumTrainSteps(),
                                     "--sample_1_of_n_eval_examples=" + 1,
                                     getDockerModelConfigPath())
@@ -445,7 +445,11 @@ public class TFTrainer implements AutoCloseable
             }
             // train_config.fine_tune_checkpoint
             Pipeline.TrainEvalPipelineConfig.Builder builder = config.toBuilder();
-            builder.setTrainConfig(config.getTrainConfig().toBuilder().setFineTuneCheckpoint(getDockerFineTuneCkptPath()));
+            builder.setTrainConfig(config.getTrainConfig().toBuilder()
+                  .setBatchSize(Settings.getTFTrainBatchSize())
+                  .setFineTuneCheckpoint(getDockerFineTuneCkptPath())
+                  .setFineTuneCheckpointType("detection")
+                  .setFineTuneCheckpointVersion(Train.CheckpointVersion.V2));
 
             // number of classes
             int numClasses = getLabelMapItems(Settings.getTFDataDir()).size();
@@ -486,11 +490,15 @@ public class TFTrainer implements AutoCloseable
     }
 
     public static String getDockerFineTuneCkptPath() {
-        return "/root/model/model.ckpt";
+        return "/root/model/checkpoint/ckpt-0";
     }
 
-    public static String getDockerModelTrainPath() {
-        return "/root/model/train";
+    public static String getDockerModelDirPath() {
+        return "/root/model/temp";
+    }
+
+    public static String getDockerExportGraphPath() {
+        return "/root/model/fine_tuned_model";
     }
 
     public static String getDockerModelConfigPath() {

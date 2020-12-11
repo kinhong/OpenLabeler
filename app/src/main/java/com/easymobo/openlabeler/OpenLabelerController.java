@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler;
@@ -26,7 +25,7 @@ import com.easymobo.openlabeler.tag.ObjectTag;
 import com.easymobo.openlabeler.tag.ShapeItem;
 import com.easymobo.openlabeler.tag.TagBoard;
 import com.easymobo.openlabeler.tensorflow.TFTrainer;
-import com.easymobo.openlabeler.tool.ExportCOCOController;
+import com.easymobo.openlabeler.tool.ExportCOCOPane;
 import com.easymobo.openlabeler.ui.MediaPane;
 import com.easymobo.openlabeler.ui.MediaTableView.MediaFile;
 import com.easymobo.openlabeler.ui.ObjectTableView;
@@ -46,7 +45,6 @@ import javafx.collections.ObservableSet;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
@@ -72,7 +70,6 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.lang.invoke.MethodHandles;
@@ -400,15 +397,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
 
     @FXML
     private void onExportCOCO(ActionEvent event) {
-        try {
-            FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fxml/tool/ExportCOCO.fxml"), bundle);
-            Node content = fxmlLoader.load();
-            ExportCOCOController controller = fxmlLoader.getController();
-            controller.showDialog(content, tagBoard.getModel());
-        }
-        catch (IOException ex) {
-            LOG.log(Level.SEVERE, "Unable to load FXML: ", ex);
-        }
+        new ExportCOCOPane().showAndWait(tagBoard.getModel());
     }
 
     @FXML
@@ -629,6 +618,9 @@ public class OpenLabelerController implements Initializable, AutoCloseable
 
         BooleanBinding canClearHint = vhBinding.greaterThan(0);
         miClearHint.disableProperty().bind(canClearHint.not());
+
+        // Tools -> Export COCO
+        miExportCOCO.disableProperty().bind(tagBoard.modelProperty().isNull());
 
         // Status bar
         tagBoard.statusProperty().addListener((observable, oldValue, newValue) -> status.setText(newValue));

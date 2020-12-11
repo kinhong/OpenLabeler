@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,13 +12,13 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler.preference;
 
 import com.easymobo.openlabeler.preference.PreferenceUtil.BooleanPrefProperty;
 import com.easymobo.openlabeler.preference.PreferenceUtil.ColorPrefProperty;
+import com.easymobo.openlabeler.preference.PreferenceUtil.IntegerPrefProperty;
 import com.easymobo.openlabeler.preference.PreferenceUtil.StringPrefProperty;
 import com.easymobo.openlabeler.tag.ShapeItem.Type;
 import com.easymobo.openlabeler.util.Colors;
@@ -46,6 +46,7 @@ public class Settings
     private static final String TF_ANNOTATION_DIR = "tfAnnotationDir";
     private static final String TF_DATA_DIR = "tfDataDir";
     private static final String TF_BASE_MODEL_DIR = "tfBaseModelDir";
+    private static final String TF_TRAIN_BATCH_SIZE = "tfTrainBatchSize";
     private static final String DOCKER_IMAGE = "dockerImage";
     private static final String CONTAINER_HOST_NAME = "containerHostName";
     private static final String CONTAINER_NAME = "containerName";
@@ -57,6 +58,7 @@ public class Settings
     // Tools
     private static final String TOOL_COCO_JSON = "toolCOCOJson";
     // Others
+    private static final String PREF_TAB_INDEX = "prefTabIndex";
     private static final String EDIT_SHAPE = "editShape";
     private static final String RECENT_FILES = "recentFiles";
     private static final String RECENT_NAMES = "recentNames";
@@ -161,8 +163,17 @@ public class Settings
         tfBaseModelDirProperty.set(dir);
     }
 
+    // TensorFlow train batch size
+    public static final IntegerProperty tfTrainBatchSizeProperty = new IntegerPrefProperty(pref, TF_TRAIN_BATCH_SIZE, 24);
+    public static int getTFTrainBatchSize() {
+        return tfTrainBatchSizeProperty.get();
+    }
+    public static void setTFTrainBatchSize(int size) {
+        tfTrainBatchSizeProperty.set(size);
+    }
+
     // Docker Image
-    public static final StringProperty dockerImageProperty = new StringPrefProperty(pref, DOCKER_IMAGE, "kinhong/openlabeler:latest-py3");
+    public static final StringProperty dockerImageProperty = new StringPrefProperty(pref, DOCKER_IMAGE, "kinhong/openlabeler:tf-2.3.1");
     public static String getDockerImage() {
         return dockerImageProperty.get();
     }
@@ -249,6 +260,14 @@ public class Settings
     }
     public static void setEditShape(Type shape) {
         editShapeProperty.set(shape.name());
+    }
+
+    public static final IntegerProperty prefTabIndexProperty = new IntegerPrefProperty(pref, PREF_TAB_INDEX, 0);
+    public static int getPrefTabIndex() {
+        return prefTabIndexProperty.get();
+    }
+    public static void setPrefTabIndex(int index) {
+        prefTabIndexProperty.set(index);
     }
 
     // Recent files

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+  ~ Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,21 +14,13 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  ~ ==============================================================================
   -->
 
 <?import com.easymobo.openlabeler.preference.PreferencePane?>
-<?import javafx.scene.control.ListView?>
-<?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.TabPane?>
 <fx:root stylesheets="@/css/OpenLabeler.css" type="com.easymobo.openlabeler.preference.PreferencePane"
          xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
     <content>
-        <SplitPane fx:id="splitPane" dividerPositions="0.2" prefHeight="900.0" prefWidth="950.0">
-            <items>
-                <ListView fx:id="categoryList" prefHeight="200.0" styleClass="title"/>
-                <ScrollPane fx:id="scroller" pannable="true" fitToWidth="true"/>
-            </items>
-        </SplitPane>
+        <TabPane fx:id="tabs" prefHeight="900.0" prefWidth="900.0" tabClosingPolicy="UNAVAILABLE"/>
     </content>
 </fx:root>

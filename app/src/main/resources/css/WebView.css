@@ -14,11 +14,26 @@
  * limitations under the License.
  */
 
-/* General */
-* {
-    -fx-primary-color: #F7941D;
-    -fx-primary-focus-color: #F25E02;
+body {
+    padding: 0px;
+    margin: 0px;
+    color: white;
+    background-color: #292929;
+    font-family: sans-serif, Arial, Helvetica;
+    overflow-x: hidden;
+    overflow-y: hidden;
 }
-.root {
-    -fx-font-family: "Arial";
+
+table {
+    border: none;
+}
+
+td {
+    white-space: nowrap;
+    border: none;
+}
+
+td.label {
+    padding-right: 15px;
+    text-align: right;
 }

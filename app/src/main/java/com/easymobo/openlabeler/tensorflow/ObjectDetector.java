@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler.tensorflow;
@@ -30,11 +29,15 @@ import org.apache.commons.lang.ArrayUtils;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Tensor;
 import org.tensorflow.TensorFlow;
-import org.tensorflow.Tensors;
+import org.tensorflow.framework.DataType;
 import org.tensorflow.framework.MetaGraphDef;
 import org.tensorflow.framework.SignatureDef;
 import org.tensorflow.framework.TensorInfo;
-import org.tensorflow.types.UInt8;
+import org.tensorflow.ndarray.Shape;
+import org.tensorflow.ndarray.buffer.DataBuffers;
+import org.tensorflow.types.TFloat32;
+import org.tensorflow.types.TString;
+import org.tensorflow.types.TUint8;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -157,6 +160,10 @@ public class ObjectDetector implements AutoCloseable
             Tensor<?> input = null;
             String operation = "";
             BufferedImage img = ImageIO.read(imageFile);
+
+            MetaGraphDef m = MetaGraphDef.parseFrom(model.metaGraphDef().toByteArray());
+            SignatureDef sig = m.getSignatureDefOrThrow("serving_default");
+
             try {
                 if (model.graph().operation("image_tensor") != null) {
                     operation = "image_tensor";
@@ -166,12 +173,17 @@ public class ObjectDetector implements AutoCloseable
                     operation = "encoded_image_string_tensor";
                     input = makeImageStringTensor(imageFile);
                 }
+                else if (sig.containsInputs("input_tensor")) {
+                    TensorInfo tensorInfo = sig.getInputsOrThrow("input_tensor");
+                    operation = tensorInfo.getName();
+                    input = tensorInfo.getDtype() == DataType.DT_STRING ? makeImageStringTensor(imageFile) : makeImageTensor(img);
+                }
                 outputs = model.session()
                       .runner()
                       .feed(operation, input)
-                      .fetch("detection_scores")
-                      .fetch("detection_classes")
-                      .fetch("detection_boxes")
+                      .fetch(sig.getOutputsOrThrow("detection_scores").getName())
+                      .fetch(sig.getOutputsOrThrow("detection_classes").getName())
+                      .fetch(sig.getOutputsOrThrow("detection_boxes").getName())
                       .run();
             }
             finally {
@@ -179,29 +191,25 @@ public class ObjectDetector implements AutoCloseable
                     input.close();
                 }
             }
-            try (Tensor<Float> scoresT = outputs.get(0).expect(Float.class);
-                 Tensor<Float> classesT = outputs.get(1).expect(Float.class);
-                 Tensor<Float> boxesT = outputs.get(2).expect(Float.class)) {
+            try (Tensor<TFloat32> scoresT = outputs.get(0).expect(TFloat32.DTYPE);
+                 Tensor<TFloat32> classesT = outputs.get(1).expect(TFloat32.DTYPE);
+                 Tensor<TFloat32> boxesT = outputs.get(2).expect(TFloat32.DTYPE)) {
                 // All these tensors have:
                 // - 1 as the first dimension
                 // - maxObjects as the second dimension
                 // While boxesT will have 4 as the third dimension (2 sets of (x, y) coordinates).
                 // This can be verified by looking at scoresT.shape() etc.
-                int maxObjects = (int) scoresT.shape()[1];
-                float[] scores = scoresT.copyTo(new float[1][maxObjects])[0];
-                float[] classes = classesT.copyTo(new float[1][maxObjects])[0];
-                float[][] boxes = boxesT.copyTo(new float[1][maxObjects][4])[0];
-                // Collect all objects whose score is at least 0.5.
-                for (int i = 0; i < scores.length; ++i) {
-                    float score = scores[i];
+                int maxObjects = (int) scoresT.shape().asArray()[1];
+                for (int i = 0; i < maxObjects; i++) {
+                    float score = scoresT.data().getFloat(0, i);
                     if (score < 0.5) {
                         continue;
                     }
-                    float ymin = boxes[i][0] * img.getHeight();
-                    float xmin = boxes[i][1] * img.getWidth();
-                    float ymax = boxes[i][2] * img.getHeight();
-                    float xmax = boxes[i][3] * img.getWidth();
-                    int id = (int) classes[i];
+                    float ymin = boxesT.data().getFloat(0, i, 0) * img.getHeight();
+                    float xmin = boxesT.data().getFloat(0, i, 1) * img.getWidth();
+                    float ymax = boxesT.data().getFloat(0, i, 2) * img.getHeight();
+                    float xmax = boxesT.data().getFloat(0, i, 3) * img.getWidth();
+                    int id = (int) classesT.data().getFloat(0, i);
                     if (id < labels.length) {
                         HintModel model = new HintModel(labels[id], xmin, ymin, xmax, ymax);
                         model.setScore(score);
@@ -219,7 +227,7 @@ public class ObjectDetector implements AutoCloseable
 
     private static void printSignature(SavedModelBundle model) {
         try {
-            MetaGraphDef m = MetaGraphDef.parseFrom(model.metaGraphDef());
+            MetaGraphDef m = MetaGraphDef.parseFrom(model.metaGraphDef().toByteArray());
             SignatureDef sig = m.getSignatureDefOrThrow("serving_default");
             int numInputs = sig.getInputsCount();
             int i = 1;
@@ -288,8 +296,8 @@ public class ObjectDetector implements AutoCloseable
         bgr2rgb(data);
         final long BATCH_SIZE = 1;
         final long CHANNELS = 3;
-        long[] shape = new long[]{BATCH_SIZE, img.getHeight(), img.getWidth(), CHANNELS};
-        return Tensor.create(UInt8.class, shape, ByteBuffer.wrap(data));
+        Shape shape = Shape.of(BATCH_SIZE, img.getHeight(), img.getWidth(), CHANNELS);
+        return TUint8.tensorOf(shape, DataBuffers.of(data));
     }
 
     /**
@@ -297,8 +305,7 @@ public class ObjectDetector implements AutoCloseable
      */
     private static Tensor<?> makeImageStringTensor(File imageFile) throws IOException {
         var content = FileUtils.readFileToByteArray(imageFile);
-        byte[][] data = { content };
-        return Tensors.create(data);
+        return TString.tensorOfBytes(Shape.of(1), DataBuffers.ofObjects(content));
     }
 
     /**

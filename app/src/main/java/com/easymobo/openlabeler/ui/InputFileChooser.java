@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler.ui;
@@ -84,7 +83,7 @@ public class InputFileChooser extends HBox
             chooser.setTitle(bundle.getString("label.chooseFile"));
             if (StringUtils.isNotBlank(txt.getText())) {
                 var dir = new File(txt.getText()).getParentFile();
-                if (dir.exists()) {
+                if (dir != null && dir.exists()) {
                     chooser.setInitialDirectory(dir);
                 }
             }

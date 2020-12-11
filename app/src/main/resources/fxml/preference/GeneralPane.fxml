@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+  ~ Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  ~ ==============================================================================
   -->
 
 <?import com.easymobo.openlabeler.preference.GeneralPane?>
@@ -46,9 +45,9 @@
                        GridPane.valignment="CENTER"/>
                 <TextField fx:id="textAnnotationsDir" GridPane.columnIndex="1" GridPane.rowIndex="1"/>
             </children>
-        </GridPane>
-    </content>
-</BorderedTitledPane>
+            </GridPane>
+            </content>
+        </BorderedTitledPane>
         <BorderedTitledPane title="%label.annotation">
             <content>
             <GridPane hgap="10.0" vgap="10">

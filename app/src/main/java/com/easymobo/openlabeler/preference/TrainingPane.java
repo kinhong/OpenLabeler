@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler.preference;
@@ -55,7 +54,7 @@ public class TrainingPane extends VBox implements Category
     @FXML
     private InputFileChooser dirTFImage, dirTFAnnotation, dirTFData, dirTFBaseModel;
     @FXML
-    private TextField txtDockerImage, txtContainerHostName, txtContainerName;
+    private TextField txtTrainBatchSize, txtDockerImage, txtContainerHostName, txtContainerName;
     @FXML
     private LabelMapPane labelMapPane;
     @FXML
@@ -115,6 +114,7 @@ public class TrainingPane extends VBox implements Category
         dirTFAnnotation.setText(Settings.getTFAnnotationDir());
         dirTFData.setText(Settings.getTFDataDir());
         dirTFBaseModel.setText(Settings.getTFBaseModelDir());
+        txtTrainBatchSize.setText(String.valueOf(Settings.getTFTrainBatchSize()));
         txtDockerImage.setText(Settings.getDockerImage());
         txtContainerHostName.setText(Settings.getContainerHostName());
         txtContainerName.setText(Settings.getContainerName());
@@ -129,6 +129,7 @@ public class TrainingPane extends VBox implements Category
         Settings.setTFAnnotationDir(dirTFAnnotation.getText());
         Settings.setTFDataDir(dirTFData.getText());
         Settings.setTFBaseModelDir(dirTFBaseModel.getText());
+        Settings.setTFTrainBatchSize(Integer.valueOf(txtTrainBatchSize.getText()));
         Settings.setDockerImage(txtDockerImage.getText());
         Settings.setContainerHostName(txtContainerHostName.getText());
         Settings.setContainerName(txtContainerName.getText());
@@ -165,6 +166,8 @@ public class TrainingPane extends VBox implements Category
         dirTFData.textProperty().addListener((observable, oldValue, newValue) -> updateLabelMap());
         dirTFBaseModel.textProperty().addListener((observable, oldValue, newValue) -> updateTraining());
 
+        txtTrainBatchSize.setTextFormatter(AppUtils.createNumberTextFormatter());
+
         BooleanBinding changes[] = {
                 dirTFImage.textProperty().isNotEqualTo(Settings.tfImageDirProperty),
                 dirTFAnnotation.textProperty().isNotEqualTo(Settings.tfAnnotationDirProperty),
@@ -172,6 +175,7 @@ public class TrainingPane extends VBox implements Category
                 new SimpleListProperty(labelMapPane.getItems()).isNotEqualTo(
                         FXCollections.observableList(TFTrainer.getLabelMapItems(dirTFData.getText()))),
                 dirTFBaseModel.textProperty().isNotEqualTo(Settings.tfBaseModelDirProperty),
+              txtTrainBatchSize.textProperty().isNotEqualTo(Settings.tfTrainBatchSizeProperty.asString()),
                 txtDockerImage.textProperty().isNotEqualTo(Settings.dockerImageProperty),
                 txtContainerHostName.textProperty().isNotEqualTo(Settings.containerHostNameProperty),
                 txtContainerName.textProperty().isNotEqualTo(Settings.containerNameProperty),

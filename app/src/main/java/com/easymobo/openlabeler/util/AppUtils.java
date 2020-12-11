@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler.util;
@@ -33,12 +32,14 @@ import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.LineTo;
 import javafx.scene.shape.MoveTo;
 import javafx.scene.shape.Shape;
+import javafx.stage.Stage;
 import javafx.util.Duration;
 import javafx.util.StringConverter;
 import org.apache.commons.io.FilenameUtils;
@@ -56,6 +57,8 @@ import java.util.ResourceBundle;
 import java.util.function.Function;
 import java.util.stream.IntStream;
 
+import static com.easymobo.openlabeler.OpenLabeler.APP_CSS;
+import static com.easymobo.openlabeler.OpenLabeler.APP_ICON;
 import static java.nio.file.StandardWatchEventKinds.OVERFLOW;
 
 public class AppUtils
@@ -281,6 +284,12 @@ public class AppUtils
       alert.setTitle(title);
       alert.setHeaderText(null);
       alert.setContentText(message);
+
+      DialogPane dialogPane = alert.getDialogPane();
+      dialogPane.getStylesheets().add(AppUtils.class.getResource(APP_CSS).toExternalForm());
+      Stage stage = (Stage)dialogPane.getScene().getWindow();
+      stage.getIcons().add(new Image(AppUtils.class.getClassLoader().getResourceAsStream(APP_ICON)));
+
       return alert;
    }
 

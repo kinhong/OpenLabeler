@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+  ~ Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -13,7 +13,6 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  ~ ==============================================================================
   -->
 
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -33,37 +32,32 @@
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-controls</artifactId>
-            <version>14</version>
+            <version>15.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-fxml</artifactId>
-            <version>14</version>
+            <version>15.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-media</artifactId>
-            <version>14</version>
+            <version>15.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-web</artifactId>
-            <version>14</version>
+            <version>15.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
-            <version>14</version>
-        </dependency>
-        <dependency>
-            <groupId>org.controlsfx</groupId>
-            <artifactId>controlsfx</artifactId>
-            <version>11.0.1</version>
+            <version>15.0.1</version>
         </dependency>
         <dependency>
             <groupId>org.tensorflow</groupId>
-            <artifactId>tensorflow</artifactId>
-            <version>1.15.0</version>
+            <artifactId>tensorflow-core-platform</artifactId>
+            <version>0.2.0</version>
         </dependency>
         <dependency>
             <groupId>org.tensorflow</groupId>
@@ -79,47 +73,47 @@
         <dependency>
             <groupId>com.google.protobuf</groupId>
             <artifactId>protobuf-java</artifactId>
-            <version>3.11.4</version>
+            <version>3.14.0</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
-            <version>4.1</version>
+            <version>4.4</version>
         </dependency>
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.8.1</version>
+            <version>3.11</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>2.6</version>
+            <version>2.8.0</version>
         </dependency>
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.11</version>
+            <version>1.15</version>
         </dependency>
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-javafx</artifactId>
-            <version>11.3.5</version>
+            <version>11.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.kordamp.ikonli</groupId>
             <artifactId>ikonli-materialdesign-pack</artifactId>
-            <version>11.3.5</version>
+            <version>11.5.0</version>
         </dependency>
         <dependency>
             <groupId>de.codecentric.centerdevice</groupId>
             <artifactId>centerdevice-nsmenufx</artifactId>
-            <version>2.1.6</version>
+            <version>2.1.7</version>
         </dependency>
         <dependency>
             <groupId>com.github.docker-java</groupId>
             <artifactId>docker-java</artifactId>
-            <version>3.2.1</version>
+            <version>3.2.6</version>
             <exclusions>
                 <exclusion>
                     <artifactId>commons-codec</artifactId>
@@ -140,37 +134,37 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.25</version>
+            <version>1.7.30</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-simple</artifactId>
-            <version>1.7.25</version>
+            <version>1.7.30</version>
         </dependency>
         <dependency>
             <groupId>javax.xml.bind</groupId>
             <artifactId>jaxb-api</artifactId>
-            <version>2.2.2</version>
+            <version>2.3.1</version>
         </dependency>
         <dependency>
             <groupId>org.glassfish.jaxb</groupId>
             <artifactId>jaxb-runtime</artifactId>
-            <version>2.3.2</version>
+            <version>2.3.3</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.10.3</version>
+            <version>2.11.3</version>
         </dependency>
         <dependency>
             <groupId>org.openpnp</groupId>
             <artifactId>opencv</artifactId>
-            <version>3.4.2-2</version>
+            <version>4.3.0-2</version>
         </dependency>
         <dependency>
             <groupId>one.util</groupId>
             <artifactId>streamex</artifactId>
-            <version>0.7.1</version>
+            <version>0.7.3</version>
         </dependency>
         <dependency>
             <groupId>com.easymobo</groupId>
@@ -282,7 +276,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>${project.basedir}/bin/jdk.packager-osx/jpackager</executable>
+                                    <executable>${java.home}/bin/jpackage</executable>
                                     <workingDirectory>${project.build.directory}</workingDirectory>
                                     <longModulepath>false
                                     </longModulepath> <!-- fix for https://github.com/mojohaus/exec-maven-plugin/issues/75 -->
@@ -291,24 +285,22 @@
                                     </environmentVariables>
                                     <arguments>
                                         <!-- packager arguments -->
-                                        <argument>create-installer</argument>
+                                        <argument>--type</argument>
                                         <argument>pkg</argument>
                                         <argument>--verbose</argument>
-                                        <argument>--echo-mode</argument>
-                                        <argument>--singleton</argument>
                                         <argument>--input</argument>
                                         <argument>${project.build.directory}/libs</argument>
-                                        <argument>--class</argument>
-                                        <argument>com.easymobo.openlabeler.Main</argument>
                                         <argument>--vendor</argument>
                                         <argument>${project.vendor}</argument>
-                                        <argument>--version</argument>
+                                        <argument>--app-version</argument>
                                         <argument>${revision}</argument>
                                         <argument>--main-jar</argument>
                                         <argument>./openlabeler-app-${revision}.jar</argument>
-                                        <argument>--output</argument>
+                                        <argument>--main-class</argument>
+                                        <argument>com.easymobo.openlabeler.Main</argument>
+                                        <argument>--dest</argument>
                                         <argument>${project.build.directory}/package</argument>
-                                        <argument>--identifier</argument>
+                                        <argument>--mac-package-identifier</argument>
                                         <argument>com.easymobo.openlabeler</argument>
                                         <argument>--name</argument>
                                         <argument>OpenLabeler</argument>
@@ -320,7 +312,6 @@
                                         <argument>${java.home}/jmods:${project.build.directory}/mods</argument>
                                         <argument>--add-modules</argument>
                                         <argument>${project.build.add-modules}</argument>
-                                        <argument>--strip-native-commands</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -359,7 +350,7 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>${project.basedir}/bin/jdk.packager-linux/jpackager</executable>
+                                    <executable>${java.home}/bin/jpackage</executable>
                                     <workingDirectory>${project.build.directory}</workingDirectory>
                                     <longModulepath>false
                                     </longModulepath> <!-- fix for https://github.com/mojohaus/exec-maven-plugin/issues/75 -->
@@ -368,38 +359,32 @@
                                     </environmentVariables>
                                     <arguments>
                                         <!-- packager arguments -->
-                                        <argument>create-installer</argument>
+                                        <argument>--type</argument>
                                         <argument>deb</argument>
                                         <argument>--verbose</argument>
-                                        <argument>--echo-mode</argument>
-                                        <argument>--singleton</argument>
                                         <argument>--input</argument>
                                         <argument>${project.build.directory}/libs</argument>
-                                        <argument>--class</argument>
-                                        <argument>com.easymobo.openlabeler.Main</argument>
                                         <argument>--vendor</argument>
                                         <argument>${project.vendor}</argument>
-                                        <argument>--version</argument>
+                                        <argument>--app-version</argument>
                                         <argument>${revision}</argument>
                                         <argument>--main-jar</argument>
                                         <argument>./openlabeler-app-${revision}.jar</argument>
-                                        <argument>--output</argument>
+                                        <argument>--main-class</argument>
+                                        <argument>com.easymobo.openlabeler.Main</argument>
+                                        <argument>--dest</argument>
                                         <argument>${project.build.directory}/package</argument>
-                                        <argument>--identifier</argument>
-                                        <argument>com.easymobo.openlabeler</argument>
                                         <argument>--name</argument>
                                         <argument>OpenLabeler</argument>
                                         <argument>--icon</argument>
                                         <argument>${project.build.directory}/classes/icon.png</argument>
-                                        <argument>--linux-bundle-name</argument>
-                                        <argument>openlabeler</argument>
+                                        <argument>--linux-shortcut</argument>
 
                                         <!-- jlink arguments -->
                                         <argument>--module-path</argument>
                                         <argument>${java.home}/jmods:${project.build.directory}/mods</argument>
                                         <argument>--add-modules</argument>
                                         <argument>${project.build.add-modules}</argument>
-                                        <argument>--strip-native-commands</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -437,39 +422,28 @@
                                     <goal>exec</goal>
                                 </goals>
                                 <configuration>
-                                    <executable>${java.home}/bin/java</executable>
+                                    <executable>${java.home}/bin/jpackage</executable>
                                     <workingDirectory>${project.build.directory}</workingDirectory>
                                     <longModulepath>false</longModulepath> <!-- fix for https://github.com/mojohaus/exec-maven-plugin/issues/75 -->
                                     <environmentVariables>
                                         <JAVA_HOME>${java.home}</JAVA_HOME>
                                     </environmentVariables>
                                     <arguments>
-                                        <argument>--module-path</argument>
-                                        <argument>${java.home}/jmods</argument>
-                                        <argument>--add-opens</argument>
-                                        <argument>jdk.jlink/jdk.tools.jlink.internal.packager=jdk.packager</argument>
-                                        <argument>-m</argument>
-                                        <argument>jdk.packager/jdk.packager.Main</argument>
-                                        <!-- packager arguments -->
-                                        <argument>create-installer</argument>
+                                        <argument>--type</argument>
                                         <argument>msi</argument>
                                         <argument>--verbose</argument>
-                                        <argument>--echo-mode</argument>
-                                        <argument>--singleton</argument>
                                         <argument>--input</argument>
                                         <argument>${project.build.directory}/libs</argument>
-                                        <argument>--class</argument>
-                                        <argument>com.easymobo.openlabeler.Main</argument>
                                         <argument>--vendor</argument>
                                         <argument>${project.vendor}</argument>
-                                        <argument>--version</argument>
+                                        <argument>--app-version</argument>
                                         <argument>${revision}</argument>
                                         <argument>--main-jar</argument>
                                         <argument>./openlabeler-app-${revision}.jar</argument>
-                                        <argument>--output</argument>
+                                        <argument>--main-class</argument>
+                                        <argument>com.easymobo.openlabeler.Main</argument>
+                                        <argument>--dest</argument>
                                         <argument>${project.build.directory}/package</argument>
-                                        <argument>--identifier</argument>
-                                        <argument>com.easymobo.openlabeler</argument>
                                         <argument>--name</argument>
                                         <argument>OpenLabeler</argument>
                                         <argument>--icon</argument>
@@ -483,7 +457,6 @@
                                         <argument>${java.home}/jmods;${project.build.directory}/mods</argument>
                                         <argument>--add-modules</argument>
                                         <argument>${project.build.add-modules}</argument>
-                                        <argument>--strip-native-commands</argument>
                                     </arguments>
                                 </configuration>
                             </execution>

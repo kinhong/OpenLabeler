@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,19 +12,18 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler.ui;
 
 import com.easymobo.openlabeler.preference.NameColor;
 import com.easymobo.openlabeler.preference.Settings;
-import javafx.beans.property.ObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -35,11 +34,8 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.Window;
 import org.apache.commons.collections4.IteratorUtils;
-import org.controlsfx.control.textfield.CustomTextField;
-import org.controlsfx.control.textfield.TextFields;
 
 import java.lang.invoke.MethodHandles;
-import java.lang.reflect.Method;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -48,7 +44,9 @@ import java.util.logging.Logger;
 public class NameEditor extends VBox
 {
     @FXML
-    private CustomTextField text;
+    private TextField textField;
+    @FXML
+    private Button button;
     @FXML
     private ListView<String> list;
 
@@ -67,17 +65,17 @@ public class NameEditor extends VBox
 
         try {
             loader.load();
-            setupClearButtonField(text);
         }
         catch (Exception ex) {
             LOG.log(Level.SEVERE, "Unable to load FXML", ex);
         }
 
+        button.setOnAction(e -> textField.setText(""));
 
         List<String> labels = IteratorUtils.toList(Settings.recentNamesProperty.stream().map(NameColor::getName).iterator());
         FilteredList<String> filtered = new FilteredList<>(FXCollections.observableArrayList(labels), s -> true);
-        text.textProperty().addListener(obs -> {
-            String filter = text.getText();
+        textField.textProperty().addListener(obs -> {
+            String filter = textField.getText();
             if (filter == null || filter.length() == 0) {
                 filtered.setPredicate(s -> true);
             }
@@ -94,7 +92,7 @@ public class NameEditor extends VBox
 
                 setOnMouseClicked(value -> {
                     if (!empty && value.getClickCount() == 2) {
-                        text.setText(item);
+                        textField.setText(item);
                         ((Stage) getScene().getWindow()).close();
                     }
                 });
@@ -102,8 +100,8 @@ public class NameEditor extends VBox
         });
 
         list.setItems(filtered);
-        text.setText(label);
-        text.selectAll();
+        textField.setText(label);
+        textField.selectAll();
     }
 
     public static String getLastLabel(ResourceBundle bundle) {
@@ -116,21 +114,21 @@ public class NameEditor extends VBox
     public String showPopup(double screenX, double screenY, Window window) {
         Scene scene = new Scene(this);
         Stage popupStage = new Stage(StageStyle.UNDECORATED);
-        String label = text.getText();
+        String label = textField.getText();
         popupStage.addEventFilter(KeyEvent.KEY_PRESSED, event -> {
             switch (event.getCode()) {
                 case ESCAPE: {
-                    text.setText(label); // discard change
+                    textField.setText(label); // discard change
                     popupStage.close();
                     break;
                 }
                 case ENTER: {
                     int index = list.getSelectionModel().getSelectedIndex();
                     if (index >= 0) {
-                        text.setText(list.getSelectionModel().getSelectedItem());
+                        textField.setText(list.getSelectionModel().getSelectedItem());
                     }
-                    if (text.getText().trim().isEmpty()) {
-                        text.setText(label);
+                    if (textField.getText().trim().isEmpty()) {
+                        textField.setText(label);
                     }
                     popupStage.close();
                     break;
@@ -167,8 +165,8 @@ public class NameEditor extends VBox
         });
         popupStage.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
             if (!isNowFocused) {
-                if (text.getText().trim().isEmpty()) {
-                    text.setText(label);
+                if (textField.getText().trim().isEmpty()) {
+                    textField.setText(label);
                 }
                 popupStage.hide();
             }
@@ -182,12 +180,6 @@ public class NameEditor extends VBox
         popupStage.setY(screenY + 10);
 
         popupStage.showAndWait();
-        return text.getText();
-    }
-
-    private void setupClearButtonField(CustomTextField customTextField)  throws Exception {
-        Method m = TextFields.class.getDeclaredMethod("setupClearButtonField", TextField.class, ObjectProperty.class);
-        m.setAccessible(true);
-        m.invoke(null, customTextField, customTextField.rightProperty());
+        return textField.getText();
     }
 }

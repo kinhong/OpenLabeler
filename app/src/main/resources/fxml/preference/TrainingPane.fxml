@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+  ~ Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  ~ ==============================================================================
   -->
 
 <?import com.easymobo.openlabeler.preference.LabelMapPane?>
@@ -45,7 +44,7 @@
 
                         <Label text="%label.labelMap" GridPane.halignment="RIGHT" GridPane.valignment="TOP"
                                GridPane.rowIndex="4"/>
-                        <LabelMapPane fx:id="labelMapPane" prefHeight="250.0" prefWidth="285.0" GridPane.columnIndex="1"
+                        <LabelMapPane fx:id="labelMapPane" prefHeight="200.0" prefWidth="285.0" GridPane.columnIndex="1"
                                       GridPane.rowIndex="4"/>
 
                         <Button fx:id="btnCreateTrainData" text="%label.createTrainData" onAction="#onCreateTrainData"
@@ -58,7 +57,7 @@
                 </GridPane>
             </content>
         </BorderedTitledPane>
-        <BorderedTitledPane title="%label.model">
+        <BorderedTitledPane title="%label.modelAndConfig">
             <content>
                 <GridPane hgap="10.0" vgap="10">
                     <children>
@@ -70,6 +69,9 @@
 
                         <Label text="%label.trainCkpt" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
                         <Label fx:id="labelTrainCkpt" text="" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+
+                        <Label text="%label.trainBatchSize" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
+                        <TextField fx:id="txtTrainBatchSize" text="" minWidth="100" maxWidth="100" GridPane.columnIndex="1" GridPane.rowIndex="3"/>
                     </children>
                     <columnConstraints>
                         <ColumnConstraints/>

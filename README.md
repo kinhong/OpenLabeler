@@ -6,7 +6,7 @@
 
 **OpenLabeler** is an open source application for annotating objects. It can generate the PASCAL VOC format XML annotation file for artificial intelligence and deep learning training. A unique aspect of this application is its ability to use inference (with [TensorFlow](https://www.tensorflow.org)) to help improve accuracy and speed up the annotation process.
 
-OpenLabeler is written in [OpenJDK](https://openjdk.java.net)/[OpenJFX](https://openjfx.io) (version 11.x).
+OpenLabeler is written in [OpenJDK](https://openjdk.java.net)/[OpenJFX](https://openjfx.io) (version 15.x).
 
 ![Application](assets/app.png)
 
@@ -36,20 +36,20 @@ OpenLabeler supports graphs with the `image_tensor` and `encoded_image_string_te
 
 *Note: This is currently an experimental feature.*
 
-OpenLabeler can be used to start/stop a training process in TensorFlow within a [Docker](https://www.docker.com) container. Containers with [TensorFlow](https://www.tensorflow.org/install/docker) and [Object Detection API](https://github.com/tensorflow/models/tree/master/research/object_detection) dependencies have been pre-built for your convenience. To use this feature:
+OpenLabeler can be used to start/stop a training process in TensorFlow running inside a [Docker](https://www.docker.com) container. Containers with [TensorFlow 2](https://www.tensorflow.org/install/docker) and [Object Detection API](https://github.com/tensorflow/models/tree/master/research/object_detection) dependencies have been pre-built for your convenience. To use this feature:
 
 1. [Install Docker](https://docs.docker.com/install) on your host machine
 2. *Windows only* Open Docker > Settings > General and check "Expose daemon on tcp://localhost:2375 without TLS"
 3. *Windows only* Create a `<home>\.docker-java.properties` file. Add a `DOCKER_HOST=tcp://localhost:2375 entry`. See [reference](https://github.com/docker-java/docker-java)
-4. Choose a pre-built, `kinhong/openlabeler:latest-py3` or `kinhong/openlabeler:latest-gpu-py3`, [docker image](https://cloud.docker.com/repository/docker/kinhong/openlabeler/tags) from [Docker Hub](https://hub.docker.com/) and pull it to your docker host
-5. Download a base model from the [TensorFlow Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/detection_model_zoo.md) for transfer learning
+4. Choose a pre-built, `kinhong/openlabeler:tf-2.3.1` or `kinhong/openlabeler:tf-2.3.1-gpu`, [docker image](https://cloud.docker.com/repository/docker/kinhong/openlabeler/tags) from [Docker Hub](https://hub.docker.com/) and pull it to your docker host
+5. Download a base model from the [TensorFlow 2 Detection Model Zoo](https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md) for transfer learning
 6. Configure the Training Preference settings (and add the label map entries)
 ![Train Preferences](assets/pref-train.png)
 7. You can then start, stop, continue, restart training, or export the inference graph
 
 ## Shortcut Keys
 
-The following shortcut keys are supported:
+OpenLabeler supports the following shortcut keys:
 
 | Key Combination  | Action
 | ------------- | -------------
@@ -89,8 +89,9 @@ Download and execute the `.pkg`, `.deb` or `.msi` installation packages for macO
   +models
     +model
       -pipeline config file
-      +train
-        -saved_model
+      +temp (created by OpenLabeler)
+        -ckpt-xyz...
+      +fine_tuned_model (created by OpenLabeler 
 ```
  
 ## Build

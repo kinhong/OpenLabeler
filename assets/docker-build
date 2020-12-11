@@ -1,0 +1,5 @@
+docker build -f Dockerfile --tag kinhong/openlabeler:tf-2.3.1 .
+docker push kinhong/openlabeler:tf-2.3.1
+
+docker build -f Dockerfile-gpu --tag kinhong/openlabeler:tf-2.3.1-gpu .
+docker push kinhong/openlabeler:tf-2.3.1-gpu

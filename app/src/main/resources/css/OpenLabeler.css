@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,34 +12,69 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 .root {
-    -fx-base: #ececec;
-    -fx-background: derive(-fx-base,26.4%);
-    -fx-background-color: -fx-background;
+    -fx-font-family: "Arial";
+    -app-base: #ececec;
+    -app-background: derive(-fx-base, 26.4%);
+    -fx-background-color: -app-background;
+    -fx-accent: #616161; /* Gray 700 */
+    -fx-focus-color: -fx-accent;
+    -app-control-background: derive(-fx-accent, 90.0%);
+    -app-hover-background: derive(-fx-accent, 50.0%);
 }
 
-.flat, .tool-bar .button, .tool-bar .toggle-button {
+.button {
+    -fx-background-color: -app-control-background;
+    -fx-background-insets: 0;
+}
+
+.button:hover {
+    -fx-background-color: -app-hover-background;
+}
+
+.button.flat, .tool-bar .button, .tool-bar .toggle-button {
     -fx-background-color: transparent;
     -fx-background-insets: 0;
 }
 
-.flat:hover, .tool-bar .button:hover, .tool-bar .toggle-button:hover {
-    -fx-background-color: -fx-pressed-base;
+.button.flat:hover, .tool-bar .button:hover, .tool-bar .toggle-button:hover {
+    -fx-background-color: -app-control-background;
 }
 
-.flat:focused, .tool-bar .button:focused, .tool-bar .toggle-button:focused {
+.button:focused, .button.flat:focused, .tool-bar .button:focused, .tool-bar .toggle-button:focused {
     -fx-faint-focus-color: transparent;
     -fx-focus-color: transparent;
 }
 
-/* Split Pane */
-.split-pane > .split-pane-divider {
-    -fx-padding: 0 0.5em 0 0.5em;
+/*
+ Tool Bar
+ */
+.tool-bar {
+    -fx-background-color: transparent;
 }
 
+/* Table
+    https://github.com/TurekBot/JFXTableView_CSS/blob/master/src/main/resources/tech/ugma/education/jfoenixtableview/jfx-table-view.css
+ */
+.table-view .column-header,
+.table-view .column-header .filler,
+.table-view .column-header-background .filler {
+    -fx-background-color: -app-control-background;
+}
+
+.table-view .column-header .label {
+    -fx-font-weight: bold;
+    -fx-padding: 5 0 5 0;
+}
+
+.table-view .table-cell.text {
+    -fx-padding: 0 0 0 5;
+    -fx-alignment: center-left;
+}
+
+/* Split Pane */
 .split-pane:horizontal > .split-pane-divider {
     -fx-background-color: transparent;
 }
@@ -61,17 +96,63 @@
 .bordered-titled-title {
     -fx-translate-x:  8;
     -fx-translate-y: -10;
-    -fx-padding: 0 0 0 4;
-    -fx-background-color: -fx-background;
+    -fx-padding: 0 0 0 5;
+    -fx-background-color: -app-background;
 }
 
 .bordered-titled-border {
     -fx-content-display: top;
-    -fx-border-insets: 10 10 10 10;
+    -fx-border-insets: 10 0 10 0;
     -fx-border-color: -fx-text-box-border;
     -fx-border-width: 1;
 }
 
 .bordered-titled-content {
     -fx-padding: 18 10 10 10;
+}
+
+/* Scroll Bar */
+.scroll-bar:horizontal .track, .scroll-bar:vertical .track {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.scroll-bar:horizontal .thumb, .scroll-bar:vertical .thumb {
+    -fx-background-color : -app-control-background;
+}
+
+.scroll-bar:horizontal .thumb:hover, .scroll-bar:vertical .thumb:hover {
+    -fx-background-color : -app-hover-background;
+}
+
+/* Tab Pane */
+.tab-pane > .tab-content-area > * {
+    -fx-padding: 10 0 10 0;
+}
+
+.tab-pane > .tab-header-area > .headers-region > .tab {
+    -fx-padding: 5 20 5 20;
+}
+
+.tab-pane > .tab-header-area > .headers-region >.tab:selected .focus-indicator{
+    -fx-border-width: 0px;
+}
+
+.tab .tab-label {
+    -fx-font-weight: bold;
+}
+
+/* Combo Box */
+.combo-box-base  {
+    -fx-background-color: -app-background;
+    -fx-border-width: 1;
+    -fx-border-color: -app-control-background;
+}
+
+.combo-box .arrow-button, .color-picker .arrow-button {
+    -fx-background-color: -app-background;
+}
+
+.combo-box .arrow-button:hover, .color-picker .arrow-button:hover {
+    -fx-background-color: -app-control-background;
 }

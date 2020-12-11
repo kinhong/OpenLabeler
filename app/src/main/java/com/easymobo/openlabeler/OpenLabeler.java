@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler;
@@ -59,6 +58,8 @@ import static javafx.application.Preloader.StateChangeNotification.Type.BEFORE_S
 public class OpenLabeler extends Application
 {
     private static final String APP_HOME = ".openlabeler";
+    public static final String APP_ICON = "icon.png";
+    public static final String APP_CSS = "/css/OpenLabeler.css";
 
     private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,20 +12,20 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler.preference;
 
 import com.easymobo.openlabeler.util.AppUtils;
 import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.stage.Stage;
 import org.fxmisc.easybind.EasyBind;
 
 import java.lang.invoke.MethodHandles;
@@ -34,19 +34,16 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import static com.easymobo.openlabeler.OpenLabeler.APP_ICON;
+
 public class PreferencePane extends DialogPane
 {
-    @FXML
-    private SplitPane splitPane;
-    @FXML
-    private ListView<String> categoryList;
-    @FXML
-    private ScrollPane scroller;
-
     private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
 
+    @FXML
+    private TabPane tabs;
+
     private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
-    private ObservableList<Category> categories = FXCollections.observableArrayList();
 
     public PreferencePane() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/preference/PreferencePane.fxml"), bundle);
@@ -70,6 +67,9 @@ public class PreferencePane extends DialogPane
         dialog.setTitle(bundle.getString("label.preferences"));
         dialog.setResizable(true);
 
+        Stage stage = (Stage)getScene().getWindow();
+        stage.getIcons().add(new Image(getClass().getClassLoader().getResourceAsStream(APP_ICON)));
+
         lookupButton(ButtonType.CLOSE).addEventFilter(
             ActionEvent.ACTION,
             event -> {
@@ -85,34 +85,30 @@ public class PreferencePane extends DialogPane
         Optional<ButtonType> result = dialog.showAndWait();
         result.ifPresent(res -> {
             if (res.equals(ButtonType.APPLY)) {
-                categories.forEach(c -> c.save());
+                getCategories().forEach(c -> c.save());
             }
         });
     }
 
     private void bindProperties() {
-        categories.add(new GeneralPane());
-        categories.add(new InferencePane());
-        categories.add(new TrainingPane());
+        addTab(new GeneralPane());
+        addTab(new InferencePane());
+        addTab(new TrainingPane());
 
-        categoryList.getItems().addAll(EasyBind.map(categories, Category::getName));
-
-        categoryList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            Category selected = categories.stream().filter(p -> p.getName().equals(newValue)).findFirst().get();
-            scroller.setContent((Node) selected);
-        });
-
-        ObservableList<ObservableValue<Boolean>> dirties = EasyBind.map(categories, c -> c.dirtyProperty());
+        ObservableList<ObservableValue<Boolean>> dirties = EasyBind.map(getCategories(), c -> c.dirtyProperty());
         lookupButton(ButtonType.APPLY).disableProperty().bind(EasyBind.combine(dirties, stream -> stream.allMatch(a -> !a)));
 
-        categoryList.getSelectionModel().select(0);
+        tabs.getSelectionModel().select(Settings.getPrefTabIndex());
+        Settings.prefTabIndexProperty.bind(tabs.getSelectionModel().selectedIndexProperty());
+    }
 
-        // Split Pane Divider
-        splitPane.sceneProperty().addListener(((observable, oldValue, newValue) -> {
-            if (newValue != null) {
-                var positions = splitPane.getDividerPositions();
-                splitPane.getScene().widthProperty().addListener((obs, oldItem, newItem) -> splitPane.setDividerPositions(positions));
-            }
-        }));
+    private ObservableList<Category> getCategories() {
+        return EasyBind.map(tabs.getTabs(), t -> Category.class.cast(t.getContent()));
+    }
+
+    private void addTab(Category category) {
+        Tab tab = new Tab(category.getName());
+        tab.setContent((Node)category);
+        tabs.getTabs().add(tab);
     }
 }

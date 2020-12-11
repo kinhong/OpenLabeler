@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+  ~ Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  ~ ==============================================================================
   -->
 
 <?import com.easymobo.openlabeler.tag.TagBoard?>
@@ -312,8 +311,11 @@
                 </ScrollPane>
                 <SplitPane dividerPositions="0.3" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0">
                     <items>
-                        <ObjectTableView fx:id="objectTable" minHeight="0.0" minWidth="0.0" prefHeight="100.0"
-                                         prefWidth="160.0"/>
+                        <BorderPane>
+                            <center>
+                                <ObjectTableView fx:id="objectTable" prefHeight="100.0" prefWidth="160.0"/>
+                            </center>
+                        </BorderPane>
                         <MediaPane fx:id="mediaPane" prefHeight="200.0" prefWidth="200.0"/>
                     </items>
                 </SplitPane>

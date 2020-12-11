@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+  ~ Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
   ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
-  ~ ==============================================================================
   -->
 
 <?import com.easymobo.openlabeler.ui.MediaTableView?>
@@ -26,7 +25,7 @@
         <Label text="%label.noMedia"/>
     </placeholder>
     <columns>
-        <TableColumn fx:id="colAnnotated" minWidth="25.0" prefWidth="25.0" resizable="false">
+        <TableColumn fx:id="colAnnotated" minWidth="40.0" prefWidth="40.0" resizable="false" >
             <graphic>
                 <CheckBox fx:id="chkShowAll" alignment="CENTER" cache="true" mnemonicParsing="false"
                           onAction="#onShowAll" selected="true"/>
@@ -38,6 +37,6 @@
                 <FontIcon iconLiteral="mdi-file-image" iconSize="18"/>
             </graphic>
         </TableColumn>
-        <TableColumn fx:id="colName" prefWidth="240.0" text="%label.fileName"/>
+        <TableColumn fx:id="colName" styleClass="text" prefWidth="240.0" text="%label.fileName"/>
     </columns>
 </fx:root>
