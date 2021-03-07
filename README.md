@@ -88,10 +88,14 @@ Download and execute the `.pkg`, `.deb` or `.msi` installation packages for macO
     -eval TFRecord file
   +models
     +model
+      +checkpoint
+      +saved_model
       -pipeline config file
+      -model.config (created by OpenLabeler)
       +temp (created by OpenLabeler)
         -ckpt-xyz...
-      +fine_tuned_model (created by OpenLabeler 
+        ...
+      +fine_tuned_model (created by OpenLabeler)
 ```
  
 ## Build
