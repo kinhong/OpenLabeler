@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import com.easymobo.openlabeler.tag.ShapeItem;
 import com.easymobo.openlabeler.tag.TagBoard;
 import com.easymobo.openlabeler.tensorflow.TFTrainer;
 import com.easymobo.openlabeler.tool.ExportCOCOPane;
+import com.easymobo.openlabeler.tool.ExportCreateMLPane;
 import com.easymobo.openlabeler.ui.MediaPane;
 import com.easymobo.openlabeler.ui.MediaTableView.MediaFile;
 import com.easymobo.openlabeler.ui.ObjectTableView;
@@ -398,6 +399,11 @@ public class OpenLabelerController implements Initializable, AutoCloseable
     @FXML
     private void onExportCOCO(ActionEvent event) {
         new ExportCOCOPane().showAndWait(tagBoard.getModel());
+    }
+
+    @FXML
+    private void onExportCreateML(ActionEvent event) {
+        new ExportCreateMLPane().showAndWait(tagBoard.getModel());
     }
 
     @FXML

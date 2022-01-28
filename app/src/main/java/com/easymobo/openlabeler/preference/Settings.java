@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,7 @@ public class Settings
     private static final String HINT_STROKE_COLOR = "hintBoxColor";
     // Tools
     private static final String TOOL_COCO_JSON = "toolCOCOJson";
+    private static final String TOOL_CREATEML_JSON = "toolCreateML";
     // Others
     private static final String PREF_TAB_INDEX = "prefTabIndex";
     private static final String EDIT_SHAPE = "editShape";
@@ -251,6 +252,14 @@ public class Settings
     }
     public static void setToolCOCOJson(String json) {
         toolCOCOJson.set(json);
+    }
+
+    public static final StringProperty toolCreateMLJson = new StringPrefProperty(pref, TOOL_CREATEML_JSON, "");
+    public static String getToolCreateMLJson() {
+        return toolCreateMLJson.get();
+    }
+    public static void setToolCreateMLJson(String json) {
+        toolCreateMLJson.set(json);
     }
 
     // Others

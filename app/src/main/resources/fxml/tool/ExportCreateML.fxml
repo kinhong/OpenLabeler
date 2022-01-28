@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<?import com.easymobo.openlabeler.tool.ExportCreateMLPane?>
+<?import com.easymobo.openlabeler.ui.InputFileChooser?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.*?>
+<fx:root stylesheets="@/css/OpenLabeler.css" type="com.easymobo.openlabeler.tool.ExportCreateMLPane"
+         xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml">
+    <content>
+        <VBox prefHeight="220.0" prefWidth="600.0" spacing="10.0">
+            <padding>
+                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+            </padding>
+            <children>
+                <GridPane hgap="10.0" vgap="10">
+                    <children>
+                        <Label text="%label.mediaDir" GridPane.halignment="RIGHT" GridPane.rowIndex="0"/>
+                        <InputFileChooser fx:id="dirMedia" minWidth="400" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+                        <Label text="%label.annotationDir" GridPane.halignment="RIGHT" GridPane.rowIndex="1"/>
+                        <InputFileChooser fx:id="dirAnnotation" minWidth="400" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+                        <CheckBox fx:id="chkFormatJSON" text="%label.formatJSON" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+                        <Label text="%label.output" GridPane.halignment="RIGHT" GridPane.rowIndex="3"/>
+                        <InputFileChooser fx:id="fileOutput" file="true" minWidth="400" save="true"
+                                          GridPane.rowIndex="3"
+                                          GridPane.columnIndex="1"/>
+                    </children>
+                    <columnConstraints>
+                        <ColumnConstraints/>
+                        <ColumnConstraints hgrow="ALWAYS"/>
+                    </columnConstraints>
+                    <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                    </padding>
+                </GridPane>
+            </children>
+        </VBox>
+    </content>
+</fx:root>

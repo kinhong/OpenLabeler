@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
+  ~ Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -152,7 +152,8 @@
                         </Menu>
                         <Menu text="%menu.tools">
                         <items>
-                        <MenuItem fx:id="miExportCOCO" onAction="#onExportCOCO" text="%menu.exportCOCO" />
+                            <MenuItem fx:id="miExportCOCO" onAction="#onExportCOCO" text="%menu.exportCOCO" />
+                            <MenuItem fx:id="miExportCreateML" onAction="#onExportCreateML" text="%menu.exportCreateML" />
                         </items>
                         </Menu>
                         <Menu text="%menu.help">

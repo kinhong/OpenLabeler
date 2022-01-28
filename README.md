@@ -6,7 +6,7 @@
 
 **OpenLabeler** is an open source application for annotating objects. It can generate the PASCAL VOC format XML annotation file for artificial intelligence and deep learning training. A unique aspect of this application is its ability to use inference (with [TensorFlow](https://www.tensorflow.org)) to help improve accuracy and speed up the annotation process.
 
-OpenLabeler is written in [OpenJDK](https://openjdk.java.net)/[OpenJFX](https://openjfx.io) (version 15.x).
+OpenLabeler is written in [OpenJDK](https://openjdk.java.net)/[OpenJFX](https://openjfx.io) (version 17.x).
 
 ![Application](assets/app.png)
 
@@ -100,11 +100,12 @@ Download and execute the `.pkg`, `.deb` or `.msi` installation packages for macO
  
 ## Build
 
-This application can be built using [Apache Maven](https://maven.apache.org).
+This application can be built using [Apache Maven](https://maven.apache.org) with CLI.
+First make sure the environment variable JAVA_HOME has been set accordingly
 
 ### macOS
 
-1. Download and install [OpenJDK 11](http://jdk.java.net/11)
+1. Download and install [OpenJDK 17](http://jdk.java.net/17)
 2. Download and install [Maven](https://maven.apache.org/install.html)
 ```
 cd <openlabeler>
@@ -116,7 +117,7 @@ The macOS .pkg installer can be found under the app/target/package directory.
 ```
 sudo add-apt-repository ppa:openjdk-r/ppa \
 sudo apt-get update -q \
-sudo apt install -y openjdk-11-jdk
+sudo apt install -y openjdk-17-jdk
 
 sudo apt-get install maven
 
@@ -129,15 +130,11 @@ The Linux .deb bundle can be found under the app/target/package directory.
 
 ### Windows
 
-1. Download [OpenJDK 11+](http://jdk.java.net/11/) for Windows and unzip to a directory with no spaces (e.g., `C:\java\jdk-11`)
+1. Download [OpenJDK 17](http://jdk.java.net/17/) for Windows and unzip to a directory with no spaces (e.g., `C:\java\jdk-17`)
 2. Download [Maven](https://maven.apache.org/download.cgi) and unzip to a directory with no spaces (e.g., `C:\java\apache-maven`)
-3. Download [Wix](https://github.com/wixtoolset/wix3/releases) and unzip to a directory with no spaces (e.g., `C:\wix`)
-3. Open Control Panel > System and Security > System. Set the `PATH` (e.g., `C:\java\jdk-11\bin;C:\java\apache-maven\bin;C:\wix\bin`) and `JAVA_HOME` (e.g., `C:\java\jdk-11`) environment variables
 
 ```DOS .bat
 cd <openlabeler>
-copy <openlabeler>\bin\jdk.packager-windows\jpackager.exe <java_home>\bin
-copy <openlabeler>\bin\jdk.packager-windows\jdk.packager.jar <java_home>\jmods
 mvn clean package -Drevision=x.y.z
 ```
 
