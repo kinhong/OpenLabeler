@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler.ui;
@@ -112,7 +111,7 @@ public class MediaPane extends BorderPane implements AutoCloseable
         if (file.isDirectory()) {
             files = file.listFiles((dir, name) -> {
                 name = name.toLowerCase();
-                return name.endsWith(".jpg") || name.endsWith(".png") || name.endsWith(".gif");
+                return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".gif");
             });
             Arrays.sort(files);
             if (files.length <= 0) {

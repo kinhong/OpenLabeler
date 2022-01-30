@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +16,6 @@
 
 package com.easymobo.openlabeler;
 
-import com.easymobo.openlabeler.preference.PreferencePane;
-import de.codecentric.centerdevice.MenuToolkit;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.application.Preloader.StateChangeNotification;
@@ -26,19 +24,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.stage.WindowEvent;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.SystemUtils;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -103,10 +94,6 @@ public class OpenLabeler extends Application
                     });
 
                     Platform.runLater(() -> {
-                        if (SystemUtils.IS_OS_MAC) {
-                            initOSMac(bundle);
-                        }
-
                         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
                         Scene scene = new Scene(root, screenBounds.getWidth() * 0.8, screenBounds.getHeight() * 0.8); // 80% of monitor size
                         stage.setTitle(bundle.getString("app.name"));
@@ -132,31 +119,6 @@ public class OpenLabeler extends Application
     public static void main(String[] args) {
         System.setProperty("javafx.preloader", "com.easymobo.openlabeler.SplashScreenLoader");
         launch(OpenLabeler.class, args);
-    }
-
-    private void initOSMac(ResourceBundle bundle) {
-        MenuToolkit tk = MenuToolkit.toolkit();
-
-        String appName = bundle.getString("app.name");
-        Menu appMenu = new Menu(appName); // Name for appMenu can't be set at Runtime
-
-        MenuItem aboutItem = tk.createAboutMenuItem(appName, createAboutStage(bundle));
-
-        MenuItem prefsItem = new MenuItem(bundle.getString("menu.preferences"));
-        prefsItem.acceleratorProperty().set(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.SHORTCUT_DOWN));
-        prefsItem.setOnAction(event -> new PreferencePane().showAndWait());
-
-        appMenu.getItems().addAll(aboutItem, new SeparatorMenuItem(), prefsItem, new SeparatorMenuItem(),
-                tk.createHideMenuItem(appName), tk.createHideOthersMenuItem(), tk.createUnhideAllMenuItem(),
-                new SeparatorMenuItem(), tk.createQuitMenuItem(appName));
-
-        Menu windowMenu = new Menu(bundle.getString("menu.window"));
-        windowMenu.getItems().addAll(tk.createMinimizeMenuItem(), tk.createZoomMenuItem(), tk.createCycleWindowsItem(),
-                new SeparatorMenuItem(), tk.createBringAllToFrontItem());
-
-        // Update the existing Application menu
-        tk.setForceQuitOnCmdQ(false);
-        tk.setApplicationMenu(appMenu);
     }
 
     public static Stage createAboutStage(ResourceBundle bundle) {

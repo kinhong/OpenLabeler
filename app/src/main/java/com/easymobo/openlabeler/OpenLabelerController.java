@@ -52,8 +52,7 @@ import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.scene.control.ButtonBar.ButtonData;
 import javafx.scene.image.Image;
-import javafx.scene.input.Clipboard;
-import javafx.scene.input.DataFormat;
+import javafx.scene.input.*;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
@@ -103,7 +102,7 @@ public class OpenLabelerController implements Initializable, AutoCloseable
           miUndo, miRedo, miCut, miCopy, miPaste, miDelete,
           miPrevMediaFile, miNextMediaFile, miGoToUnlabeledMediaFile,
           miZoomIn, miZoomOut, miZoomFit, miRotateLeft, miRotateRight, miShowHint, miClearHint,
-          miInspectLabels, miExportCOCO,
+          miInspectLabels, miExportCOCO, miExportCreateML,
           msAbout, miAbout;
     @FXML
     private RadioMenuItem miShapeRectangle, miShapePolygon;
@@ -136,12 +135,9 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         // Platform dependent menu adjustments
         menuBar.setUseSystemMenuBar(true);
         if (SystemUtils.IS_OS_MAC) {
-            msPreference.setVisible(false);
-            miPreference.setVisible(false);
+            miPreference.acceleratorProperty().set(new KeyCodeCombination(KeyCode.COMMA, KeyCombination.SHORTCUT_DOWN));
             msExit.setVisible(false);
             miExit.setVisible(false);
-            msAbout.setVisible(false);
-            miAbout.setVisible(false);
         }
 
         try {
@@ -625,8 +621,9 @@ public class OpenLabelerController implements Initializable, AutoCloseable
         BooleanBinding canClearHint = vhBinding.greaterThan(0);
         miClearHint.disableProperty().bind(canClearHint.not());
 
-        // Tools -> Export COCO
+        // Tools
         miExportCOCO.disableProperty().bind(tagBoard.modelProperty().isNull());
+        miExportCreateML.disableProperty().bind(tagBoard.modelProperty().isNull());
 
         // Status bar
         tagBoard.statusProperty().addListener((observable, oldValue, newValue) -> status.setText(newValue));

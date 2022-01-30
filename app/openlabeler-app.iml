@@ -44,7 +44,6 @@
     <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-javafx:12.3.0" level="project" />
     <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-core:12.3.0" level="project" />
     <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-materialdesign-pack:12.3.0" level="project" />
-    <orderEntry type="library" name="Maven: de.codecentric.centerdevice:centerdevice-nsmenufx:2.1.7" level="project" />
     <orderEntry type="library" name="Maven: com.github.docker-java:docker-java:3.2.6" level="project" />
     <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-core:3.2.6" level="project" />
     <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-api:3.2.6" level="project" />
