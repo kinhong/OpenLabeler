@@ -52,7 +52,6 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.regex.Pattern;
 
 import static com.easymobo.openlabeler.OpenLabeler.APP_ICON;
 
@@ -148,9 +147,6 @@ public class ExportCreateMLPane extends DialogPane
    }
 
    private void exportCreateML(CreateML template, File mediaDir, File annotationDir, File output) {
-      var regex = Pattern.compile("[^\\d-_.]*([\\d-_.]+).*");
-      var modelMap = new HashMap<File, Annotation>();
-      var categoryMap = new HashMap<String, Integer>();
       int imageCount = 0, annotationCount = 0, errorCount = 0;
       try {
          JsonGenerator writer = new JsonFactory().createGenerator(output, JsonEncoding.UTF8);
@@ -166,7 +162,6 @@ public class ExportCreateMLPane extends DialogPane
             name = name.toLowerCase();
             return name.endsWith(".xml");
          });
-         var imageId = 1;
          for (File annotation : annotations) {
             Annotation model;
             try {
@@ -232,8 +227,8 @@ public class ExportCreateMLPane extends DialogPane
 
       BoundBox bb = model.getBoundBox();
       Map<String, Integer> coordinates = new HashMap() {{
-         put("x", Math.round(bb.getX()));
-         put("y", Math.round(bb.getY()));
+         put("x", Math.round((bb.getXMin() + bb.getXMax()) / 2));
+         put("y", Math.round((bb.getYMin() + bb.getYMax()) / 2));
          put("width", Math.round(bb.getWidth()));
          put("height", Math.round(bb.getHeight()));
       }};
