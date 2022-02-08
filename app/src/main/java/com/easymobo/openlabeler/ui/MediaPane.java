@@ -109,10 +109,7 @@ public class MediaPane extends BorderPane implements AutoCloseable
     public void openFileOrDir(File file) {
         File[] files = new File[] { file };
         if (file.isDirectory()) {
-            files = file.listFiles((dir, name) -> {
-                name = name.toLowerCase();
-                return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".gif");
-            });
+            files = file.listFiles((dir, name) -> AppUtils.isMediaExtension(name.toLowerCase()));
             Arrays.sort(files);
             if (files.length <= 0) {
                 AppUtils.showInformation(bundle.getString("label.alert"), bundle.getString("msg.noMediaFiles"));
@@ -192,8 +189,10 @@ public class MediaPane extends BorderPane implements AutoCloseable
                                 }
                                 if (key == imageDirWatchKey) {
                                     if (event.kind() == ENTRY_CREATE) {
-                                        Path path = (Path) event.context();
-                                        Platform.runLater(() -> tvMedia.getSource().add(new MediaFile(path.toFile())));
+                                        File f = ((Path) event.context()).toFile();
+                                        if (AppUtils.isMediaExtension(f.getName().toLowerCase())) {
+                                            Platform.runLater(() -> tvMedia.getSource().add(new MediaFile(f)));
+                                        }
                                     }
                                     else if (event.kind() == ENTRY_DELETE) {
                                         Path path = (Path) event.context();

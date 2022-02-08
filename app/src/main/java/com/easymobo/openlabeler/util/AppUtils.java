@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,6 +77,10 @@ public class AppUtils
       }
       String path = parent + File.separator + FilenameUtils.getBaseName(media.getName()) + ".xml";
       return new File(path);
+   }
+
+   public static boolean isMediaExtension(String name) {
+      return name.endsWith(".jpg") || name.endsWith(".jpeg") || name.endsWith(".png") || name.endsWith(".gif");
    }
 
    public static void watchAndUpdate(WatchService watcher, String name, Function<Path, Void> update) {
