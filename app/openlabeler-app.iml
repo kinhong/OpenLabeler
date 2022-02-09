@@ -25,16 +25,16 @@
     <orderEntry type="library" name="Maven: org.openjfx:javafx-web:mac:17.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:17.0.2" level="project" />
     <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:mac:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-platform:0.2.0" level="project" />
-    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:1.5.4" level="project" />
-    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:linux-x86_64:1.5.4" level="project" />
-    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:macosx-x86_64:1.5.4" level="project" />
-    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:windows-x86_64:1.5.4" level="project" />
-    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:0.2.0" level="project" />
-    <orderEntry type="library" name="Maven: org.tensorflow:ndarray:0.2.0" level="project" />
-    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:linux-x86_64:0.2.0" level="project" />
-    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:macosx-x86_64:0.2.0" level="project" />
-    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:windows-x86_64:0.2.0" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-platform:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:1.5.6" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:linux-x86_64:1.5.6" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:macosx-x86_64:1.5.6" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:windows-x86_64:1.5.6" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:ndarray:0.3.3" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:linux-x86_64:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:macosx-x86_64:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:windows-x86_64:0.4.0" level="project" />
     <orderEntry type="library" name="Maven: org.tensorflow:proto:1.15.0" level="project" />
     <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.19.3" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-collections4:4.4" level="project" />

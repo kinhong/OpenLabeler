@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -156,8 +156,8 @@ public class ObjectDetector implements AutoCloseable
                 return Collections.emptyList();
             }
             List<HintModel> hints = new ArrayList();
-            List<Tensor<?>> outputs;
-            Tensor<?> input = null;
+            List<Tensor> outputs;
+            Tensor input = null;
             String operation = "";
             BufferedImage img = ImageIO.read(imageFile);
 
@@ -191,9 +191,9 @@ public class ObjectDetector implements AutoCloseable
                     input.close();
                 }
             }
-            try (Tensor<TFloat32> scoresT = outputs.get(0).expect(TFloat32.DTYPE);
-                 Tensor<TFloat32> classesT = outputs.get(1).expect(TFloat32.DTYPE);
-                 Tensor<TFloat32> boxesT = outputs.get(2).expect(TFloat32.DTYPE)) {
+            try (TFloat32 scoresT = (TFloat32)outputs.get(0);
+                 TFloat32 classesT = (TFloat32)outputs.get(1);
+                 TFloat32 boxesT = (TFloat32)outputs.get(2)) {
                 // All these tensors have:
                 // - 1 as the first dimension
                 // - maxObjects as the second dimension
@@ -201,15 +201,15 @@ public class ObjectDetector implements AutoCloseable
                 // This can be verified by looking at scoresT.shape() etc.
                 int maxObjects = (int) scoresT.shape().asArray()[1];
                 for (int i = 0; i < maxObjects; i++) {
-                    float score = scoresT.data().getFloat(0, i);
+                    float score = scoresT.getFloat(0, i);
                     if (score < 0.5) {
                         continue;
                     }
-                    float ymin = boxesT.data().getFloat(0, i, 0) * img.getHeight();
-                    float xmin = boxesT.data().getFloat(0, i, 1) * img.getWidth();
-                    float ymax = boxesT.data().getFloat(0, i, 2) * img.getHeight();
-                    float xmax = boxesT.data().getFloat(0, i, 3) * img.getWidth();
-                    int id = (int) classesT.data().getFloat(0, i);
+                    float ymin = boxesT.getFloat(0, i, 0) * img.getHeight();
+                    float xmin = boxesT.getFloat(0, i, 1) * img.getWidth();
+                    float ymax = boxesT.getFloat(0, i, 2) * img.getHeight();
+                    float xmax = boxesT.getFloat(0, i, 3) * img.getWidth();
+                    int id = (int) classesT.getFloat(0, i);
                     if (id < labels.length) {
                         HintModel model = new HintModel(labels[id], xmin, ymin, xmax, ymax);
                         model.setScore(score);
@@ -276,7 +276,7 @@ public class ObjectDetector implements AutoCloseable
         }
     }
 
-    private static Tensor<?> makeImageTensor(BufferedImage img) throws IOException {
+    private static Tensor makeImageTensor(BufferedImage img) throws IOException {
         if (img.getType() == BufferedImage.TYPE_BYTE_INDEXED
               || img.getType() == BufferedImage.TYPE_BYTE_BINARY
               || img.getType() == BufferedImage.TYPE_BYTE_GRAY
@@ -303,7 +303,7 @@ public class ObjectDetector implements AutoCloseable
     /**
      * See <a href="https://github.com/tensorflow/tensorflow/issues/24331#issuecomment-447523402">GitHub issue</a>
      */
-    private static Tensor<?> makeImageStringTensor(File imageFile) throws IOException {
+    private static Tensor makeImageStringTensor(File imageFile) throws IOException {
         var content = FileUtils.readFileToByteArray(imageFile);
         return TString.tensorOfBytes(Shape.of(1), DataBuffers.ofObjects(content));
     }
