@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler.tag;
@@ -194,10 +193,7 @@ public class TagBoard extends Group implements AutoCloseable
          }
       });
 
-      // Object detector and hints
-      objectDetector = new ObjectDetector();
-      new Thread(() -> objectDetector.init(), "Object Detector Initializer").start();
-      objectDetector.statusProperty().addListener((observable, oldValue, newValue) -> statusProperty.set(newValue));
+      // inference
       Settings.useInferenceProperty.addListener((observable, oldValue, newValue) -> findHints());
 
       // keyboard
@@ -256,7 +252,7 @@ public class TagBoard extends Group implements AutoCloseable
       else {
          statusProperty.set(bundle.getString("msg.noObjects"));
       }
-      findHints();
+      Platform.runLater(() -> findHints());
    }
 
    public Scale getScale() {
@@ -630,6 +626,13 @@ public class TagBoard extends Group implements AutoCloseable
       }
       new Thread(() -> {
          try {
+            // Object detector and hints
+            if (objectDetector == null) {
+               objectDetector = new ObjectDetector();
+               objectDetector.init();
+               objectDetector.statusProperty().addListener((observable, oldValue, newValue) -> statusProperty.set(newValue));
+            }
+
             final Annotation model = getModel();
             if (model != null) {
                List<HintModel> hints = objectDetector.detect(model.getFile());
