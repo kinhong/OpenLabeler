@@ -245,6 +245,8 @@ public class TagBoard extends Group implements AutoCloseable
       hintsProperty.clear();
       imageView.setImage(model == null ? null : model.getSize().getImage());
       imageView.setCache(true);
+      canvas.setWidth(imageView.getBoundsInLocal().getWidth());
+      canvas.setHeight(imageView.getBoundsInLocal().getHeight());
       if (model != null && model.getObjects().size() > 0) {
          model.getObjects().forEach(obj -> createObjectTag(obj));
          statusProperty.set(MessageFormat.format(bundle.getString("msg.objectsCount"), model.getObjects().size()));
@@ -273,6 +275,9 @@ public class TagBoard extends Group implements AutoCloseable
    private Path path;
 
    private void onMousePressed(MouseEvent me) {
+      if (imageView.getImage() == null) {
+         return;
+      }
       requestFocus();
       deselectObjects();
 
@@ -284,6 +289,10 @@ public class TagBoard extends Group implements AutoCloseable
    }
 
    private void onMouseMoved(MouseEvent me) {
+      if (imageView.getImage() == null) {
+         return;
+      }
+
       if (Settings.getEditShape() == POLYGON && path != null) {
          updatePath(imageView.parentToLocal(me.getX(), me.getY()));
       }
@@ -291,6 +300,10 @@ public class TagBoard extends Group implements AutoCloseable
    }
 
    private void onMouseDragged(MouseEvent me) {
+      if (imageView.getImage() == null) {
+         return;
+      }
+
       if (Settings.getEditShape() == RECTANGLE && path != null) {
          updateDragBox(imageView.parentToLocal(me.getX(), me.getY()));
       }
@@ -298,6 +311,10 @@ public class TagBoard extends Group implements AutoCloseable
    }
 
    private void onMouseClicked(MouseEvent me) {
+      if (imageView.getImage() == null) {
+         return;
+      }
+
       if (!me.getButton().equals(MouseButton.PRIMARY)) {
          me.consume();
          return;
@@ -327,6 +344,10 @@ public class TagBoard extends Group implements AutoCloseable
    }
 
    private void onMouseReleased(MouseEvent me) {
+      if (imageView.getImage() == null) {
+         return;
+      }
+
       if (Settings.getEditShape() == RECTANGLE && path != null) {
          updateDragBox(imageView.parentToLocal(me.getX(), me.getY()));
          path.getElements().add(new LineTo(lastPoint.getX(), lastPoint.getY()));
