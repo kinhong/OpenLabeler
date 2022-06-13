@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ import object_detection.protos.StringIntLabelMapOuterClass.StringIntLabelMap;
 import object_detection.protos.StringIntLabelMapOuterClass.StringIntLabelMapItem;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang.ArrayUtils;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;

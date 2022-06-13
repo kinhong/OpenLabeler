@@ -11,13 +11,13 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:mac:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:mac:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:mac:17.0.2" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:mac:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:mac:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:mac:18.0.1" level="project" />
   </component>
 </module>

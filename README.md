@@ -6,7 +6,7 @@
 
 **OpenLabeler** is an open source application for annotating objects. It can generate the PASCAL VOC format XML annotation file for artificial intelligence and deep learning training. A unique aspect of this application is its ability to use inference (with [TensorFlow](https://www.tensorflow.org)) to help improve accuracy and speed up the annotation process.
 
-OpenLabeler is written in [OpenJDK](https://openjdk.java.net)/[OpenJFX](https://openjfx.io) (version 17.x).
+OpenLabeler is written in [OpenJDK](https://openjdk.java.net)/[OpenJFX](https://openjfx.io) (version 18.x).
 
 ![Application](assets/app.png)
 
@@ -105,7 +105,7 @@ First make sure the environment variable JAVA_HOME has been set accordingly
 
 ### macOS
 
-1. Download and install [OpenJDK 17](http://jdk.java.net/17)
+1. Download and install [OpenJDK 18](http://jdk.java.net/18)
 2. Download and install [Maven](https://maven.apache.org/install.html)
 ```
 cd <openlabeler>
@@ -117,7 +117,7 @@ The macOS .pkg installer can be found under the app/target/package directory.
 ```
 sudo add-apt-repository ppa:openjdk-r/ppa \
 sudo apt-get update -q \
-sudo apt install -y openjdk-17-jdk
+sudo apt install -y openjdk-18-jdk
 
 sudo apt-get install maven
 
@@ -130,7 +130,7 @@ The Linux .deb bundle can be found under the app/target/package directory.
 
 ### Windows
 
-1. Download [OpenJDK 17](http://jdk.java.net/17/) for Windows and unzip to a directory with no spaces (e.g., `C:\java\jdk-17`)
+1. Download [OpenJDK 18](http://jdk.java.net/18/) for Windows and unzip to a directory with no spaces (e.g., `C:\java\jdk-18`)
 2. Download [Maven](https://maven.apache.org/download.cgi) and unzip to a directory with no spaces (e.g., `C:\java\apache-maven`)
 
 ```DOS .bat

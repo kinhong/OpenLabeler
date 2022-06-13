@@ -28,9 +28,9 @@
     <name>OpenLabeler</name>
 
     <properties>
-        <java.version>1.17</java.version>
-        <maven.compiler.source>1.17</maven.compiler.source>
-        <maven.compiler.target>1.17</maven.compiler.target>
+        <java.version>1.18</java.version>
+        <maven.compiler.source>1.18</maven.compiler.source>
+        <maven.compiler.target>1.18</maven.compiler.target>
         <revision>0.0.0</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mainClass>com.easymobo.openlabeler.OpenLabeler</mainClass>

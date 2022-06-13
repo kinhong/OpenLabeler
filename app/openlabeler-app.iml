@@ -11,49 +11,48 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:mac:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:mac:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:mac:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:mac:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:mac:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:mac:17.0.2" level="project" />
-    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-platform:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-controls:mac:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-graphics:mac:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-base:mac:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-fxml:mac:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-media:mac:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-web:mac:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.openjfx:javafx-swing:mac:18.0.1" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-platform:0.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.bytedeco:javacpp:1.5.6" level="project" />
     <orderEntry type="library" name="Maven: org.bytedeco:javacpp:linux-x86_64:1.5.6" level="project" />
     <orderEntry type="library" name="Maven: org.bytedeco:javacpp:macosx-x86_64:1.5.6" level="project" />
     <orderEntry type="library" name="Maven: org.bytedeco:javacpp:windows-x86_64:1.5.6" level="project" />
-    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:0.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.tensorflow:ndarray:0.3.3" level="project" />
-    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:linux-x86_64:0.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:macosx-x86_64:0.4.0" level="project" />
-    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:windows-x86_64:0.4.0" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:linux-x86_64:0.4.1" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:macosx-x86_64:0.4.1" level="project" />
+    <orderEntry type="library" name="Maven: org.tensorflow:tensorflow-core-api:windows-x86_64:0.4.1" level="project" />
     <orderEntry type="library" name="Maven: org.tensorflow:proto:1.15.0" level="project" />
-    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.19.3" level="project" />
+    <orderEntry type="library" name="Maven: com.google.protobuf:protobuf-java:3.21.1" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-collections4:4.4" level="project" />
     <orderEntry type="library" name="Maven: org.apache.commons:commons-lang3:3.12.0" level="project" />
     <orderEntry type="library" name="Maven: commons-io:commons-io:2.11.0" level="project" />
     <orderEntry type="library" name="Maven: commons-codec:commons-codec:1.15" level="project" />
-    <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-javafx:12.3.0" level="project" />
-    <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-core:12.3.0" level="project" />
-    <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-materialdesign-pack:12.3.0" level="project" />
-    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java:3.2.6" level="project" />
-    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-core:3.2.6" level="project" />
-    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-api:3.2.6" level="project" />
-    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-transport:3.2.6" level="project" />
-    <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.20" level="project" />
-    <orderEntry type="library" name="Maven: commons-lang:commons-lang:2.6" level="project" />
+    <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-javafx:12.3.1" level="project" />
+    <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-core:12.3.1" level="project" />
+    <orderEntry type="library" name="Maven: org.kordamp.ikonli:ikonli-materialdesign-pack:12.3.1" level="project" />
+    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java:3.2.13" level="project" />
+    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-core:3.2.13" level="project" />
+    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-api:3.2.13" level="project" />
+    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-transport:3.2.13" level="project" />
+    <orderEntry type="library" name="Maven: org.apache.commons:commons-compress:1.21" level="project" />
     <orderEntry type="library" name="Maven: com.google.guava:guava:19.0" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcpkix-jdk15on:1.64" level="project" />
     <orderEntry type="library" name="Maven: org.bouncycastle:bcprov-jdk15on:1.64" level="project" />
-    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-transport-jersey:3.2.6" level="project" />
+    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-transport-jersey:3.2.13" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider:2.10.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.jaxrs:jackson-jaxrs-base:2.10.3" level="project" />
     <orderEntry type="library" name="Maven: com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.10.3" level="project" />
@@ -75,7 +74,7 @@
     <orderEntry type="library" name="Maven: org.javassist:javassist:3.25.0-GA" level="project" />
     <orderEntry type="library" name="Maven: com.kohlschutter.junixsocket:junixsocket-common:2.3.2" level="project" />
     <orderEntry type="library" name="Maven: com.kohlschutter.junixsocket:junixsocket-native-common:2.3.2" level="project" />
-    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-transport-netty:3.2.6" level="project" />
+    <orderEntry type="library" name="Maven: com.github.docker-java:docker-java-transport-netty:3.2.13" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-codec-http:4.1.46.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-common:4.1.46.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-buffer:4.1.46.Final" level="project" />
@@ -89,13 +88,11 @@
     <orderEntry type="library" name="Maven: io.netty:netty-transport-native-unix-common:4.1.46.Final" level="project" />
     <orderEntry type="library" name="Maven: io.netty:netty-transport-native-kqueue:osx-x86_64:4.1.46.Final" level="project" />
     <orderEntry type="library" name="Maven: org.slf4j:jcl-over-slf4j:1.7.30" level="project" />
-    <orderEntry type="library" name="Maven: org.awaitility:awaitility:4.0.1" level="project" />
-    <orderEntry type="library" name="Maven: org.hamcrest:hamcrest:2.1" level="project" />
     <orderEntry type="library" name="Maven: org.fxmisc.easybind:easybind:1.0.3" level="project" />
     <orderEntry type="library" name="Maven: org.fxmisc.undo:undofx:2.1.1" level="project" />
     <orderEntry type="library" name="Maven: org.reactfx:reactfx:2.0-M5" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.35" level="project" />
-    <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.35" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-api:1.7.36" level="project" />
+    <orderEntry type="library" name="Maven: org.slf4j:slf4j-simple:1.7.36" level="project" />
     <orderEntry type="library" name="Maven: javax.xml.bind:jaxb-api:2.3.1" level="project" />
     <orderEntry type="library" name="Maven: javax.activation:javax.activation-api:1.2.0" level="project" />
     <orderEntry type="library" name="Maven: org.glassfish.jaxb:jaxb-runtime:2.3.3" level="project" />
@@ -103,9 +100,9 @@
     <orderEntry type="library" name="Maven: org.glassfish.jaxb:txw2:2.3.3" level="project" />
     <orderEntry type="library" name="Maven: com.sun.istack:istack-commons-runtime:3.0.11" level="project" />
     <orderEntry type="library" name="Maven: com.sun.activation:jakarta.activation:1.2.2" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.13.1" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.13.1" level="project" />
-    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.1" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.13.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.13.3" level="project" />
+    <orderEntry type="library" name="Maven: com.fasterxml.jackson.core:jackson-core:2.13.3" level="project" />
     <orderEntry type="library" name="Maven: org.openpnp:opencv:4.5.1-2" level="project" />
     <orderEntry type="library" name="Maven: one.util:streamex:0.8.1" level="project" />
     <orderEntry type="module" module-name="openlabeler-preloader" />
