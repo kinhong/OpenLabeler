@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
+  ~ Copyright (c) 2024. Kin-Hong Wong. All Rights Reserved.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -28,9 +28,7 @@
     <name>OpenLabeler</name>
 
     <properties>
-        <java.version>1.18</java.version>
-        <maven.compiler.source>1.18</maven.compiler.source>
-        <maven.compiler.target>1.18</maven.compiler.target>
+        <maven.compiler.release>21</maven.compiler.release>
         <revision>0.0.0</revision>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mainClass>com.easymobo.openlabeler.OpenLabeler</mainClass>
@@ -51,15 +49,15 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.0</version>
+                <version>3.12.1</version>
                 <configuration>
-                    <release>11</release>
+                    <release>21</release>
                 </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.1</version>
+                <version>3.2.5</version>
                 <configuration>
                     <argLine>
                         --illegal-access=permit
@@ -69,7 +67,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.22.1</version>
+                <version>3.2.5</version>
                 <configuration>
                     <argLine>
                         --illegal-access=permit
@@ -77,8 +75,9 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.3.0</version>
                 <configuration>
                     <outputDirectory>${project.build.directory}/libs</outputDirectory>
                 </configuration>

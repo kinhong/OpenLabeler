@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2024. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,16 +12,15 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler.model;
 
 import com.easymobo.openlabeler.model.ModelUtil.BooleanAdapter;
+import jakarta.xml.bind.annotation.*;
+import jakarta.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import javafx.scene.image.Image;
 
-import javax.xml.bind.annotation.*;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;

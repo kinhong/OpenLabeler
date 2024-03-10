@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2024. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,7 +12,6 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler.tensorflow;
@@ -20,14 +19,14 @@ package com.easymobo.openlabeler.tensorflow;
 import com.easymobo.openlabeler.model.Annotation;
 import com.easymobo.openlabeler.preference.LabelMapItem;
 import com.google.protobuf.ByteString;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Unmarshaller;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
 import org.tensorflow.example.*;
 import org.tensorflow.hadoop.util.TFRecordWriter;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;

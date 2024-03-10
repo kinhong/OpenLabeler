@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2024. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,13 +12,14 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler.ui;
 
 import com.easymobo.openlabeler.model.Annotation;
 import com.easymobo.openlabeler.util.AppUtils;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.Unmarshaller;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
@@ -35,8 +36,6 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import org.apache.commons.lang3.SystemUtils;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.Unmarshaller;
 import java.awt.*;
 import java.io.File;
 import java.lang.invoke.MethodHandles;

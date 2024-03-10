@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2024. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,10 @@ import com.easymobo.openlabeler.undo.ListChange;
 import com.easymobo.openlabeler.undo.NameChange;
 import com.easymobo.openlabeler.undo.ShapeChange;
 import com.easymobo.openlabeler.util.AppUtils;
+import jakarta.xml.bind.JAXBContext;
+import jakarta.xml.bind.JAXBException;
+import jakarta.xml.bind.Marshaller;
+import jakarta.xml.bind.Unmarshaller;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
@@ -65,10 +69,6 @@ import org.fxmisc.undo.UndoManager;
 import org.fxmisc.undo.UndoManagerFactory;
 import org.reactfx.EventStream;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.io.StringReader;
 import java.io.StringWriter;

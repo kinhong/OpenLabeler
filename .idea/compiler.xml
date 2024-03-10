@@ -10,10 +10,5 @@
         <module name="openlabeler-app" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
-      <module name="openlabeler" target="11" />
-      <module name="openlabeler-app" target="11" />
-      <module name="openlabeler-preloader" target="11" />
-    </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,4 +1,4 @@
 .DS_Store
-/.idea/libraries
-/app/target
-/preloader/target
+/.idea/libraries/
+/app/target/
+/preloader/target/

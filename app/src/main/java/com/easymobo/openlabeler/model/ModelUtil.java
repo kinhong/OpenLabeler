@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2024. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -12,17 +12,16 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- * ==============================================================================
  */
 
 package com.easymobo.openlabeler.model;
 
+import jakarta.xml.bind.JAXBElement;
+import jakarta.xml.bind.annotation.XmlAnyElement;
+import jakarta.xml.bind.annotation.XmlType;
+import jakarta.xml.bind.annotation.adapters.XmlAdapter;
 import org.w3c.dom.Element;
 
-import javax.xml.bind.JAXBElement;
-import javax.xml.bind.annotation.XmlAnyElement;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlAdapter;
 import javax.xml.namespace.QName;
 import java.util.*;
 import java.util.function.Function;
@@ -129,7 +128,7 @@ public class ModelUtil
 
       /**
        * <p>
-       * Extract local name from <code>obj</code>, whether it's javax.xml.bind.JAXBElement or org.w3c.dom.Element;
+       * Extract local name from <code>obj</code>, whether it's jakarta.xml.bind.JAXBElement or org.w3c.dom.Element;
        * </p>
        *
        * @param obj
@@ -145,7 +144,7 @@ public class ModelUtil
 
       /**
        * <p>
-       * Extract text content from <code>obj</code>, whether it's javax.xml.bind.JAXBElement or org.w3c.dom.Element;
+       * Extract text content from <code>obj</code>, whether it's jakarta.xml.bind.JAXBElement or org.w3c.dom.Element;
        * </p>
        *
        * @param obj
