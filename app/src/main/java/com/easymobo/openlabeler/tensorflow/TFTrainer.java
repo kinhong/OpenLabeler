@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2024. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
 import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
-import com.github.dockerjava.jaxrs.JerseyDockerHttpClient;
+import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.google.protobuf.TextFormat;
 import javafx.application.Platform;
@@ -70,7 +70,7 @@ public class TFTrainer implements AutoCloseable
 
     // Docker
     private static DockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
-    private static DockerHttpClient dockerHttpClient = new JerseyDockerHttpClient.Builder().dockerHost(dockerClientConfig.getDockerHost()).build();
+    private static DockerHttpClient dockerHttpClient = new ApacheDockerHttpClient.Builder().dockerHost(dockerClientConfig.getDockerHost()).build();
     private static DockerClient dockerClient = DockerClientBuilder.getInstance().withDockerHttpClient(dockerHttpClient).build();
 
     private SimpleIntegerProperty checkpointProperty = new SimpleIntegerProperty(-1);
