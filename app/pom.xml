@@ -56,19 +56,13 @@
         </dependency>
         <dependency>
             <groupId>org.tensorflow</groupId>
-            <artifactId>tensorflow-core-platform</artifactId>
-            <version>0.4.1</version>
+            <artifactId>tensorflow-core-api</artifactId>
+            <version>0.5.0</version>
         </dependency>
         <dependency>
             <groupId>org.tensorflow</groupId>
             <artifactId>proto</artifactId>
             <version>1.15.0</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>protobuf-java</artifactId>
-                    <groupId>com.google.protobuf</groupId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.google.protobuf</groupId>
@@ -107,7 +101,7 @@
         </dependency>
         <dependency>
             <groupId>com.github.docker-java</groupId>
-            <artifactId>docker-java</artifactId>
+            <artifactId>docker-java-core</artifactId>
             <version>3.3.6</version>
         </dependency>
         <dependency>
@@ -198,6 +192,7 @@
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>3.3.1</version>
                 <configuration>
+                    <propertiesEncoding>UTF-8</propertiesEncoding>
                     <nonFilteredFileExtensions>
                         <nonFilteredFileExtension>png</nonFilteredFileExtension>
                         <nonFilteredFileExtension>icns</nonFilteredFileExtension>
@@ -206,6 +201,7 @@
                 </configuration>
             </plugin>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <version>3.6.1</version>
                 <executions>
@@ -218,19 +214,6 @@
                         <configuration>
                             <outputDirectory>${project.build.directory}/libs</outputDirectory>
                             <includeScope>runtime</includeScope>
-                            <excludeGroupIds>org.openjfx</excludeGroupIds>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>copy-modules</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>copy-dependencies</goal>
-                        </goals>
-                        <configuration>
-                            <outputDirectory>${project.build.directory}/mods</outputDirectory>
-                            <includeScope>runtime</includeScope>
-                            <includeGroupIds>org.openjfx</includeGroupIds>
                         </configuration>
                     </execution>
                 </executions>
@@ -238,9 +221,6 @@
         </plugins>
     </build>
     <properties>
-        <project.build.add-modules>
-            java.base,java.logging,java.desktop,java.prefs,java.xml,javafx.base,javafx.graphics,javafx.controls,javafx.fxml,javafx.web,javafx.media,javafx.swing
-        </project.build.add-modules>
         <project.vendor>OpenLabeler</project.vendor>
     </properties>
     <profiles>
@@ -251,6 +231,14 @@
                     <family>mac</family>
                 </os>
             </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.tensorflow</groupId>
+                    <artifactId>tensorflow-core-api</artifactId>
+                    <version>0.5.0</version>
+                    <classifier>macosx-x86_64</classifier>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <plugin>
@@ -304,8 +292,6 @@
                                         <!-- jlink arguments -->
                                         <argument>--module-path</argument>
                                         <argument>${java.home}/jmods:${project.build.directory}/mods</argument>
-                                        <argument>--add-modules</argument>
-                                        <argument>${project.build.add-modules}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -325,6 +311,14 @@
                     <name>Linux</name>
                 </os>
             </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.tensorflow</groupId>
+                    <artifactId>tensorflow-core-api</artifactId>
+                    <version>0.5.0</version>
+                    <classifier>linux-x86_64</classifier>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <plugin>
@@ -376,8 +370,6 @@
                                         <!-- jlink arguments -->
                                         <argument>--module-path</argument>
                                         <argument>${java.home}/jmods:${project.build.directory}/mods</argument>
-                                        <argument>--add-modules</argument>
-                                        <argument>${project.build.add-modules}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>
@@ -396,6 +388,14 @@
                     <family>windows</family>
                 </os>
             </activation>
+            <dependencies>
+                <dependency>
+                    <groupId>org.tensorflow</groupId>
+                    <artifactId>tensorflow-core-api</artifactId>
+                    <version>0.5.0</version>
+                    <classifier>windows-x86_64</classifier>
+                </dependency>
+            </dependencies>
             <build>
                 <plugins>
                     <plugin>
@@ -448,8 +448,6 @@
                                         <!-- jlink arguments -->
                                         <argument>--module-path</argument>
                                         <argument>${java.home}/jmods;${project.build.directory}/mods</argument>
-                                        <argument>--add-modules</argument>
-                                        <argument>${project.build.add-modules}</argument>
                                     </arguments>
                                 </configuration>
                             </execution>

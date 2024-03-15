@@ -23,8 +23,8 @@ import com.github.dockerjava.api.DockerClient;
 import com.github.dockerjava.api.command.CreateContainerResponse;
 import com.github.dockerjava.api.model.*;
 import com.github.dockerjava.core.DefaultDockerClientConfig;
-import com.github.dockerjava.core.DockerClientBuilder;
 import com.github.dockerjava.core.DockerClientConfig;
+import com.github.dockerjava.core.DockerClientImpl;
 import com.github.dockerjava.httpclient5.ApacheDockerHttpClient;
 import com.github.dockerjava.transport.DockerHttpClient;
 import com.google.protobuf.TextFormat;
@@ -43,12 +43,10 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Field;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.*;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -62,18 +60,16 @@ public class TFTrainer implements AutoCloseable
     private static final Logger LOG = Logger.getLogger(MethodHandles.lookup().lookupClass().getCanonicalName());
     private static final String EXPORTER = "OpenLabeler-Exporter";
 
-    private ResourceBundle bundle = ResourceBundle.getBundle("bundle");
-
     // Monitors TF training status
     private WatchService watcher;
     private WatchKey tfTrainDirWatchKey;
 
     // Docker
-    private static DockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
-    private static DockerHttpClient dockerHttpClient = new ApacheDockerHttpClient.Builder().dockerHost(dockerClientConfig.getDockerHost()).build();
-    private static DockerClient dockerClient = DockerClientBuilder.getInstance().withDockerHttpClient(dockerHttpClient).build();
+    private static final DockerClientConfig dockerClientConfig = DefaultDockerClientConfig.createDefaultConfigBuilder().build();
+    private static final DockerHttpClient dockerHttpClient = new ApacheDockerHttpClient.Builder().dockerHost(dockerClientConfig.getDockerHost()).build();
+    private static final DockerClient dockerClient = DockerClientImpl.getInstance(dockerClientConfig, dockerHttpClient);
 
-    private SimpleIntegerProperty checkpointProperty = new SimpleIntegerProperty(-1);
+    private final SimpleIntegerProperty checkpointProperty = new SimpleIntegerProperty(-1);
     public IntegerProperty checkpointProperty() {
         return checkpointProperty;
     }
@@ -87,14 +83,12 @@ public class TFTrainer implements AutoCloseable
         }
 
         watch(getModelDirPath(Settings.getTFDataDir()));
-        Settings.tfDataDirProperty.addListener((observable, oldValue, newValue) -> {
-            watch(Paths.get(newValue));
-        });
+        Settings.tfDataDirProperty.addListener((observable, oldValue, newValue) -> watch(Paths.get(newValue)));
     }
 
     @Override
     public void close() {
-        Optional.ofNullable(tfTrainDirWatchKey).ifPresent(key -> key.cancel());
+        Optional.ofNullable(tfTrainDirWatchKey).ifPresent(WatchKey::cancel);
         IOUtils.closeQuietly(watcher);
     }
 
@@ -174,11 +168,11 @@ public class TFTrainer implements AutoCloseable
     public static List<LabelMapItem> getLabelMapItems(Path path) {
         try {
             if (path.toFile().exists()) {
-                String text = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+                String text = Files.readString(path);
                 StringIntLabelMap.Builder builder = StringIntLabelMap.newBuilder();
                 TextFormat.merge(text, builder);
                 StringIntLabelMap proto = builder.build();
-                return proto.getItemList().stream().map(i -> new LabelMapItem(i)).collect(Collectors.toList());
+                return proto.getItemList().stream().map(LabelMapItem::new).collect(Collectors.toList());
             }
         }
         catch (Exception ex) {
@@ -211,7 +205,9 @@ public class TFTrainer implements AutoCloseable
         try {
             FileUtils.deleteDirectory(getDataPath().toFile());
             String dataDir = Settings.getTFDataDir();
-            getDataPath().toFile().mkdirs();
+            if (!getDataPath().toFile().exists() && !getDataPath().toFile().mkdirs()) {
+                throw new Exception("Unable to create " + dataDir);
+            }
             saveLabelMap(items, dataDir);
             LOG.info("Creating training data in " + dataDir + "...");
             TFRecordCreator recordCreator = new TFRecordCreator(Paths.get(Settings.getTFImageDir()), Paths.get(Settings.getTFAnnotationDir()), getDataPath());
@@ -261,22 +257,23 @@ public class TFTrainer implements AutoCloseable
     }
 
     public static void saveLabelMap(List<LabelMapItem> items, String dataDir) throws IOException {
-        if (items.size() <= 0) {
+        if (items.isEmpty()) {
             LOG.severe("No label map items");
         }
         StringIntLabelMapOuterClass.StringIntLabelMap.Builder builder = StringIntLabelMapOuterClass.StringIntLabelMap.newBuilder();
-        items.forEach(item -> {
-            builder.addItem(StringIntLabelMapItem.newBuilder().setId(item.getId()).setName(item.getName()).setDisplayName(item.getDisplayName()));
-        });
+        items.forEach(item -> builder.addItem(StringIntLabelMapItem.newBuilder().setId(item.getId()).setName(item.getName()).setDisplayName(item.getDisplayName())));
         String labelMap = TextFormat.printToString(builder.build());
         if (StringUtils.isNotEmpty(labelMap)) {
-            getLabelMapPath(dataDir).toFile().getParentFile().mkdirs();
+            File parentFile = getLabelMapPath(dataDir).toFile().getParentFile();
+            if (!parentFile.exists() && !parentFile.mkdirs()) {
+                throw new IOException("Unable to create " + parentFile.getAbsolutePath());
+            }
             Files.write(getLabelMapPath(dataDir), labelMap.getBytes());
             LOG.info("Created " + getLabelMapPath(dataDir));
         }
     }
 
-    public static int getTrainCkpt(String baseModelDir) {
+    public static int getTrainCkpt(String baseModelDir) throws NullPointerException {
         File trainDir = getModelDirPath(baseModelDir).toFile();
         if (!trainDir.exists()) {
             return -1;
@@ -287,7 +284,7 @@ public class TFTrainer implements AutoCloseable
         for (File file : trainDir.listFiles()) {
             Matcher matcher = pattern.matcher(file.getName());
             if (matcher.matches()) {
-                ckpt = Math.max(ckpt, Integer.valueOf(matcher.group(1)));
+                ckpt = Math.max(ckpt, Integer.parseInt(matcher.group(1)));
             }
         }
         return ckpt;
@@ -403,7 +400,7 @@ public class TFTrainer implements AutoCloseable
 
         private Pipeline.TrainEvalPipelineConfig parse(Path path) {
             try {
-                String text = new String(Files.readAllBytes(path), StandardCharsets.UTF_8);
+                String text = Files.readString(path);
                 Pipeline.TrainEvalPipelineConfig.Builder builder = Pipeline.TrainEvalPipelineConfig.newBuilder();
                 TextFormat.Parser parser = TextFormat.Parser.newBuilder().build();
 
@@ -441,7 +438,7 @@ public class TFTrainer implements AutoCloseable
         // Update pipeline config with paths expected in docker container
         private Pipeline.TrainEvalPipelineConfig update(Pipeline.TrainEvalPipelineConfig config) {
             if (config == null) {
-                return config;
+                return null;
             }
             // train_config.fine_tune_checkpoint
             Pipeline.TrainEvalPipelineConfig.Builder builder = config.toBuilder();

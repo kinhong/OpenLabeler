@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022. Kin-Hong Wong. All Rights Reserved.
+ * Copyright (c) 2024. Kin-Hong Wong. All Rights Reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,15 +26,16 @@ import javafx.beans.property.StringProperty;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.ArrayUtils;
+import org.tensorflow.Result;
 import org.tensorflow.SavedModelBundle;
 import org.tensorflow.Tensor;
 import org.tensorflow.TensorFlow;
-import org.tensorflow.framework.DataType;
-import org.tensorflow.framework.MetaGraphDef;
-import org.tensorflow.framework.SignatureDef;
-import org.tensorflow.framework.TensorInfo;
 import org.tensorflow.ndarray.Shape;
 import org.tensorflow.ndarray.buffer.DataBuffers;
+import org.tensorflow.proto.framework.DataType;
+import org.tensorflow.proto.framework.MetaGraphDef;
+import org.tensorflow.proto.framework.SignatureDef;
+import org.tensorflow.proto.framework.TensorInfo;
 import org.tensorflow.types.TFloat32;
 import org.tensorflow.types.TString;
 import org.tensorflow.types.TUint8;
@@ -143,7 +144,7 @@ public class ObjectDetector implements AutoCloseable
                 LOG.info(savedModelFile.toString() + " does not exist");
             }
         }
-        catch (Exception ex) {
+        catch (Throwable ex) {
             LOG.log(Level.SEVERE, "Unable to update " + path, ex);
         }
         return null;
@@ -156,7 +157,7 @@ public class ObjectDetector implements AutoCloseable
                 return Collections.emptyList();
             }
             List<HintModel> hints = new ArrayList();
-            List<Tensor> outputs;
+            Result result;
             Tensor input = null;
             String operation = "";
             BufferedImage img = ImageIO.read(imageFile);
@@ -178,7 +179,7 @@ public class ObjectDetector implements AutoCloseable
                     operation = tensorInfo.getName();
                     input = tensorInfo.getDtype() == DataType.DT_STRING ? makeImageStringTensor(imageFile) : makeImageTensor(img);
                 }
-                outputs = model.session()
+                result = model.session()
                       .runner()
                       .feed(operation, input)
                       .fetch(sig.getOutputsOrThrow("detection_scores").getName())
@@ -191,9 +192,9 @@ public class ObjectDetector implements AutoCloseable
                     input.close();
                 }
             }
-            try (TFloat32 scoresT = (TFloat32)outputs.get(0);
-                 TFloat32 classesT = (TFloat32)outputs.get(1);
-                 TFloat32 boxesT = (TFloat32)outputs.get(2)) {
+            try (TFloat32 scoresT = (TFloat32)result.get(0);
+                 TFloat32 classesT = (TFloat32)result.get(1);
+                 TFloat32 boxesT = (TFloat32)result.get(2)) {
                 // All these tensors have:
                 // - 1 as the first dimension
                 // - maxObjects as the second dimension

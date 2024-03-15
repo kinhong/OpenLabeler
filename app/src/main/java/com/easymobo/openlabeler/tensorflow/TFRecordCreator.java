@@ -24,8 +24,8 @@ import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Unmarshaller;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.io.IOUtils;
-import org.tensorflow.example.*;
 import org.tensorflow.hadoop.util.TFRecordWriter;
+import org.tensorflow.proto.example.*;
 
 import java.io.DataOutputStream;
 import java.io.File;
